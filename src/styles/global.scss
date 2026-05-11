@@ -1,0 +1,30 @@
+// Single entry point for global styles.
+// Imported once from src/layouts/Shell.astro.
+// Order matters: tokens first (CSS custom properties), then reset.
+
+@use 'tokens';
+@use 'reset';
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  transition:
+    background-color 320ms ease,
+    color 320ms ease;
+}
+
+// Mono is reserved for telemetry surfaces (instrument readouts, panel IDs,
+// data values). Apply via class — not by default.
+.mono { font-family: var(--font-mono); }
+
+// Hero font — Chakra Petch in night, Instrument Sans in day (locked via tokens).
+.hero { font-family: var(--font-hero); }

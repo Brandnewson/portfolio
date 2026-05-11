@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branson — Palette v5 · Night CTAs in context</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #141210;
+  padding: 32px 28px;
+  color: #CFC6B2;
+  font-family: 'Instrument Sans', sans-serif;
+}
+
+.meta { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: #9C8F75; margin-bottom: 6px; }
+.meta-note { font-size: 12px; color: #8A7D64; max-width: 820px; line-height: 1.55; margin-bottom: 28px; }
+
+.section-head {
+  font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
+  padding: 30px 0 8px; border-bottom: 1px solid rgba(180,160,110,.18); margin-bottom: 22px;
+  color: #B89D6E;
+}
+.section-head:first-of-type { padding-top: 0; }
+.section-note { color: #8A7D64; font-size: 11px; margin-bottom: 22px; max-width: 820px; line-height: 1.55; }
+
+/* ═══════════════════════════════════════════════════════════
+   NIGHT CONTEXT CARD — full N-1 page preview
+   Palette locked:
+     --bg:   #090A07   (warm near-black)
+     --bg2:  #141210
+     --fg:   #E8DFC8   (bone — logo, body, hero, CTA text)
+     --mut:  #8A7D64   (muted)
+     --acc:  #14CC4A   (phosphor — instrument-only glow)
+     --amb:  #D9A030   (amber — CTAs, accent ticks)
+     --ink:  #1E1A15   (graphite panels)
+   ═══════════════════════════════════════════════════════════ */
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+@media (max-width: 1100px) { .pair { grid-template-columns: 1fr; } }
+
+.ncard {
+  background: #090A07;
+  border: 1px solid rgba(180,160,110,.12);
+  border-radius: 3px;
+  padding: 0;
+  overflow: hidden;
+  color: #E8DFC8;
+  font-family: 'Instrument Sans', sans-serif;
+}
+
+.ncard-label {
+  background: #141210;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(180,160,110,.14);
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; color: #B89D6E; text-transform: uppercase;
+}
+.ncard-label .hero-font { color: #E8DFC8; }
+
+/* top strip — phosphor status dot + panel IDs */
+.top-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 24px; border-bottom: 1px solid rgba(180,160,110,.08);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+}
+.logo { font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.05em; color: #E8DFC8; text-transform: none; }
+.logo .dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: #14CC4A;
+  box-shadow: 0 0 6px rgba(20,204,74,.85), 0 0 14px rgba(20,204,74,.35);
+  margin-left: 4px; vertical-align: middle;
+}
+.nav { display: flex; gap: 18px; }
+.nav a { color: #8A7D64; text-decoration: none; }
+.nav a.active { color: #E8DFC8; }
+.nav a:hover { color: #D9A030; }
+
+/* hero region */
+.hero {
+  padding: 36px 24px 28px;
+  position: relative;
+}
+.hero-panelid {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: #14CC4A;
+  text-shadow: 0 0 6px rgba(20,204,74,.55), 0 0 14px rgba(20,204,74,.18);
+  margin-bottom: 14px;
+}
+.hero-title {
+  font-size: 38px; line-height: 1.02; letter-spacing: -0.01em;
+  color: #E8DFC8; font-weight: 600;
+  margin-bottom: 14px;
+}
+.hero-title .italic { font-style: italic; color: #E8DFC8; }
+.hero-sub {
+  font-size: 14px; line-height: 1.55; color: #CFC6B2; max-width: 440px;
+  margin-bottom: 22px;
+}
+.hero-sub em { font-style: italic; color: #D9A030; }
+
+/* CTA set — amber outline primary, amber fill secondary, amber ghost */
+.ctas { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.cta {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 11px 20px;
+  border-radius: 0;              /* squared */
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: transparent;
+  transition: all .15s ease;
+}
+.cta-primary {
+  border-color: #D9A030;
+  color: #D9A030;
+}
+.cta-primary:hover {
+  background: #D9A030;
+  color: #1E1A15;
+}
+.cta-secondary {
+  background: #D9A030;
+  color: #1E1A15;
+  border-color: #D9A030;
+}
+.cta-secondary:hover {
+  background: #E8B850;
+  border-color: #E8B850;
+}
+.cta-ghost {
+  padding: 11px 6px;
+  color: #D9A030;
+  border-color: transparent;
+  letter-spacing: 0.22em;
+}
+.cta-ghost:hover { color: #E8B850; }
+.cta-ghost::after {
+  content: " →";
+  opacity: .7;
+}
+
+/* instrument bar — phosphor gauge + vitals */
+.instrument-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1px solid rgba(180,160,110,.1);
+  border-bottom: 1px solid rgba(180,160,110,.1);
+  background: #0C0D0A;
+}
+.ibox {
+  padding: 14px 18px;
+  border-right: 1px solid rgba(180,160,110,.08);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.ibox:last-child { border-right: none; }
+.ibox-lbl {
+  font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: #8A7D64; margin-bottom: 6px;
+}
+.ibox-val {
+  font-size: 14px; color: #E8DFC8; letter-spacing: 0.04em;
+}
+.ibox-val .green {
+  color: #14CC4A;
+  text-shadow: 0 0 6px rgba(20,204,74,.55), 0 0 14px rgba(20,204,74,.18);
+}
+
+/* gauge bar — phosphor fill */
+.gauge {
+  padding: 14px 24px 18px; border-bottom: 1px solid rgba(180,160,110,.08);
+}
+.gauge-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: #8A7D64;
+}
+.gauge-val {
+  color: #14CC4A;
+  text-shadow: 0 0 6px rgba(20,204,74,.55), 0 0 14px rgba(20,204,74,.18);
+}
+.gauge-track {
+  height: 4px; background: rgba(180,160,110,.1); border-radius: 0; overflow: hidden;
+}
+.gauge-fill {
+  height: 100%; width: 72%;
+  background: #14CC4A;
+  box-shadow: 0 0 6px rgba(20,204,74,.7), 0 0 16px rgba(20,204,74,.3);
+}
+
+/* project row under hero */
+.proj-row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(180,160,110,.06);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em;
+}
+.proj-row:last-child { border-bottom: none; }
+.proj-id {
+  color: #14CC4A;
+  text-shadow: 0 0 6px rgba(20,204,74,.55), 0 0 12px rgba(20,204,74,.18);
+  font-size: 10px; letter-spacing: 0.22em;
+}
+.proj-name { color: #E8DFC8; letter-spacing: 0.04em; }
+.proj-tag { color: #8A7D64; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
+
+/* hero font overrides */
+.ncard.iserif .hero-title { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.005em; font-size: 46px; line-height: .98; }
+.ncard.iserif .hero-title .italic { font-style: italic; }
+.ncard.chakra .hero-title { font-family: 'Chakra Petch', sans-serif; font-weight: 500; font-size: 36px; }
+.ncard.chakra .hero-title .italic { font-style: italic; font-weight: 400; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   PART 2 — CTA isolation against phosphor elements
+   ═══════════════════════════════════════════════════════════ */
+.iso {
+  background: #090A07;
+  border: 1px solid rgba(180,160,110,.12);
+  border-radius: 3px;
+  padding: 28px 26px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+}
+@media (max-width: 900px) { .iso { grid-template-columns: 1fr; } }
+
+.iso-block { display: flex; flex-direction: column; gap: 14px; }
+.iso-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: #8A7D64;
+}
+.iso-phos {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.12em;
+  color: #14CC4A;
+  text-shadow: 0 0 6px rgba(20,204,74,.55), 0 0 14px rgba(20,204,74,.18);
+}
+.iso-phos .mini-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #14CC4A;
+  box-shadow: 0 0 6px rgba(20,204,74,.8), 0 0 12px rgba(20,204,74,.3);
+}
+.iso-gauge { height: 3px; background: rgba(180,160,110,.1); overflow: hidden; }
+.iso-gauge span { display: block; height: 100%; width: 64%; background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,.7); }
+
+.iso-cta-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+</style>
+</head>
+<body>
+
+<div class="meta">PALETTE v5 · NIGHT CTA IN CONTEXT · locked: Bordeaux · Instrument Sans · phosphor #14CC4A</div>
+<div class="meta-note">Amber CTAs (#D9A030) in a full N-1 page with phosphor-green instrument elements present. Two night hero-font candidates side by side: <strong style="color:#E8DFC8">Instrument Serif</strong> (pairs natively with Instrument Sans) vs <strong style="color:#E8DFC8">Chakra Petch</strong> (the street-racer carryover). Everything else identical: CTAs squared, ghost is text-only, secondary is amber-filled, primary is amber outline.</div>
+
+
+<div class="section-head">01 · Full page mock — Instrument Serif vs Chakra Petch hero</div>
+
+<div class="pair">
+
+<!-- LEFT: Instrument Serif hero -->
+<div class="ncard iserif">
+  <div class="ncard-label">
+    <span>N-1 · AMBER CTA · <span class="hero-font">HERO = INSTRUMENT SERIF</span></span>
+    <span>01</span>
+  </div>
+  <div class="top-bar">
+    <div class="logo">Branson<span class="dot"></span></div>
+    <div class="nav">
+      <a class="active">work</a>
+      <a>writing</a>
+      <a>about</a>
+      <a>contact</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-panelid">SYS/HERO · 001</div>
+    <h1 class="hero-title">Full-stack engineer<br><span class="italic">building for the edge.</span></h1>
+    <p class="hero-sub">ML tooling, GTM systems, and forward-deployed prototypes — <em>shipped to Cloudflare's global network.</em></p>
+    <div class="ctas">
+      <button class="cta cta-primary">View Work</button>
+      <button class="cta cta-secondary">Contact</button>
+      <button class="cta cta-ghost">CV / PDF</button>
+    </div>
+  </div>
+
+  <div class="instrument-bar">
+    <div class="ibox">
+      <div class="ibox-lbl">Status</div>
+      <div class="ibox-val"><span class="green">ONLINE</span></div>
+    </div>
+    <div class="ibox">
+      <div class="ibox-lbl">Location</div>
+      <div class="ibox-val">NYC / LDN</div>
+    </div>
+    <div class="ibox">
+      <div class="ibox-lbl">Uptime</div>
+      <div class="ibox-val"><span class="green">99.98%</span></div>
+    </div>
+  </div>
+
+  <div class="gauge">
+    <div class="gauge-head">
+      <span>Project Load</span>
+      <span class="gauge-val">72%</span>
+    </div>
+    <div class="gauge-track"><div class="gauge-fill"></div></div>
+  </div>
+
+  <div class="proj-row">
+    <span class="proj-id">PRJ/001</span>
+    <span class="proj-name">Edge search pipeline — Fuse + ONNX</span>
+    <span class="proj-tag">ML</span>
+  </div>
+  <div class="proj-row">
+    <span class="proj-id">PRJ/002</span>
+    <span class="proj-name">LP-solved knapsack simulator</span>
+    <span class="proj-tag">sim</span>
+  </div>
+  <div class="proj-row">
+    <span class="proj-id">PRJ/003</span>
+    <span class="proj-name">GTM funnel instrumentation</span>
+    <span class="proj-tag">GTM</span>
+  </div>
+</div>
+
+<!-- RIGHT: Chakra Petch hero -->
+<div class="ncard chakra">
+  <div class="ncard-label">
+    <span>N-1 · AMBER CTA · <span class="hero-font">HERO = CHAKRA PETCH</span></span>
+    <span>02</span>
+  </div>
+  <div class="top-bar">
+    <div class="logo">Branson<span class="dot"></span></div>
+    <div class="nav">
+      <a class="active">work</a>
+      <a>writing</a>
+      <a>about</a>
+      <a>contact</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-panelid">SYS/HERO · 001</div>
+    <h1 class="hero-title">Full-stack engineer<br><span class="italic">building for the edge.</span></h1>
+    <p class="hero-sub">ML tooling, GTM systems, and forward-deployed prototypes — <em>shipped to Cloudflare's global network.</em></p>
+    <div class="ctas">
+      <button class="cta cta-primary">View Work</button>
+      <button class="cta cta-secondary">Contact</button>
+      <button class="cta cta-ghost">CV / PDF</button>
+    </div>
+  </div>
+
+  <div class="instrument-bar">
+    <div class="ibox">
+      <div class="ibox-lbl">Status</div>
+      <div class="ibox-val"><span class="green">ONLINE</span></div>
+    </div>
+    <div class="ibox">
+      <div class="ibox-lbl">Location</div>
+      <div class="ibox-val">NYC / LDN</div>
+    </div>
+    <div class="ibox">
+      <div class="ibox-lbl">Uptime</div>
+      <div class="ibox-val"><span class="green">99.98%</span></div>
+    </div>
+  </div>
+
+  <div class="gauge">
+    <div class="gauge-head">
+      <span>Project Load</span>
+      <span class="gauge-val">72%</span>
+    </div>
+    <div class="gauge-track"><div class="gauge-fill"></div></div>
+  </div>
+
+  <div class="proj-row">
+    <span class="proj-id">PRJ/001</span>
+    <span class="proj-name">Edge search pipeline — Fuse + ONNX</span>
+    <span class="proj-tag">ML</span>
+  </div>
+  <div class="proj-row">
+    <span class="proj-id">PRJ/002</span>
+    <span class="proj-name">LP-solved knapsack simulator</span>
+    <span class="proj-tag">sim</span>
+  </div>
+  <div class="proj-row">
+    <span class="proj-id">PRJ/003</span>
+    <span class="proj-name">GTM funnel instrumentation</span>
+    <span class="proj-tag">GTM</span>
+  </div>
+</div>
+
+</div>
+
+
+<div class="section-head">02 · CTA isolation — amber against phosphor</div>
+<div class="section-note">Each block pairs a phosphor element (status dot, gauge, panel ID) against the CTA set so you can check the colour tension in isolation. Amber #D9A030 and phosphor #14CC4A are complementary-ish on the colour wheel — they read as separate systems (warning amber vs. live green) rather than fighting.</div>
+
+<div class="iso">
+
+  <div class="iso-block">
+    <div class="iso-label">A · CTAs next to live status</div>
+    <div class="iso-phos"><span class="mini-dot"></span>SYS · ONLINE · 99.98%</div>
+    <div class="iso-cta-row">
+      <button class="cta cta-primary">View Work</button>
+      <button class="cta cta-secondary">Contact</button>
+      <button class="cta cta-ghost">CV / PDF</button>
+    </div>
+  </div>
+
+  <div class="iso-block">
+    <div class="iso-label">B · CTAs next to phosphor gauge</div>
+    <div class="iso-phos" style="color:#8A7D64;text-shadow:none;">LOAD · <span style="color:#14CC4A;text-shadow:0 0 6px rgba(20,204,74,.5);">64%</span></div>
+    <div class="iso-gauge"><span></span></div>
+    <div class="iso-cta-row" style="margin-top:6px;">
+      <button class="cta cta-primary">View Work</button>
+      <button class="cta cta-secondary">Contact</button>
+      <button class="cta cta-ghost">CV / PDF</button>
+    </div>
+  </div>
+
+  <div class="iso-block">
+    <div class="iso-label">C · CTAs next to panel IDs</div>
+    <div class="iso-phos">PRJ/001 · PRJ/002 · PRJ/003</div>
+    <div class="iso-cta-row">
+      <button class="cta cta-primary">View Work</button>
+      <button class="cta cta-secondary">Contact</button>
+      <button class="cta cta-ghost">CV / PDF</button>
+    </div>
+  </div>
+
+  <div class="iso-block">
+    <div class="iso-label">D · CTAs next to vitals line</div>
+    <div class="iso-phos" style="color:#8A7D64;text-shadow:none;letter-spacing:.08em;">
+      RPM <span style="color:#14CC4A;text-shadow:0 0 6px rgba(20,204,74,.5);">04,280</span> &nbsp; TEMP <span style="color:#14CC4A;text-shadow:0 0 6px rgba(20,204,74,.5);">88°C</span> &nbsp; V <span style="color:#14CC4A;text-shadow:0 0 6px rgba(20,204,74,.5);">12.4</span>
+    </div>
+    <div class="iso-cta-row">
+      <button class="cta cta-primary">View Work</button>
+      <button class="cta cta-secondary">Contact</button>
+      <button class="cta cta-ghost">CV / PDF</button>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="section-head">03 · CTA anatomy</div>
+<div class="section-note">
+Primary = amber outline, 1px border, squared, hover fills amber with graphite text.<br>
+Secondary = amber fill, graphite text, squared.<br>
+Ghost = amber text only, arrow suffix, no border, no fill. Inline-feeling for tertiary paths.
+</div>
+
+<div class="iso" style="grid-template-columns: 1fr;">
+  <div class="iso-block">
+    <div class="iso-cta-row" style="gap:20px;">
+      <button class="cta cta-primary">Primary → outline</button>
+      <button class="cta cta-secondary">Secondary → fill</button>
+      <button class="cta cta-ghost">Ghost text</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

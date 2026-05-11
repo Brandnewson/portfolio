@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branson — Palette Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=Rajdhani:wght@400;500;700&family=Barlow+Condensed:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #111; font-family: 'Courier New', monospace; padding: 24px; }
+
+.section-label {
+  color: #888; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 20px 0 12px;
+  border-bottom: 1px solid #333; margin-bottom: 20px;
+}
+
+.row { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+
+/* ─── CARD SHELL ─── */
+.card {
+  flex: 1; min-width: 280px; max-width: 380px;
+  border-radius: 3px; overflow: hidden;
+  font-size: 11px;
+}
+.card-label {
+  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 5px 12px; text-align: center;
+  font-family: 'Courier New', monospace;
+}
+.targa { height: 4px; }
+.inst-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 14px;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+.logo { font-size: 12px; font-weight: 700; letter-spacing: 0.28em; }
+.indicators { display: flex; gap: 14px; align-items: center; font-size: 9px; letter-spacing: 0.18em; }
+.dot { display:inline-block; width:5px; height:5px; border-radius:50%; margin-right:4px; animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.hero { padding: 24px 14px 16px; }
+.hero-name { line-height: 1.05; }
+.hero-tagline { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px; font-family: 'Courier New', monospace; }
+.hero-coords  { font-size: 9px; letter-spacing: 0.15em; margin-top: 4px; opacity: .5; font-family: 'Courier New', monospace; }
+
+.rule-bar { display: flex; align-items: center; margin: 0 14px 16px; gap: 6px; }
+.rule-line { flex:1; height:2px; }
+.rule-dot  { width:4px; height:4px; border-radius:50%; }
+
+.panel {
+  margin: 0 14px 14px;
+  border-top: 2px solid;
+  border-radius: 2px;
+}
+.ph {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 10px;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  border-bottom: 1px solid;
+}
+.pid { font-weight: 700; letter-spacing: 0.24em; }
+.pb { padding: 10px; font-size: 10px; line-height: 1.6; font-family: 'Courier New', monospace; }
+.gauge { padding: 8px 10px; border-top: 1px solid; }
+.gauge-label { font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; opacity: .55; font-family: 'Courier New', monospace; }
+.gauge-track { height: 2px; border-radius: 1px; overflow: hidden; }
+.gauge-fill  { height: 100%; width: 62%; border-radius: 1px; }
+
+.bot {
+  display: flex; justify-content: space-between;
+  padding: 7px 14px;
+  font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase;
+  border-top: 1px solid;
+  font-family: 'Courier New', monospace;
+}
+
+/* font size for hero names */
+.f-jakarta  { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 700; }
+.f-grotesk  { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; }
+.f-courier  { font-family: 'Courier New', monospace; font-size: 32px; font-weight: 700; }
+.f-rajdhani { font-family: 'Rajdhani', sans-serif; font-size: 38px; font-weight: 700; letter-spacing: 0.04em; }
+.f-barlow   { font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; letter-spacing: 0.02em; }
+
+
+
+/* ════════════════════════════════════════════
+   DAY D1 — GRAPHITE TARGA
+   Dark instrument bar + cream body + cognac
+   Font: Plus Jakarta Sans
+════════════════════════════════════════════ */
+.d1 { background: #F0E8D0; }
+.d1 .card-label { background: #8B5A30; color: #F0E8D0; }
+.d1 .targa { background: linear-gradient(90deg,#9A9490,#D0CAC0 30%,#B8B2A6 50%,#D0CAC0 70%,#9A9490); }
+.d1 .inst-bar { background: #1E1A16; border-bottom: 1px solid rgba(255,255,255,.08); }
+.d1 .inst-bar .logo { color: #F0E8D0; }
+.d1 .inst-bar .indicators { color: rgba(240,232,208,.4); }
+.d1 .dot { background: #8B5A30; }
+.d1 .hero { background: #F0E8D0; }
+.d1 .hero-name { color: #1A120A; }
+.d1 .hero-tagline { color: #6A5040; }
+.d1 .hero-coords  { color: #6A5040; }
+.d1 .rule-line { background: linear-gradient(90deg,transparent,#B8B2A6,transparent); }
+.d1 .rule-dot  { background: #B8B2A6; }
+.d1 .panel { background: #EAE0C8; border-color: #8B5A30; }
+.d1 .ph { background: #E4D8BC; border-color: rgba(90,70,40,.15); color: #6A5040; }
+.d1 .pid { color: #8B5A30; }
+.d1 .pb { color: #1A120A; background: #EAE0C8; }
+.d1 .gauge { border-color: rgba(90,70,40,.12); background: #EAE0C8; }
+.d1 .gauge-track { background: rgba(90,70,40,.12); }
+.d1 .gauge-fill  { background: #8B5A30; }
+.d1 .bot { background: #1E1A16; border-color: rgba(255,255,255,.08); color: rgba(240,232,208,.4); }
+
+/* ════════════════════════════════════════════
+   DAY D2 — RALLY TAN
+   Richer sand base, olive secondary, bold cognac
+   Font: Plus Jakarta Sans (heavier feel)
+════════════════════════════════════════════ */
+.d2 { background: #D9CEAA; }
+.d2 .card-label { background: #5A7A30; color: #F5F0E8; }
+.d2 .targa { background: linear-gradient(90deg,#888,#C8C0A8 30%,#A8A090 50%,#C8C0A8 70%,#888); }
+.d2 .inst-bar { background: #2A1C0C; border-bottom: 1px solid rgba(255,255,255,.06); }
+.d2 .inst-bar .logo { color: #E8D890; }
+.d2 .inst-bar .indicators { color: rgba(200,180,100,.5); }
+.d2 .dot { background: #5A7A30; }
+.d2 .hero { background: #D9CEAA; }
+.d2 .hero-name { color: #1A0E04; }
+.d2 .hero-tagline { color: #5A7A30; }
+.d2 .hero-coords  { color: #7A6040; }
+.d2 .rule-line { background: linear-gradient(90deg,transparent,#A09888,transparent); }
+.d2 .rule-dot  { background: #A09888; }
+.d2 .panel { background: #CCC0A0; border-color: #C47820; }
+.d2 .ph { background: #C0B494; border-color: rgba(90,70,20,.2); color: #5A7A30; }
+.d2 .pid { color: #C47820; }
+.d2 .pb { color: #1A0E04; background: #CCC0A0; }
+.d2 .gauge { border-color: rgba(90,70,20,.15); background: #CCC0A0; }
+.d2 .gauge-track { background: rgba(90,70,20,.15); }
+.d2 .gauge-fill  { background: #5A7A30; }
+.d2 .bot { background: #2A1C0C; border-color: rgba(255,255,255,.06); color: rgba(200,180,100,.45); }
+
+/* ════════════════════════════════════════════
+   DAY D3 — CAFÉ RACER
+   Near-white base, dark leather header, BRG accent
+   Font: Space Grotesk (slightly techy)
+════════════════════════════════════════════ */
+.d3 { background: #F5EEE0; }
+.d3 .card-label { background: #2D5016; color: #F5EEE0; }
+.d3 .targa { background: linear-gradient(90deg,#AAA,#D8D0C0 30%,#C0B8A8 50%,#D8D0C0 70%,#AAA); }
+.d3 .inst-bar { background: #3A2818; border-bottom: 1px solid rgba(255,255,255,.07); }
+.d3 .inst-bar .logo { color: #F5EEE0; }
+.d3 .inst-bar .indicators { color: rgba(245,238,224,.4); }
+.d3 .dot { background: #2D5016; }
+.d3 .hero { background: #F5EEE0; }
+.d3 .hero-name { color: #1A120A; }
+.d3 .hero-tagline { color: #2D5016; }
+.d3 .hero-coords  { color: #7A6050; }
+.d3 .rule-line { background: linear-gradient(90deg,transparent,#C0B8A8,transparent); }
+.d3 .rule-dot  { background: #C0B8A8; }
+.d3 .panel { background: #EDE4D0; border-color: #2D5016; }
+.d3 .ph { background: #E2D8C4; border-color: rgba(45,80,22,.15); color: #8B5A30; }
+.d3 .pid { color: #2D5016; }
+.d3 .pb { color: #1A120A; background: #EDE4D0; }
+.d3 .gauge { border-color: rgba(45,80,22,.12); background: #EDE4D0; }
+.d3 .gauge-track { background: rgba(45,80,22,.12); }
+.d3 .gauge-fill  { background: #2D5016; }
+.d3 .bot { background: #3A2818; border-color: rgba(255,255,255,.07); color: rgba(245,238,224,.4); }
+
+/* ════════════════════════════════════════════
+   NIGHT N1 — PHOSPHOR (current, refined)
+   Phosphor green. Font: Rajdhani
+════════════════════════════════════════════ */
+.n1 { background: #090A07; }
+.n1 .card-label { background: #14CC4A; color: #090A07; }
+.n1 .targa { background: #0A0C08; }
+.n1 .inst-bar { background: #070907; border-bottom: 1px solid rgba(20,204,74,.12); }
+.n1 .inst-bar .logo { color: #14CC4A; text-shadow: 0 0 8px rgba(20,204,74,.5); }
+.n1 .inst-bar .indicators { color: #1E4A28; }
+.n1 .dot { background: #14CC4A; box-shadow: 0 0 5px rgba(20,204,74,.6); }
+.n1 .hero { background: #090A07; }
+.n1 .hero-name { color: #14CC4A; text-shadow: 0 0 10px rgba(20,204,74,.4), 0 0 22px rgba(20,204,74,.15); }
+.n1 .hero-tagline { color: #1E4A28; }
+.n1 .hero-coords  { color: #1E4A28; }
+.n1 .rule-line { background: linear-gradient(90deg,transparent,#182015,transparent); }
+.n1 .rule-dot  { background: #182015; }
+.n1 .panel { background: #0D0F0A; border-color: #14CC4A; }
+.n1 .ph { background: #0A0C07; border-color: rgba(20,204,74,.12); color: #1E4A28; }
+.n1 .pid { color: #14CC4A; text-shadow: 0 0 6px rgba(20,204,74,.4); }
+.n1 .pb { color: #6DB870; background: #0D0F0A; }
+.n1 .gauge { border-color: rgba(20,204,74,.12); background: #0D0F0A; }
+.n1 .gauge-track { background: rgba(20,204,74,.1); }
+.n1 .gauge-fill  { background: #14CC4A; box-shadow: 0 0 5px rgba(20,204,74,.4); }
+.n1 .bot { background: #070907; border-color: rgba(20,204,74,.1); color: #1E4A28; }
+
+/* ════════════════════════════════════════════
+   NIGHT N2 — JDM AMBER
+   Warm amber gauge. Like a real analogue cluster.
+   Font: Rajdhani
+════════════════════════════════════════════ */
+.n2 { background: #080705; }
+.n2 .card-label { background: #E09020; color: #080705; }
+.n2 .targa { background: #070604; }
+.n2 .inst-bar { background: #060504; border-bottom: 1px solid rgba(200,130,20,.1); }
+.n2 .inst-bar .logo { color: #E09020; text-shadow: 0 0 8px rgba(200,130,20,.5); }
+.n2 .inst-bar .indicators { color: #4A3010; }
+.n2 .dot { background: #E09020; box-shadow: 0 0 5px rgba(200,130,20,.6); }
+.n2 .hero { background: #080705; }
+.n2 .hero-name { color: #E09020; text-shadow: 0 0 10px rgba(200,130,20,.5), 0 0 24px rgba(200,130,20,.2); }
+.n2 .hero-tagline { color: #4A3010; }
+.n2 .hero-coords  { color: #4A3010; }
+.n2 .rule-line { background: linear-gradient(90deg,transparent,#2A1A08,transparent); }
+.n2 .rule-dot  { background: #2A1A08; }
+.n2 .panel { background: #0D0B08; border-color: #E09020; }
+.n2 .ph { background: #090704; border-color: rgba(200,130,20,.1); color: #4A3010; }
+.n2 .pid { color: #E09020; text-shadow: 0 0 6px rgba(200,130,20,.4); }
+.n2 .pb { color: #C89858; background: #0D0B08; }
+.n2 .gauge { border-color: rgba(200,130,20,.1); background: #0D0B08; }
+.n2 .gauge-track { background: rgba(200,130,20,.1); }
+.n2 .gauge-fill  { background: #E09020; box-shadow: 0 0 5px rgba(200,130,20,.5); }
+.n2 .bot { background: #060504; border-color: rgba(200,130,20,.1); color: #4A3010; }
+
+/* ════════════════════════════════════════════
+   NIGHT N3 — STREET CYAN
+   Electric teal/cyan. Modern tuner HUD.
+   Font: Barlow Condensed
+════════════════════════════════════════════ */
+.n3 { background: #030A0C; }
+.n3 .card-label { background: #00D8C0; color: #030A0C; }
+.n3 .targa { background: #020809; }
+.n3 .inst-bar { background: #020709; border-bottom: 1px solid rgba(0,200,180,.1); }
+.n3 .inst-bar .logo { color: #00D8C0; text-shadow: 0 0 8px rgba(0,200,180,.5); }
+.n3 .inst-bar .indicators { color: #083A38; }
+.n3 .dot { background: #00D8C0; box-shadow: 0 0 5px rgba(0,200,180,.7); }
+.n3 .hero { background: #030A0C; }
+.n3 .hero-name { color: #00D8C0; text-shadow: 0 0 10px rgba(0,200,180,.5), 0 0 28px rgba(0,200,180,.2); }
+.n3 .hero-tagline { color: #083A38; }
+.n3 .hero-coords  { color: #083A38; }
+.n3 .rule-line { background: linear-gradient(90deg,transparent,#062020,transparent); }
+.n3 .rule-dot  { background: #062020; }
+.n3 .panel { background: #041214; border-color: #00D8C0; }
+.n3 .ph { background: #030C0F; border-color: rgba(0,200,180,.1); color: #083A38; }
+.n3 .pid { color: #00D8C0; text-shadow: 0 0 6px rgba(0,200,180,.45); }
+.n3 .pb { color: #6AC8C0; background: #041214; }
+.n3 .gauge { border-color: rgba(0,200,180,.1); background: #041214; }
+.n3 .gauge-track { background: rgba(0,200,180,.1); }
+.n3 .gauge-fill  { background: #00D8C0; box-shadow: 0 0 5px rgba(0,200,180,.5); }
+.n3 .bot { background: #020709; border-color: rgba(0,200,180,.08); color: #083A38; }
+
+
+/* Note strip */
+.note { color: #555; font-size: 9px; letter-spacing: 0.18em; font-family:'Courier New',monospace; text-transform: uppercase; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="section-label">DAY VARIANTS — pick a palette × font you want to take forward</div>
+<div class="note">All three use Plus Jakarta Sans for the hero name — if you want Space Grotesk on D3 tested separately, say so</div>
+
+<div class="row">
+
+  <!-- D1 -->
+  <div class="card d1">
+    <div class="card-label">D1 · GRAPHITE TARGA · cream body / dark header / cognac</div>
+    <div class="targa"></div>
+    <div class="inst-bar">
+      <span class="logo">BRANSON</span>
+      <div class="indicators"><span><span class="dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="hero">
+      <div class="hero-name f-jakarta">Branson Tay</div>
+      <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+      <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+    </div>
+    <div class="rule-bar"><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div></div>
+    <div class="panel">
+      <div class="ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="pb">Multi-agent RL racing sim. Six autonomous agents, λ-slider control.</div>
+      <div class="gauge"><div class="gauge-label">Agent convergence</div><div class="gauge-track"><div class="gauge-fill"></div></div></div>
+    </div>
+    <div class="bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- D2 -->
+  <div class="card d2">
+    <div class="card-label">D2 · RALLY TAN · sand base / olive accent / deep header</div>
+    <div class="targa"></div>
+    <div class="inst-bar">
+      <span class="logo">BRANSON</span>
+      <div class="indicators"><span><span class="dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="hero">
+      <div class="hero-name f-jakarta">Branson Tay</div>
+      <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+      <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+    </div>
+    <div class="rule-bar"><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div></div>
+    <div class="panel">
+      <div class="ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="pb">Multi-agent RL racing sim. Six autonomous agents, λ-slider control.</div>
+      <div class="gauge"><div class="gauge-label">Agent convergence</div><div class="gauge-track"><div class="gauge-fill"></div></div></div>
+    </div>
+    <div class="bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- D3 -->
+  <div class="card d3">
+    <div class="card-label">D3 · CAFÉ RACER · off-white / BRG accent / dark leather header</div>
+    <div class="targa"></div>
+    <div class="inst-bar">
+      <span class="logo">BRANSON</span>
+      <div class="indicators"><span><span class="dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="hero">
+      <div class="hero-name f-grotesk">Branson Tay</div>
+      <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+      <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+    </div>
+    <div class="rule-bar"><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div></div>
+    <div class="panel">
+      <div class="ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="pb">Multi-agent RL racing sim. Six autonomous agents, λ-slider control.</div>
+      <div class="gauge"><div class="gauge-label">Agent convergence</div><div class="gauge-track"><div class="gauge-fill"></div></div></div>
+    </div>
+    <div class="bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+</div>
+
+
+<div class="section-label">NIGHT VARIANTS — pick a colour mood × font</div>
+<div class="note">N1+N2 use Rajdhani. N3 uses Barlow Condensed. Mix any night colour with either font if you want.</div>
+
+<div class="row">
+
+  <!-- N1 -->
+  <div class="card n1">
+    <div class="card-label">N1 · PHOSPHOR GREEN · classic CRT / Rajdhani</div>
+    <div class="targa"></div>
+    <div class="inst-bar">
+      <span class="logo">BRANSON</span>
+      <div class="indicators"><span><span class="dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="hero">
+      <div class="hero-name f-rajdhani">Branson Tay</div>
+      <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+      <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+    </div>
+    <div class="rule-bar"><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div></div>
+    <div class="panel">
+      <div class="ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="pb">Multi-agent RL racing sim. Six autonomous agents, λ-slider control.</div>
+      <div class="gauge"><div class="gauge-label">Agent convergence</div><div class="gauge-track"><div class="gauge-fill"></div></div></div>
+    </div>
+    <div class="bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- N2 -->
+  <div class="card n2">
+    <div class="card-label">N2 · JDM AMBER · warm analogue cluster / Rajdhani</div>
+    <div class="targa"></div>
+    <div class="inst-bar">
+      <span class="logo">BRANSON</span>
+      <div class="indicators"><span><span class="dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="hero">
+      <div class="hero-name f-rajdhani">Branson Tay</div>
+      <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+      <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+    </div>
+    <div class="rule-bar"><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div></div>
+    <div class="panel">
+      <div class="ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="pb">Multi-agent RL racing sim. Six autonomous agents, λ-slider control.</div>
+      <div class="gauge"><div class="gauge-label">Agent convergence</div><div class="gauge-track"><div class="gauge-fill"></div></div></div>
+    </div>
+    <div class="bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- N3 -->
+  <div class="card n3">
+    <div class="card-label">N3 · STREET CYAN · tuner HUD / Barlow Condensed</div>
+    <div class="targa"></div>
+    <div class="inst-bar">
+      <span class="logo">BRANSON</span>
+      <div class="indicators"><span><span class="dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="hero">
+      <div class="hero-name f-barlow">Branson Tay</div>
+      <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+      <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+    </div>
+    <div class="rule-bar"><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div><div class="rule-line"></div><div class="rule-dot"></div></div>
+    <div class="panel">
+      <div class="ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="pb">Multi-agent RL racing sim. Six autonomous agents, λ-slider control.</div>
+      <div class="gauge"><div class="gauge-label">Agent convergence</div><div class="gauge-track"><div class="gauge-fill"></div></div></div>
+    </div>
+    <div class="bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+</div>
+
+<div style="color:#444;font-size:9px;letter-spacing:0.2em;font-family:'Courier New',monospace;padding-top:8px;text-transform:uppercase;">
+  Fonts load from Google Fonts (preview only — will be self-hosted in the actual build) · Open this file directly in browser, no server needed
+</div>
+
+</body>
+</html>

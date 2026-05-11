@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branson — Palette v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #F5EEE0; padding: 36px 28px; color: #1A120A; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+.section {
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 36px 0 6px; border-bottom: 1px solid rgba(90,70,40,.2); margin-bottom: 20px;
+  color: #4A3828;
+}
+.section:first-of-type { padding-top: 0; }
+.section-note {
+  color: #7A6050; font-size: 11px; margin-bottom: 22px; max-width: 780px; line-height: 1.5;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   PART 1 — SECONDARY COLOUR ROTATION
+   ═══════════════════════════════════════════════════════════ */
+.rotation { display: grid; gap: 16px; }
+.rot-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+  padding: 18px 20px;
+  background: #EDE4D0;
+  border-radius: 3px;
+  border-left: 4px solid transparent;
+}
+.rot-name {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  display: flex; flex-direction: column; justify-content: center; gap: 6px;
+}
+.rot-name .hex { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; opacity: .65; letter-spacing: 0.05em; text-transform: none; }
+
+.swatches { display: flex; gap: 6px; align-items: stretch; }
+.sw {
+  flex: 1;
+  min-height: 68px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 6px 7px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(90,70,40,.08);
+}
+.sw.sw-dark { border: 1px solid rgba(255,255,255,.08); }
+
+.sample {
+  display: flex; flex-direction: column; justify-content: center; gap: 8px;
+  padding: 4px 0;
+}
+.sample-hero { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
+.sample-tag { font-size: 11px; font-weight: 500; }
+.sample-ctas { display: flex; gap: 8px; margin-top: 4px; }
+.sample-cta { padding: 7px 13px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; border-radius: 2px; border: 1px solid transparent; font-family: inherit; cursor: pointer; }
+.sample-cta-sec { background: transparent; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   PART 2 — DAY FONT CHOICES (one font, full day mode)
+   ═══════════════════════════════════════════════════════════ */
+.fonts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; }
+
+.fcard {
+  background: #F5EEE0;
+  border: 1px solid rgba(90,70,40,.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.fcard-label {
+  background: #1E1A16; color: #E8D5B0;
+  padding: 6px 14px;
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.fc-inst {
+  background: #1E1A16; color: #E8D5B0;
+  padding: 10px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+}
+.fc-logo { font-weight: 600; letter-spacing: 0.28em; font-size: 13px; }
+.fc-indicators { display: flex; gap: 12px; font-size: 9px; letter-spacing: 0.18em; opacity: .55; }
+.fc-dot { display:inline-block; width:5px; height:5px; border-radius:50%; margin-right:5px; background: #C47A2E; box-shadow: 0 0 4px rgba(196,122,46,.5); }
+
+.fc-hero { padding: 24px 16px 18px; }
+.fc-hero-name { font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #1A120A; }
+.fc-hero-tag { font-size: 11px; font-weight: 500; color: #7A3028; margin-top: 12px; }
+.fc-hero-coords { font-size: 10px; font-weight: 400; color: #7A6050; margin-top: 6px; letter-spacing: 0.04em; }
+.fc-cta-row { display: flex; gap: 8px; margin-top: 16px; }
+.fc-cta { padding: 8px 14px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; border-radius: 2px; cursor: pointer; border: 1px solid transparent; font-family: inherit; }
+.fc-cta-pri { background: #7A3028; color: #F5EEE0; }
+.fc-cta-sec { background: transparent; color: #8B5A30; border-color: #8B5A30; }
+
+.fc-rule { display: flex; align-items: center; margin: 16px; gap: 6px; }
+.fc-rule-line { flex: 1; height: 2px; background: linear-gradient(90deg,transparent,#B8B2A6,transparent); }
+.fc-rule-dot { width: 4px; height: 4px; border-radius: 50%; background: #B8B2A6; }
+
+.fc-panel { margin: 0 16px 16px; border-top: 2px solid #8B5A30; background: #EDE4D0; border-radius: 2px; }
+.fc-ph {
+  padding: 8px 11px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  display: flex; justify-content: space-between;
+  border-bottom: 1px solid rgba(90,70,40,.12);
+  color: #7A3028; font-weight: 600;
+  background: #E2D8C4;
+}
+.fc-ph .pid { color: #8B5A30; font-weight: 700; letter-spacing: 0.24em; }
+.fc-pb { padding: 12px 11px; font-size: 12px; line-height: 1.55; color: #1A120A; font-weight: 400; }
+.fc-gauge { padding: 9px 11px; border-top: 1px solid rgba(90,70,40,.12); display: flex; gap: 10px; align-items: center; }
+.fc-gauge-meta { flex: 1; }
+.fc-gauge-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(90,70,40,.65); margin-bottom: 4px; }
+.fc-gauge-track { height: 2px; border-radius: 1px; background: rgba(90,70,40,.15); overflow: hidden; }
+.fc-gauge-fill { height: 100%; width: 62%; background: #8B5A30; }
+.fc-gauge-value { font-size: 13px; font-weight: 600; color: #7A3028; letter-spacing: 0.04em; }
+
+.fc-bot {
+  background: #1E1A16; color: rgba(232,213,176,.45);
+  padding: 8px 16px;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  display: flex; justify-content: space-between;
+}
+
+/* font classes — apply to fcard */
+.ff-jakarta    * { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.ff-instrument * { font-family: 'Instrument Sans', sans-serif !important; }
+.ff-manrope    * { font-family: 'Manrope', sans-serif !important; }
+.ff-figtree    * { font-family: 'Figtree', sans-serif !important; }
+/* keep card-label + section-label mono for clarity */
+.ff-jakarta .fcard-label, .ff-instrument .fcard-label, .ff-manrope .fcard-label, .ff-figtree .fcard-label { font-family: 'IBM Plex Mono', monospace !important; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   PART 3 — NIGHT CTA REFINEMENT
+   On N-1 palette; cycling 4 CTA treatments
+   ═══════════════════════════════════════════════════════════ */
+.cta-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 18px; }
+
+.ncard {
+  background: #0C0A08;
+  color: #E8DFC8;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(232,223,200,.1);
+}
+.ncard-label { background: rgba(232,223,200,.08); color: #E8DFC8; padding: 6px 14px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; }
+.nc-inst {
+  background: #080604; border-bottom: 1px solid rgba(200,180,140,.08);
+  padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+}
+.nc-logo { font-family: 'Chakra Petch', sans-serif !important; font-weight: 600; font-size: 13px; letter-spacing: 0.28em; color: #E8DFC8; }
+.nc-indicators { display: flex; gap: 12px; color: #807868; font-size: 9px; }
+.nc-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,.7); margin-right: 5px; }
+.nc-hero { padding: 26px 16px 20px; font-family: 'Chakra Petch', sans-serif; }
+.nc-hero-name { font-size: 36px; font-weight: 700; letter-spacing: 0.01em; line-height: 1; color: #E8DFC8; }
+.nc-hero-tag { font-size: 12px; font-weight: 500; color: #A89878; margin-top: 12px; }
+.nc-hero-coords { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #605848; margin-top: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
+.nc-cta-row { display: flex; gap: 10px; margin-top: 18px; }
+.nc-cta { padding: 9px 16px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; border-radius: 2px; cursor: pointer; font-family: 'Chakra Petch', sans-serif; border: 1px solid transparent; }
+
+/* CTA VARIANT A — bone outline ghost */
+.cta-a-pri { background: transparent; color: #E8DFC8; border-color: rgba(232,223,200,.4); }
+.cta-a-sec { background: transparent; color: #807868; border: none; padding-left: 0; }
+
+/* CTA VARIANT B — graphite fill */
+.cta-b-pri { background: #1E1A15; color: #E8DFC8; border-color: rgba(232,223,200,.15); }
+.cta-b-sec { background: transparent; color: #A89878; border-color: rgba(168,152,120,.3); }
+
+/* CTA VARIANT C — amber warm outline */
+.cta-c-pri { background: transparent; color: #D9A030; border-color: rgba(217,160,48,.55); }
+.cta-c-sec { background: transparent; color: #807868; border: none; padding-left: 0; }
+
+/* CTA VARIANT D — dim metallic fill */
+.cta-d-pri { background: #2A2620; color: #E8DFC8; border-color: transparent; }
+.cta-d-sec { background: transparent; color: #A89878; border: 1px solid rgba(168,152,120,.3); }
+
+</style>
+</head>
+<body>
+
+
+<!-- ═════════════════════════════════════════════════════
+     PART 1 — Secondary colour rotation
+═════════════════════════════════════════════════════ -->
+
+<div class="section">PART 1 · DAY SECONDARY — rotating what sits next to cognac</div>
+<div class="section-note">
+  Anchor colours fixed: cream background (#F5EEE0), graphite header (#1E1A16), cognac primary (#8B5A30), silver (#B8B2A6). Only the <strong>secondary / CTA colour</strong> rotates. Sample hero uses Plus Jakarta Sans so fonts don't confuse the colour read.
+</div>
+
+<div class="rotation">
+
+  <!-- Oxblood -->
+  <div class="rot-row" style="border-left-color:#7A3028;">
+    <div class="rot-name">
+      <div>OXBLOOD</div>
+      <div class="hex">#7A3028</div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#F5EEE0; color:#7A6050;">cream</div>
+      <div class="sw sw-dark" style="background:#1E1A16; color:#E8D5B0;">graphite</div>
+      <div class="sw" style="background:#8B5A30; color:#F5EEE0;">cognac</div>
+      <div class="sw" style="background:#7A3028; color:#F5EEE0;">oxblood</div>
+      <div class="sw" style="background:#B8B2A6; color:#1A120A;">silver</div>
+    </div>
+    <div class="sample">
+      <div class="sample-hero">Branson Tay</div>
+      <div class="sample-tag" style="color:#7A3028;">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="sample-ctas">
+        <button class="sample-cta" style="background:#7A3028; color:#F5EEE0;">View Work</button>
+        <button class="sample-cta sample-cta-sec" style="color:#8B5A30; border-color:#8B5A30;">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Burgundy -->
+  <div class="rot-row" style="border-left-color:#6B1F2E;">
+    <div class="rot-name">
+      <div>BURGUNDY</div>
+      <div class="hex">#6B1F2E</div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#F5EEE0; color:#7A6050;">cream</div>
+      <div class="sw sw-dark" style="background:#1E1A16; color:#E8D5B0;">graphite</div>
+      <div class="sw" style="background:#8B5A30; color:#F5EEE0;">cognac</div>
+      <div class="sw" style="background:#6B1F2E; color:#F5EEE0;">burgundy</div>
+      <div class="sw" style="background:#B8B2A6; color:#1A120A;">silver</div>
+    </div>
+    <div class="sample">
+      <div class="sample-hero">Branson Tay</div>
+      <div class="sample-tag" style="color:#6B1F2E;">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="sample-ctas">
+        <button class="sample-cta" style="background:#6B1F2E; color:#F5EEE0;">View Work</button>
+        <button class="sample-cta sample-cta-sec" style="color:#8B5A30; border-color:#8B5A30;">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Claret (brighter) -->
+  <div class="rot-row" style="border-left-color:#8B2432;">
+    <div class="rot-name">
+      <div>CLARET</div>
+      <div class="hex">#8B2432</div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#F5EEE0; color:#7A6050;">cream</div>
+      <div class="sw sw-dark" style="background:#1E1A16; color:#E8D5B0;">graphite</div>
+      <div class="sw" style="background:#8B5A30; color:#F5EEE0;">cognac</div>
+      <div class="sw" style="background:#8B2432; color:#F5EEE0;">claret</div>
+      <div class="sw" style="background:#B8B2A6; color:#1A120A;">silver</div>
+    </div>
+    <div class="sample">
+      <div class="sample-hero">Branson Tay</div>
+      <div class="sample-tag" style="color:#8B2432;">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="sample-ctas">
+        <button class="sample-cta" style="background:#8B2432; color:#F5EEE0;">View Work</button>
+        <button class="sample-cta sample-cta-sec" style="color:#8B5A30; border-color:#8B5A30;">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rust (warmer) -->
+  <div class="rot-row" style="border-left-color:#9B3A1A;">
+    <div class="rot-name">
+      <div>RUST</div>
+      <div class="hex">#9B3A1A</div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#F5EEE0; color:#7A6050;">cream</div>
+      <div class="sw sw-dark" style="background:#1E1A16; color:#E8D5B0;">graphite</div>
+      <div class="sw" style="background:#8B5A30; color:#F5EEE0;">cognac</div>
+      <div class="sw" style="background:#9B3A1A; color:#F5EEE0;">rust</div>
+      <div class="sw" style="background:#B8B2A6; color:#1A120A;">silver</div>
+    </div>
+    <div class="sample">
+      <div class="sample-hero">Branson Tay</div>
+      <div class="sample-tag" style="color:#9B3A1A;">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="sample-ctas">
+        <button class="sample-cta" style="background:#9B3A1A; color:#F5EEE0;">View Work</button>
+        <button class="sample-cta sample-cta-sec" style="color:#8B5A30; border-color:#8B5A30;">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bordeaux (deeper wine) -->
+  <div class="rot-row" style="border-left-color:#5D1A29;">
+    <div class="rot-name">
+      <div>BORDEAUX</div>
+      <div class="hex">#5D1A29</div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#F5EEE0; color:#7A6050;">cream</div>
+      <div class="sw sw-dark" style="background:#1E1A16; color:#E8D5B0;">graphite</div>
+      <div class="sw" style="background:#8B5A30; color:#F5EEE0;">cognac</div>
+      <div class="sw" style="background:#5D1A29; color:#F5EEE0;">bordeaux</div>
+      <div class="sw" style="background:#B8B2A6; color:#1A120A;">silver</div>
+    </div>
+    <div class="sample">
+      <div class="sample-hero">Branson Tay</div>
+      <div class="sample-tag" style="color:#5D1A29;">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="sample-ctas">
+        <button class="sample-cta" style="background:#5D1A29; color:#F5EEE0;">View Work</button>
+        <button class="sample-cta sample-cta-sec" style="color:#8B5A30; border-color:#8B5A30;">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mahogany (darker brown-red) -->
+  <div class="rot-row" style="border-left-color:#4A2419;">
+    <div class="rot-name">
+      <div>MAHOGANY</div>
+      <div class="hex">#4A2419</div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#F5EEE0; color:#7A6050;">cream</div>
+      <div class="sw sw-dark" style="background:#1E1A16; color:#E8D5B0;">graphite</div>
+      <div class="sw" style="background:#8B5A30; color:#F5EEE0;">cognac</div>
+      <div class="sw" style="background:#4A2419; color:#F5EEE0;">mahogany</div>
+      <div class="sw" style="background:#B8B2A6; color:#1A120A;">silver</div>
+    </div>
+    <div class="sample">
+      <div class="sample-hero">Branson Tay</div>
+      <div class="sample-tag" style="color:#4A2419;">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="sample-ctas">
+        <button class="sample-cta" style="background:#4A2419; color:#F5EEE0;">View Work</button>
+        <button class="sample-cta sample-cta-sec" style="color:#8B5A30; border-color:#8B5A30;">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════
+     PART 2 — Day font (single font across entire day mode)
+═════════════════════════════════════════════════════ -->
+
+<div class="section">PART 2 · DAY FONT — one sans for everything (no mono in day mode)</div>
+<div class="section-note">
+  Each card uses the same D-1 cognac + oxblood palette. The font drives hero, tagline, coords, panel IDs, body, gauge labels, CTAs — everything. No mono surfaces here. IBM Plex Mono only returns in night mode as a technical callout. Choose based on the vibe that feels most you.
+</div>
+
+<div class="fonts-grid">
+
+  <!-- Plus Jakarta Sans -->
+  <div class="fcard ff-jakarta">
+    <div class="fcard-label">PLUS JAKARTA SANS · current baseline · geometric, modern, friendly-warm</div>
+    <div class="fc-inst">
+      <span class="fc-logo">BRANSON</span>
+      <div class="fc-indicators"><span><span class="fc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="fc-hero">
+      <div class="fc-hero-name">Branson Tay</div>
+      <div class="fc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="fc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="fc-cta-row">
+        <button class="fc-cta fc-cta-pri">View Work</button>
+        <button class="fc-cta fc-cta-sec">Get In Touch</button>
+      </div>
+    </div>
+    <div class="fc-rule"><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div></div>
+    <div class="fc-panel">
+      <div class="fc-ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="fc-pb">Multi-agent reinforcement learning on a 2D oval. The λ-slider controls exploration vs exploitation in real time.</div>
+      <div class="fc-gauge"><div class="fc-gauge-meta"><div class="fc-gauge-label">Convergence</div><div class="fc-gauge-track"><div class="fc-gauge-fill"></div></div></div><div class="fc-gauge-value">0.62</div></div>
+    </div>
+    <div class="fc-bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- Instrument Sans -->
+  <div class="fcard ff-instrument">
+    <div class="fcard-label">INSTRUMENT SANS · editorial-neutral, Grilli Type influence · slight posh</div>
+    <div class="fc-inst">
+      <span class="fc-logo">BRANSON</span>
+      <div class="fc-indicators"><span><span class="fc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="fc-hero">
+      <div class="fc-hero-name">Branson Tay</div>
+      <div class="fc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="fc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="fc-cta-row">
+        <button class="fc-cta fc-cta-pri">View Work</button>
+        <button class="fc-cta fc-cta-sec">Get In Touch</button>
+      </div>
+    </div>
+    <div class="fc-rule"><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div></div>
+    <div class="fc-panel">
+      <div class="fc-ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="fc-pb">Multi-agent reinforcement learning on a 2D oval. The λ-slider controls exploration vs exploitation in real time.</div>
+      <div class="fc-gauge"><div class="fc-gauge-meta"><div class="fc-gauge-label">Convergence</div><div class="fc-gauge-track"><div class="fc-gauge-fill"></div></div></div><div class="fc-gauge-value">0.62</div></div>
+    </div>
+    <div class="fc-bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- Manrope -->
+  <div class="fcard ff-manrope">
+    <div class="fcard-label">MANROPE · refined geometric, narrower, higher contrast</div>
+    <div class="fc-inst">
+      <span class="fc-logo">BRANSON</span>
+      <div class="fc-indicators"><span><span class="fc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="fc-hero">
+      <div class="fc-hero-name">Branson Tay</div>
+      <div class="fc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="fc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="fc-cta-row">
+        <button class="fc-cta fc-cta-pri">View Work</button>
+        <button class="fc-cta fc-cta-sec">Get In Touch</button>
+      </div>
+    </div>
+    <div class="fc-rule"><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div></div>
+    <div class="fc-panel">
+      <div class="fc-ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="fc-pb">Multi-agent reinforcement learning on a 2D oval. The λ-slider controls exploration vs exploitation in real time.</div>
+      <div class="fc-gauge"><div class="fc-gauge-meta"><div class="fc-gauge-label">Convergence</div><div class="fc-gauge-track"><div class="fc-gauge-fill"></div></div></div><div class="fc-gauge-value">0.62</div></div>
+    </div>
+    <div class="fc-bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+  <!-- Figtree -->
+  <div class="fcard ff-figtree">
+    <div class="fcard-label">FIGTREE · neutral humanist, Vercel-esque · professional, friendly</div>
+    <div class="fc-inst">
+      <span class="fc-logo">BRANSON</span>
+      <div class="fc-indicators"><span><span class="fc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="fc-hero">
+      <div class="fc-hero-name">Branson Tay</div>
+      <div class="fc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="fc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="fc-cta-row">
+        <button class="fc-cta fc-cta-pri">View Work</button>
+        <button class="fc-cta fc-cta-sec">Get In Touch</button>
+      </div>
+    </div>
+    <div class="fc-rule"><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div><div class="fc-rule-line"></div><div class="fc-rule-dot"></div></div>
+    <div class="fc-panel">
+      <div class="fc-ph"><span class="pid">F1-SIM</span><span>MARL · LIVE</span></div>
+      <div class="fc-pb">Multi-agent reinforcement learning on a 2D oval. The λ-slider controls exploration vs exploitation in real time.</div>
+      <div class="fc-gauge"><div class="fc-gauge-meta"><div class="fc-gauge-label">Convergence</div><div class="fc-gauge-track"><div class="fc-gauge-fill"></div></div></div><div class="fc-gauge-value">0.62</div></div>
+    </div>
+    <div class="fc-bot"><span>BRANSONTAY.DEV</span><span>FDE · ML/AI</span></div>
+  </div>
+
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════
+     PART 3 — Night CTA refinement on N-1
+═════════════════════════════════════════════════════ -->
+
+<div class="section">PART 3 · NIGHT CTA — the bone fill is too loud; here are 4 calmer treatments</div>
+<div class="section-note">
+  Same N-1 palette (warm black bg, bone text, subtle green on panel ID + status dot). Only the CTA row changes. A real dashboard button at night is usually recessed graphite with soft amber or bone backlighting — that's what we're reaching for.
+</div>
+
+<div class="cta-strip">
+
+  <!-- A: bone outline ghost -->
+  <div class="ncard">
+    <div class="ncard-label">A · BONE GHOST · outlined primary, text-only secondary</div>
+    <div class="nc-inst">
+      <span class="nc-logo">BRANSON</span>
+      <div class="nc-indicators"><span><span class="nc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="nc-hero">
+      <div class="nc-hero-name">Branson Tay</div>
+      <div class="nc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="nc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="nc-cta-row">
+        <button class="nc-cta cta-a-pri">View Work</button>
+        <button class="nc-cta cta-a-sec">Get In Touch →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- B: graphite fill -->
+  <div class="ncard">
+    <div class="ncard-label">B · GRAPHITE FILL · dark recessed button, subtle outline</div>
+    <div class="nc-inst">
+      <span class="nc-logo">BRANSON</span>
+      <div class="nc-indicators"><span><span class="nc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="nc-hero">
+      <div class="nc-hero-name">Branson Tay</div>
+      <div class="nc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="nc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="nc-cta-row">
+        <button class="nc-cta cta-b-pri">View Work</button>
+        <button class="nc-cta cta-b-sec">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- C: amber warm outline -->
+  <div class="ncard">
+    <div class="ncard-label">C · AMBER OUTLINE · warm accent lights the button edge</div>
+    <div class="nc-inst">
+      <span class="nc-logo">BRANSON</span>
+      <div class="nc-indicators"><span><span class="nc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="nc-hero">
+      <div class="nc-hero-name">Branson Tay</div>
+      <div class="nc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="nc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="nc-cta-row">
+        <button class="nc-cta cta-c-pri">View Work</button>
+        <button class="nc-cta cta-c-sec">Get In Touch →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D: dim metallic fill -->
+  <div class="ncard">
+    <div class="ncard-label">D · DIM METALLIC · slightly-raised dark bone fill, outlined secondary</div>
+    <div class="nc-inst">
+      <span class="nc-logo">BRANSON</span>
+      <div class="nc-indicators"><span><span class="nc-dot"></span>ONLINE</span><span>NYC / LDN</span></div>
+    </div>
+    <div class="nc-hero">
+      <div class="nc-hero-name">Branson Tay</div>
+      <div class="nc-hero-tag">Full-stack engineer, ML researcher, forward deployed.</div>
+      <div class="nc-hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+      <div class="nc-cta-row">
+        <button class="nc-cta cta-d-pri">View Work</button>
+        <button class="nc-cta cta-d-sec">Get In Touch</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div style="color:#7A6050; font-size:10px; letter-spacing:0.15em; padding:32px 0 8px; text-transform:uppercase; border-top:1px solid rgba(90,70,40,.2); margin-top:32px;">
+  Decisions needed · (1) secondary colour: oxblood / burgundy / claret / rust / bordeaux / mahogany<br>
+  (2) day font: jakarta / instrument / manrope / figtree<br>
+  (3) night CTA treatment: A / B / C / D<br>
+  (4) open question: keep Chakra Petch for night hero, or show posh alternatives to match the day font energy?
+</div>
+
+</body>
+</html>

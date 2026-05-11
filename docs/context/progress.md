@@ -10,6 +10,34 @@ Format:
 
 ---
 
+## 2026-04-17 — Session 1 (design lock)
+
+### Decisions made
+- **Day palette locked:** `--bg #F5EEE0` / `--ink #1E1A16` / `--acc #8B5A30` (cognac) / `--acc2 #5D1A29` (bordeaux).
+- **Night palette locked:** `--bg #090A07` / `--fg #E8DFC8` (bone) / `--acc #14CC4A` (phosphor, live-data only) / `--amb #D9A030` (CTAs).
+- **Fonts locked:** Day = Instrument Sans across everything. Night = Chakra Petch (hero) + Instrument Sans (body) + IBM Plex Mono (instrument readouts).
+- **CTA system locked:** squared, three variants. Night primary = amber outline, night secondary = graphite `#1E1A15` fill with amber text, night ghost = amber text + arrow. Day mirrors shape in cognac/bordeaux.
+- **Phosphor discipline promoted to hard rule** in `design.md`: green is reserved for live-state elements (status, gauges, panel IDs, data values). Never on logo, nav, CTAs, body, or decoration.
+
+### Artefacts produced
+- Six iterative palette mockups: `docs/mockup-palettes-v1.html` → `v6.html`.
+- `docs/context/design.md` rewritten with locked tokens, phosphor discipline rule, and CTA system.
+
+### What comes next (Session 1 continued / Session 2)
+1. **Branson runs the Astro wizard manually** — `npm create astro@latest .` in `C:\Code\portfolio`.
+2. After scaffold: install integrations (`@astrojs/react`, `@astrojs/cloudflare`, `sass`, `nanostores`, `@nanostores/react`).
+3. Write `src/styles/_tokens.scss` with the locked CSS custom properties + `[data-theme="night"]` swap block + `@mixin phosphor-glow`.
+4. Configure `astro.config.mjs` (Cloudflare adapter, React, SCSS `additionalData` auto-import of `_tokens.scss`).
+5. Create folder tree per `docs/context/architecture.md` with `.gitkeep` placeholders.
+6. Stop for Branson review before `_reset.scss`, `_typography.scss`, or any component.
+
+### Open decisions resolved
+- ~~Phosphor green value~~ → `#14CC4A` confirmed; discipline rule added.
+- ~~Self-host vs system fonts~~ → self-host Instrument Sans, Chakra Petch, IBM Plex Mono (all Google Fonts) via `@font-face` with `size-adjust` width-matching for the tunnel transition.
+- ~~Domain~~ → `bransontay.dev`.
+
+---
+
 ## Session 0 — Pre-initialisation
 
 **Context established in Claude.ai (not Claude Code yet)**

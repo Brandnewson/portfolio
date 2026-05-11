@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branson — Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Courier New', Courier, monospace; display: flex; min-height: 100vh; }
+
+  /* ── SHARED ── */
+  .mode { flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .label-strip {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  /* ── TARGA BAR (2px top line) ── */
+  .targa { height: 5px; }
+
+  /* ── INSTRUMENT BAR ── */
+  .instrument-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    border-bottom: 1px solid;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .instrument-bar .logo { font-size: 13px; font-weight: 700; letter-spacing: 0.28em; }
+  .instrument-bar .indicators { display: flex; gap: 18px; align-items: center; font-size: 10px; letter-spacing: 0.18em; }
+  .status-dot {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px;
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  /* ── HERO ── */
+  .hero { padding: 48px 24px 36px; }
+  .hero-name-day  { font-family: Georgia, 'Times New Roman', serif; font-size: 50px; font-weight: 700; line-height: 1; }
+  .hero-name-night{ font-family: 'Courier New', Courier, monospace; font-size: 50px; font-weight: 700; line-height: 1; letter-spacing: -0.01em; }
+  .hero-tagline { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 10px; }
+  .hero-coords { font-size: 10px; letter-spacing: 0.18em; margin-top: 6px; opacity: 0.55; }
+
+  /* ── SILVER RULE ── */
+  .silver-rule { display: flex; align-items: center; margin: 0 24px 32px; gap: 8px; }
+  .rule-line { flex: 1; height: 2px; }
+  .rule-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+  /* ── PANELS ── */
+  .panels { display: flex; gap: 16px; padding: 0 24px; flex-wrap: wrap; }
+  .panel {
+    flex: 1; min-width: 180px;
+    border-top: 2px solid;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .panel-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    border-bottom: 1px solid;
+  }
+  .panel-id { font-weight: 700; letter-spacing: 0.24em; }
+  .panel-body { padding: 12px; font-size: 11px; line-height: 1.65; }
+  .panel-gauge { padding: 10px 12px; border-top: 1px solid; }
+  .gauge-bar-track { height: 3px; border-radius: 1px; overflow: hidden; }
+  .gauge-bar-fill { height: 100%; width: 62%; border-radius: 1px; }
+  .gauge-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; opacity: 0.6; }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    margin-top: auto;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 24px;
+    border-top: 1px solid;
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+
+  /* ── DIVIDER between modes ── */
+  .divider { width: 3px; background: #888; flex-shrink: 0; }
+
+
+  /* ═══════════════════════════════════
+     DAY MODE — 911 Targa
+  ═══════════════════════════════════ */
+  .day { background: #F0E8D0; color: #1A120A; }
+  .day .label-strip { background: #8B5A30; color: #F0E8D0; }
+  .day .targa { background: linear-gradient(90deg, #9A9490, #D0CAC0 30%, #B8B2A6 50%, #D0CAC0 70%, #9A9490); }
+  .day .instrument-bar { border-color: rgba(90,70,40,0.18); }
+  .day .instrument-bar .logo { color: #1A120A; }
+  .day .instrument-bar .indicators { color: #6A5040; }
+  .day .status-dot { background: #8B5A30; }
+  .day .hero-tagline { color: #6A5040; }
+  .day .hero-coords { color: #6A5040; }
+  .day .silver-rule .rule-line { background: linear-gradient(90deg, transparent, #B8B2A6, transparent); }
+  .day .silver-rule .rule-dot { background: #B8B2A6; }
+  .day .panel { background: #EAE0C8; border-color: #8B5A30; border-top-width: 2px; }
+  .day .panel-header { background: #E4D8BC; border-color: rgba(90,70,40,0.15); color: #6A5040; }
+  .day .panel-id { color: #8B5A30; }
+  .day .panel-body { color: #1A120A; }
+  .day .panel-gauge { border-color: rgba(90,70,40,0.12); }
+  .day .gauge-bar-track { background: rgba(90,70,40,0.12); }
+  .day .gauge-bar-fill { background: #8B5A30; }
+  .day .bottom-bar { border-color: rgba(90,70,40,0.15); color: #6A5040; }
+  /* panel offsets — stagger like a real dash */
+  .day .panels .panel:nth-child(1) { transform: translateY(22px); }
+  .day .panels .panel:nth-child(2) { transform: translateY(0px); }
+  .day .panels .panel:nth-child(3) { transform: translateY(14px); }
+
+
+  /* ═══════════════════════════════════
+     NIGHT MODE — 300ZX
+  ═══════════════════════════════════ */
+  .night { background: #090A07; color: #8EC888; }
+  .night .label-strip { background: #14CC4A; color: #090A07; }
+  .night .targa { background: linear-gradient(90deg, #090A07, #182015 30%, #111410 50%, #182015 70%, #090A07); }
+  .night .instrument-bar { border-color: rgba(20,204,74,0.14); }
+  .night .instrument-bar .logo { color: #14CC4A; text-shadow: 0 0 8px rgba(20,204,74,0.45), 0 0 18px rgba(20,204,74,0.15); }
+  .night .instrument-bar .indicators { color: #2E5828; }
+  .night .status-dot { background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,0.6); }
+  .night .hero-tagline { color: #2E5828; }
+  .night .hero-coords { color: #2E5828; }
+  .night .silver-rule .rule-line { background: linear-gradient(90deg, transparent, #182015, transparent); }
+  .night .silver-rule .rule-dot { background: #182015; }
+  .night .panel { background: #111410; border-color: #14CC4A; }
+  .night .panel-header { background: #0D0F0A; border-color: rgba(20,204,74,0.14); color: #2E5828; }
+  .night .panel-id { color: #14CC4A; text-shadow: 0 0 8px rgba(20,204,74,0.45), 0 0 18px rgba(20,204,74,0.15); }
+  .night .panel-body { color: #8EC888; }
+  .night .panel-gauge { border-color: rgba(20,204,74,0.14); }
+  .night .gauge-bar-track { background: rgba(20,204,74,0.1); }
+  .night .gauge-bar-fill { background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,0.4); }
+  .night .bottom-bar { border-color: rgba(20,204,74,0.14); color: #2E5828; }
+  /* same stagger */
+  .night .panels .panel:nth-child(1) { transform: translateY(22px); }
+  .night .panels .panel:nth-child(2) { transform: translateY(0px); }
+  .night .panels .panel:nth-child(3) { transform: translateY(14px); }
+</style>
+</head>
+<body>
+
+<!-- ══ DAY MODE ══════════════════════════════ -->
+<div class="mode day">
+  <div class="label-strip">DAY MODE — 911 TARGA</div>
+  <div class="targa"></div>
+
+  <div class="instrument-bar">
+    <span class="logo">BRANSON</span>
+    <div class="indicators">
+      <span><span class="status-dot"></span>ONLINE</span>
+      <span>NYC / LDN</span>
+      <span>DAY ◐</span>
+    </div>
+  </div>
+
+  <div class="hero" style="margin-bottom: 8px;">
+    <div class="hero-name-day">Branson Tay</div>
+    <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+    <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+  </div>
+
+  <div class="silver-rule">
+    <div class="rule-dot"></div>
+    <div class="rule-line"></div>
+    <div class="rule-dot"></div>
+    <div class="rule-line"></div>
+    <div class="rule-dot"></div>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-id">F1-SIM</span>
+        <span>MARL · LIVE</span>
+      </div>
+      <div class="panel-body">
+        Multi-agent RL racing simulation. Six autonomous agents on a 2D oval. λ-slider controls exploration vs exploitation in real time.
+      </div>
+      <div class="panel-gauge">
+        <div class="gauge-label">Agent convergence</div>
+        <div class="gauge-bar-track"><div class="gauge-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-id">FS-SIM</span>
+        <span>LP · OFFLINE</span>
+      </div>
+      <div class="panel-body">
+        Formula Student quasi-static lap time simulator. Adjust downforce, weight, and tyre compound — results in &lt;1ms from pre-computed LP table.
+      </div>
+      <div class="panel-gauge">
+        <div class="gauge-label">Lap delta</div>
+        <div class="gauge-bar-track"><div class="gauge-bar-fill" style="width:38%"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-id">HELM</span>
+        <span>PROD · v2.1</span>
+      </div>
+      <div class="panel-body">
+        Kubernetes + Helm deployment tool. Reduced release time by 70%. Before/after diff view, CI pipeline breakdown, live cluster health.
+      </div>
+      <div class="panel-gauge">
+        <div class="gauge-label">Deploy health</div>
+        <div class="gauge-bar-track"><div class="gauge-bar-fill" style="width:91%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span>BRANSONTAY.DEV</span>
+    <span>FULL-STACK · ML/AI · FDE</span>
+    <span id="day-time">00:00:00</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ NIGHT MODE ══════════════════════════════ -->
+<div class="mode night">
+  <div class="label-strip">NIGHT MODE — 300ZX</div>
+  <div class="targa"></div>
+
+  <div class="instrument-bar">
+    <span class="logo">BRANSON</span>
+    <div class="indicators">
+      <span><span class="status-dot"></span>ONLINE</span>
+      <span>NYC / LDN</span>
+      <span>NIGHT ◑</span>
+    </div>
+  </div>
+
+  <div class="hero" style="margin-bottom: 8px;">
+    <div class="hero-name-night">Branson Tay</div>
+    <div class="hero-tagline">Full-Stack · ML/AI · Forward Deployed</div>
+    <div class="hero-coords">51.5°N 0.1°W · 40.7°N 74.0°W</div>
+  </div>
+
+  <div class="silver-rule">
+    <div class="rule-dot"></div>
+    <div class="rule-line"></div>
+    <div class="rule-dot"></div>
+    <div class="rule-line"></div>
+    <div class="rule-dot"></div>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-id">F1-SIM</span>
+        <span>MARL · LIVE</span>
+      </div>
+      <div class="panel-body">
+        Multi-agent RL racing simulation. Six autonomous agents on a 2D oval. λ-slider controls exploration vs exploitation in real time.
+      </div>
+      <div class="panel-gauge">
+        <div class="gauge-label">Agent convergence</div>
+        <div class="gauge-bar-track"><div class="gauge-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-id">FS-SIM</span>
+        <span>LP · OFFLINE</span>
+      </div>
+      <div class="panel-body">
+        Formula Student quasi-static lap time simulator. Adjust downforce, weight, and tyre compound — results in &lt;1ms from pre-computed LP table.
+      </div>
+      <div class="panel-gauge">
+        <div class="gauge-label">Lap delta</div>
+        <div class="gauge-bar-track"><div class="gauge-bar-fill" style="width:38%"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-id">HELM</span>
+        <span>PROD · v2.1</span>
+      </div>
+      <div class="panel-body">
+        Kubernetes + Helm deployment tool. Reduced release time by 70%. Before/after diff view, CI pipeline breakdown, live cluster health.
+      </div>
+      <div class="panel-gauge">
+        <div class="gauge-label">Deploy health</div>
+        <div class="gauge-bar-track"><div class="gauge-bar-fill" style="width:91%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span>BRANSONTAY.DEV</span>
+    <span>FULL-STACK · ML/AI · FDE</span>
+    <span id="night-time">00:00:00</span>
+  </div>
+</div>
+
+<script>
+  function tick() {
+    const t = new Date().toTimeString().slice(0,8);
+    document.getElementById('day-time').textContent = t;
+    document.getElementById('night-time').textContent = t;
+  }
+  tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>

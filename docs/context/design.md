@@ -24,7 +24,7 @@ All-green phosphor instrument cluster. Everything glows. The background is near-
 
 **Alive but not animated.** The site should feel like a running engine at idle — there is motion, but it is purposeful and unhurried. The breathing status dot, the live MARL agents, the EQ bars. Nothing spins for the sake of spinning.
 
-**Typography as material.** Courier New monospace in night mode feels like instrument labels. Georgia serif in day mode feels like a 1980s road test magazine. The font itself carries meaning — treat it as a design material, not just a vehicle for words.
+**Typography as material.** Chakra Petch in night mode feels like vintage JDM cluster lettering. Instrument Sans in day mode feels like a considered editorial sans. IBM Plex Mono is reserved for telemetry surfaces only. The font itself carries meaning — treat it as a design material, not just a vehicle for words.
 
 ---
 
@@ -32,52 +32,84 @@ All-green phosphor instrument cluster. Everything glows. The background is near-
 
 All values live in src/styles/_tokens.scss. This is the authoritative list.
 
-### Day mode
+Tokens locked in Session 1 after six rounds of mockup iteration (see `docs/mockup-palettes-v{1..6}.html`).
 
-| Token | Value | Source reference |
+### Day mode — 911 Targa
+
+| Token | Value | Role |
 |---|---|---|
-| --bg | #F0E8D0 | Cream headlining, 911 interior |
-| --bg2 | #E4D8BC | Slightly richer cream, door card |
-| --pb | #EAE0C8 | Panel surface |
+| --bg | #F5EEE0 | Off-white cream — page background |
+| --bg2 | #EDE4D0 | Slightly richer cream — surface / panel base |
+| --ink | #1E1A16 | Dark graphite — instrument bar, contrast blocks |
 | --bd | rgba(90,70,40,0.15) | Subtle warm border |
 | --sil | #B8B2A6 | Targa bar — brushed aluminium |
 | --sil2 | #D0CAC0 | Lighter silver highlight |
-| --acc | #8B5A30 | Cognac leather — the dominant accent |
-| --acc2 | #4A2E18 | Deep tobacco — E38 body colour |
-| --txt | #1A120A | Near-black, warm undertone |
-| --txt2 | #6A5040 | Mid warm-brown, secondary text |
+| --acc | #8B5A30 | Cognac — primary accent, CTA, link |
+| --acc2 | #5D1A29 | Bordeaux — secondary accent, headings emphasis |
+| --txt | #1A120A | Near-black, warm undertone — body text |
+| --txt2 | #4A3828 | Mid warm-brown — secondary text |
+| --mut | #7A6050 | Muted label / caption |
 
-### Night mode
+### Night mode — 300ZX cluster
 
-| Token | Value | Source reference |
+| Token | Value | Role |
 |---|---|---|
-| --bg | #090A07 | 300ZX cabin at night |
-| --bg2 | #0D0F0A | Slightly lighter surface |
-| --pb | #111410 | Panel background, green-ambient tinted |
-| --bd | rgba(20,180,58,0.14) | Green-tinted border |
-| --sil | #182015 | Silver becomes dark green-grey at night |
-| --sil2 | #0F160C | Deeper structural tone |
-| --acc | #14CC4A | Phosphor green — warm CRT, not neon lime |
-| --acc2 | #0A8830 | Dim phosphor for secondary elements |
-| --txt | #8EC888 | Desaturated green body text |
-| --txt2 | #2E5828 | Very dim green, hint text |
+| --bg | #090A07 | Warm near-black — page |
+| --bg2 | #141210 | Slightly lighter — card / section |
+| --ink | #1E1A15 | Graphite — secondary CTA fill, recessed surfaces |
+| --bd | rgba(180,160,110,0.12) | Warm bone-tinted border |
+| --fg | #E8DFC8 | Bone — body text, hero, **logo**, primary content |
+| --fg2 | #CFC6B2 | Slightly dimmed bone — subheadings, paragraphs |
+| --mut | #8A7D64 | Muted warm — labels, inactive nav |
+| --acc | #14CC4A | **Phosphor green** — live-data only (see discipline below) |
+| --amb | #D9A030 | Amber — CTAs, interactive accents, hero emphasis |
 
-### Phosphor glow (night mode only)
-Applied to `.dv` (data values) and `.pid` (panel IDs) in night mode:
+### Phosphor glow mixin (night only)
+Applied only to live-state elements — status dots, data values, panel IDs on active modules, gauge fills:
 ```scss
-text-shadow: 0 0 8px rgba(20, 204, 74, 0.45), 0 0 18px rgba(20, 204, 74, 0.15);
+@mixin phosphor-glow {
+  color: var(--acc);
+  text-shadow: 0 0 8px rgba(20, 204, 74, 0.45), 0 0 18px rgba(20, 204, 74, 0.15);
+}
 ```
-This simulates the bloom of real CRT phosphor. The double-layer at different radii is what makes it look like a tube rather than an LED.
+The double-layer at different radii is what makes it read as CRT phosphor bloom rather than a flat LED.
+
+### Phosphor discipline (HARD RULE)
+Phosphor green draws the eye on purpose — because it's rare. Keep it rare.
+
+**Use phosphor on:** status dots, panel IDs on live modules (`PRJ/001`), live data values (uptime, RPM, temps), gauge fills, "online/active" readouts, FS-sim instrument numerics during a run.
+
+**Never use phosphor on:** logo, top nav, CTAs (all three variants are amber), body text, hero, borders, hover states on links, generic decoration, section headers.
+
+**Test before adding green:** *Is this element reporting live state, or drawing the eye to something happening right now?* If no — use `--fg`, `--amb`, or `--mut` instead.
+
+### CTA system (both modes)
+Three variants, consistent in shape across day and night. All squared (border-radius 0) — the instrument aesthetic uses sharp edges.
+
+| Variant | Day | Night |
+|---|---|---|
+| Primary | Cognac fill `var(--acc)`, cream text | Amber outline 1px `var(--amb)`, amber text; hover fills amber with ink text |
+| Secondary | Bordeaux outline `var(--acc2)`, bordeaux text | Graphite fill `var(--ink)`, amber text `var(--amb)`; hover lightens to `#28221B` |
+| Ghost | Cognac text, arrow suffix, no border | Amber text, arrow suffix, no border |
 
 ---
 
 ## Typography
 
-**Day mode hero name:** Georgia, Times New Roman, serif — 50px, weight 700. Editorial, road test magazine.
-**Night mode hero name:** Courier New, Courier, monospace — same size. Switches during the tunnel flash so the change is invisible.
-**All other text (both modes):** Courier New, Courier, monospace. Instrument labels, data readouts, navigation.
-**Letter spacing:** Generous on labels and IDs — 0.18em to 0.24em. This is how instrument panels read.
-**Never use:** Inter, Roboto, Arial, or any system sans-serif. They break the aesthetic immediately.
+Two fonts per mode, width-matched via `@font-face { size-adjust: … }` so the tunnel transition swaps typefaces without layout shift.
+
+**Day mode — one "posh and smart" sans across everything:**
+- Hero, body, nav, labels, CTAs: **Instrument Sans** (400, 500, 600, 700)
+- No monospace surfaces in day mode — Courier-style text was tested in v3 and rejected as breaking the aesthetic.
+
+**Night mode — three-font system:**
+- Hero title: **Chakra Petch** (500, italic 400) — street-racer carryover, high letter definition at display sizes
+- Body, nav, CTAs: **Instrument Sans** — width-matched to day so the tunnel swap is seamless
+- Instrument readouts, panel IDs, data values, gauges: **IBM Plex Mono** (400, 500, 600) — mono is reserved for telemetry, not prose
+
+**Letter spacing:** Generous on labels and IDs — 0.18em to 0.26em. This is how instrument panels read. Body text stays at 0 to -0.005em.
+
+**Never use:** Inter, Roboto, Arial, any system sans-serif, Courier in day mode, or phosphor green on any typography that isn't a live-state readout.
 
 ---
 

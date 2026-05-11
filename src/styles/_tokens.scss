@@ -1,0 +1,89 @@
+// ═══════════════════════════════════════════════════════════
+// Design tokens — single source of truth
+// Day: 911 Targa (cognac / cream / silver / bordeaux)
+// Night: 300ZX (warm near-black / bone / phosphor green / amber)
+//
+// CSS custom properties live on :root (day defaults) and
+// [data-theme="night"] (night overrides). SCSS-side helpers
+// (mixins, breakpoints) are also defined here.
+// ═══════════════════════════════════════════════════════════
+
+:root {
+  // ── Surfaces ──
+  --bg:   #F5EEE0;   // page background — off-white cream
+  --bg2:  #EDE4D0;   // card / panel surface
+  --ink:  #1E1A16;   // dark graphite — instrument bar, contrast blocks
+  --bd:   rgba(90, 70, 40, 0.15);
+  --sil:  #B8B2A6;   // targa bar — brushed aluminium
+  --sil2: #D0CAC0;   // silver highlight
+
+  // ── Text ──
+  --fg:   #1A120A;   // body — near-black, warm undertone
+  --fg2:  #4A3828;   // secondary text
+  --mut:  #7A6050;   // muted labels / captions
+
+  // ── Accents ──
+  --acc:  #8B5A30;   // cognac — primary CTA, links
+  --acc2: #5D1A29;   // bordeaux — secondary accent
+  --amb:  #8B5A30;   // alias — day mode uses cognac for CTAs
+
+  // ── Type ──
+  --font-sans:  'Instrument Sans', system-ui, sans-serif;
+  --font-hero:  'Instrument Sans', system-ui, sans-serif;
+  --font-mono:  'IBM Plex Mono', ui-monospace, monospace;
+}
+
+[data-theme="night"] {
+  // ── Surfaces ──
+  --bg:   #090A07;   // warm near-black
+  --bg2:  #141210;   // card / section
+  --ink:  #1E1A15;   // graphite — secondary CTA fill, recessed
+  --bd:   rgba(180, 160, 110, 0.12);
+  --sil:  #182015;   // targa bar — dark green-grey at night
+  --sil2: #0F160C;
+
+  // ── Text ──
+  --fg:   #E8DFC8;   // bone — body, hero, logo, primary content
+  --fg2:  #CFC6B2;   // dimmed bone — paragraphs
+  --mut:  #8A7D64;   // muted warm — labels, inactive nav
+
+  // ── Accents ──
+  // PHOSPHOR DISCIPLINE: --acc is for live-state elements only
+  // (status, gauges, panel IDs, data values). Never logo / CTA / body.
+  --acc:  #14CC4A;
+  --acc2: #0A8830;   // dim phosphor — secondary live readouts
+  --amb:  #D9A030;   // amber — CTAs, interactive accents
+
+  // ── Type ──
+  --font-hero:  'Chakra Petch', system-ui, sans-serif;
+  // --font-sans and --font-mono inherit from :root
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// Phosphor glow mixin — night-mode CRT bloom
+// Double-radius text-shadow simulates real CRT phosphor.
+// Apply only to live-state elements (status, IDs, gauges, data).
+// ═══════════════════════════════════════════════════════════
+@mixin phosphor-glow {
+  color: var(--acc);
+  text-shadow:
+    0 0 8px  rgba(20, 204, 74, 0.45),
+    0 0 18px rgba(20, 204, 74, 0.15);
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// Breakpoints — mobile-first
+// ═══════════════════════════════════════════════════════════
+$bp-sm: 640px;
+$bp-md: 900px;
+$bp-lg: 1100px;
+$bp-xl: 1440px;
+
+@mixin bp($size) {
+  @if      $size == sm { @media (min-width: #{$bp-sm}) { @content; } }
+  @else if $size == md { @media (min-width: #{$bp-md}) { @content; } }
+  @else if $size == lg { @media (min-width: #{$bp-lg}) { @content; } }
+  @else if $size == xl { @media (min-width: #{$bp-xl}) { @content; } }
+}

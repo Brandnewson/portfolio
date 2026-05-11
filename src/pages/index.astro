@@ -1,0 +1,251 @@
+---
+import Shell from '../layouts/Shell.astro';
+---
+<Shell title="Branson — Token verification" theme="day">
+  <main class="preview">
+
+    <!-- DAY MODE -->
+    <section class="mode" data-theme="day">
+      <header class="bar">
+        <span class="logo">Branson</span>
+        <span class="meta mono">DAY · 911 TARGA</span>
+      </header>
+      <div class="body">
+        <p class="panel-id mono">SYS/HERO · 001</p>
+        <h1 class="hero-title">Full-stack engineer<br/><em>building for the edge.</em></h1>
+        <p class="sub">ML tooling, GTM systems, and forward-deployed prototypes — shipped to Cloudflare's global network.</p>
+        <div class="ctas">
+          <button class="cta cta-primary">View Work</button>
+          <button class="cta cta-secondary">Contact</button>
+          <button class="cta cta-ghost">CV / PDF →</button>
+        </div>
+        <div class="instrument">
+          <span class="status-dot"></span>
+          <span class="mono">SYS · ONLINE · 99.98%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- NIGHT MODE -->
+    <section class="mode" data-theme="night">
+      <header class="bar">
+        <span class="logo">Branson<span class="dot"></span></span>
+        <span class="meta mono">NIGHT · 300ZX</span>
+      </header>
+      <div class="body">
+        <p class="panel-id mono">SYS/HERO · 001</p>
+        <h1 class="hero-title">Full-stack engineer<br/><em>building for the edge.</em></h1>
+        <p class="sub">ML tooling, GTM systems, and forward-deployed prototypes — shipped to Cloudflare's global network.</p>
+        <div class="ctas">
+          <button class="cta cta-primary">View Work</button>
+          <button class="cta cta-secondary">Contact</button>
+          <button class="cta cta-ghost">CV / PDF →</button>
+        </div>
+        <div class="instrument">
+          <span class="status-dot"></span>
+          <span class="mono">SYS · ONLINE · 99.98%</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</Shell>
+
+<style lang="scss">
+@use '../styles/tokens';
+
+.preview {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mode {
+  background: var(--bg);
+  color: var(--fg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background: var(--ink);
+  color: var(--bg);
+  border-bottom: 1px solid var(--bd);
+
+  .logo {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+  .meta {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--mut);
+    text-transform: uppercase;
+  }
+}
+
+[data-theme="night"] .bar .logo {
+  color: var(--fg);
+}
+[data-theme="night"] .bar {
+  background: var(--bg2);
+  color: var(--fg);
+}
+
+// Live status dot on the logo (night only)
+[data-theme="night"] .logo .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
+  background: var(--acc);
+  box-shadow:
+    0 0 6px rgba(20, 204, 74, 0.85),
+    0 0 14px rgba(20, 204, 74, 0.35);
+}
+
+.body {
+  padding: 48px 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.panel-id {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+[data-theme="night"] .panel-id {
+  @include tokens.phosphor-glow;
+}
+
+.hero-title {
+  font-family: var(--font-hero);
+  font-size: 44px;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--acc2);
+  }
+}
+[data-theme="night"] .hero-title em {
+  color: var(--amb);
+  font-weight: 400;
+}
+
+.sub {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg2);
+  max-width: 440px;
+}
+
+.ctas {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.cta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  border-radius: 0;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+// DAY mode CTAs — cognac primary, bordeaux secondary, cognac ghost
+[data-theme="day"] {
+  .cta-primary {
+    background: var(--acc);
+    color: var(--bg);
+    border-color: var(--acc);
+    &:hover { background: var(--acc2); border-color: var(--acc2); }
+  }
+  .cta-secondary {
+    background: transparent;
+    color: var(--acc2);
+    border-color: var(--acc2);
+    &:hover { background: var(--acc2); color: var(--bg); }
+  }
+  .cta-ghost {
+    color: var(--acc);
+    padding: 11px 6px;
+    &:hover { color: var(--acc2); }
+  }
+}
+
+// NIGHT mode CTAs — amber outline / graphite fill / amber ghost
+[data-theme="night"] {
+  .cta-primary {
+    background: transparent;
+    color: var(--amb);
+    border-color: var(--amb);
+    &:hover { background: var(--amb); color: var(--ink); }
+  }
+  .cta-secondary {
+    background: var(--ink);
+    color: var(--amb);
+    border-color: var(--ink);
+    &:hover { background: #28221B; border-color: #28221B; }
+  }
+  .cta-ghost {
+    color: var(--amb);
+    padding: 11px 6px;
+    &:hover { color: #E8B850; }
+  }
+}
+
+.instrument {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--mut);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mut);
+}
+
+[data-theme="night"] .status-dot {
+  background: var(--acc);
+  box-shadow:
+    0 0 6px rgba(20, 204, 74, 0.8),
+    0 0 14px rgba(20, 204, 74, 0.3);
+}
+
+[data-theme="night"] .instrument .mono {
+  @include tokens.phosphor-glow;
+}
+</style>
