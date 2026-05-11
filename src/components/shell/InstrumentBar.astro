@@ -1,0 +1,172 @@
+---
+import ThemeToggle from '../../islands/ThemeToggle.tsx';
+
+interface Props {
+  active?: 'work' | 'writing' | 'about' | 'contact';
+}
+
+const { active = 'work' } = Astro.props;
+
+const NAV = [
+  { id: 'work', label: 'work', href: '#work' },
+  { id: 'writing', label: 'writing', href: '#writing' },
+  { id: 'about', label: 'about', href: '#about' },
+  { id: 'contact', label: 'contact', href: '#contact' },
+] as const;
+---
+<header class="instrument-bar">
+  <a class="logo" href="/" aria-label="Branson — home">
+    Branson<span class="live-dot" aria-hidden="true"></span>
+  </a>
+
+  <nav class="nav" aria-label="Primary">
+    {NAV.map((item) => (
+      <a
+        href={item.href}
+        class:list={['nav-link', { 'is-active': active === item.id }]}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+
+  <div class="bar-right">
+    <span class="inspiration-wrap" aria-live="polite">
+      <span class="inspiration day-line">Inspired by a 911 Targa sitting in Maranello</span>
+      <span class="inspiration night-line">Inspired by a 300ZX cruising on the motorway</span>
+    </span>
+    <ThemeToggle client:load />
+  </div>
+</header>
+
+<style lang="scss">
+.instrument-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 6px 36px;
+  background: var(--bar-bg);
+  color: var(--bar-fg);
+  border-bottom: 1px solid var(--bd);
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--bar-fg);
+}
+
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: var(--dot-bg);
+  box-shadow: var(--dot-glow);
+  vertical-align: middle;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+}
+
+.nav-link {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bar-fg-mut);
+  transition: color 0.15s ease;
+
+  &.is-active { color: var(--bar-fg-active); }
+  &:hover     { color: var(--primary); }
+}
+
+.bar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+// Grid-stack both inspiration lines in the same cell so width = max of both
+// — toggling theme swaps visibility (not display), so layout never shifts.
+.inspiration-wrap {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+}
+.inspiration {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: var(--bar-fg-mut);
+  white-space: nowrap;
+}
+
+:global(html[data-theme="day"]) .day-line { visibility: visible; }
+:global(html[data-theme="night"]) .night-line { visibility: visible; }
+
+// ── ThemeToggle island (rendered inside .bar-right) ──
+// Single button, equal-width DAY/NIGHT cells via grid so the sliding
+// background lines up exactly with the active label.
+:global(.theme-toggle) {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  min-width: 124px;
+  border: 1px solid var(--bar-fg-mut);
+  border-radius: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: var(--bar-fg);
+  transition: border-color 0.15s ease;
+}
+:global(.theme-toggle:hover) { border-color: var(--primary); }
+
+:global(.theme-toggle .label) {
+  position: relative;
+  z-index: 1;
+  padding: 5px 0;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-align: center;
+  color: var(--bar-fg-mut);
+  pointer-events: none;
+  transition: color 0.18s ease;
+}
+:global(.theme-toggle .label.is-active) { color: var(--toggle-active-fg); }
+
+:global(.theme-toggle .slider) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  background: var(--primary);
+  transition: transform 0.22s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+:global(.theme-toggle .slider[data-position="day"])   { transform: translateX(0); }
+:global(.theme-toggle .slider[data-position="night"]) { transform: translateX(100%); }
+</style>

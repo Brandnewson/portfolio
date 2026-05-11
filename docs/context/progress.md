@@ -10,6 +10,37 @@ Format:
 
 ---
 
+## 2026-05-11 — Session 2 (shell + landing v1)
+
+### Built
+- Shell components (all `.astro`, theme-aware via semantic tokens only): `TargaBar`, `InstrumentBar`, `BottomBar`.
+- First React island: `ThemeToggle.tsx` + `stores/theme.ts` (nanostores atom, localStorage persistence, anti-flash inline script in `Shell.astro`).
+- Two-column hero: name + tagline + sub on the left; vertical resume button + role highlights on the right.
+- Three project panels with placeholder preview regions (grid-pattern dashed boxes, `PRJ_PREVIEW · awaiting hydration` marker).
+- Reserved annotation column right of the project grid.
+- Viewport-fit layout via body flex-column + `overflow: hidden`; falls back to scroll below 900px.
+
+### Decisions made
+- **Semantic-token pattern is now the discipline** for theme-aware styling. Astro scoped CSS mangles `[data-theme="night"] .foo`; components reference `var(--xxx)` only, and tokens swap at `:root` / `[data-theme="night"]` in `_tokens.scss`.
+- Day/night inspiration line beside toggle, grid-stacked into same cell so width = max of both — toggling theme swaps `visibility` (not `display`), so the nav never shifts.
+- Tagline emphasis swap: surname is plain; tagline gets italic + `--emphasis` colour.
+- Night targa brightened from `#182015`/`#0F160C` to `#3A332B`/`#1F1B16` (originals were invisible against `#090A07`).
+- Project status badges (LIVE/RUN/READY) removed; route link inlined with title.
+
+### Branson to action
+- Drop real resume PDF at `public/resume.pdf`.
+- Replace `ROLES[]` array in `src/components/hero/Hero.astro` with real companies / titles / dates.
+- Decide annotation column content — proposed options: now-log, lab notebook, status board, single-line principle.
+
+### Next
+1. Content collections (`src/content/tech-notes/`, `src/content/projects/`) with Zod schemas — prerequisite for (i) TechNote panels per CLAUDE.md hard rule.
+2. Self-host fonts (Instrument Sans / Chakra Petch / IBM Plex Mono) via `@font-face` + `size-adjust` for width-matched tunnel transition.
+3. Annotation column content (after Branson decides direction).
+4. First real interactive island — likely the FS quasi-static sim sliders, since the lookup table is the simplest data shape.
+5. Boot sequence (ECU-style first-load animation).
+
+---
+
 ## 2026-04-17 — Session 1 (design lock)
 
 ### Decisions made

@@ -3,67 +3,128 @@
 // Day: 911 Targa (cognac / cream / silver / bordeaux)
 // Night: 300ZX (warm near-black / bone / phosphor green / amber)
 //
-// CSS custom properties live on :root (day defaults) and
-// [data-theme="night"] (night overrides). SCSS-side helpers
-// (mixins, breakpoints) are also defined here.
+// Two tiers:
+//  1. Raw palette — the locked colour and font values.
+//  2. Semantic tokens — what components actually reference.
+//     These shift between day and night so components don't need
+//     [data-theme="night"] selectors (which Astro scoped CSS
+//     mangles). Add a semantic token here when a component needs
+//     a value that changes with theme.
 // ═══════════════════════════════════════════════════════════
 
 :root {
-  // ── Surfaces ──
-  --bg:   #F5EEE0;   // page background — off-white cream
-  --bg2:  #EDE4D0;   // card / panel surface
-  --ink:  #1E1A16;   // dark graphite — instrument bar, contrast blocks
+  // ── 1. Raw palette — Day defaults ──
+  --bg:   #F5EEE0;
+  --bg2:  #EDE4D0;
+  --ink:  #1E1A16;
   --bd:   rgba(90, 70, 40, 0.15);
-  --sil:  #B8B2A6;   // targa bar — brushed aluminium
-  --sil2: #D0CAC0;   // silver highlight
+  --sil:  #B8B2A6;
+  --sil2: #D0CAC0;
 
-  // ── Text ──
-  --fg:   #1A120A;   // body — near-black, warm undertone
-  --fg2:  #4A3828;   // secondary text
-  --mut:  #7A6050;   // muted labels / captions
+  --fg:   #1A120A;
+  --fg2:  #4A3828;
+  --mut:  #7A6050;
 
-  // ── Accents ──
-  --acc:  #8B5A30;   // cognac — primary CTA, links
-  --acc2: #5D1A29;   // bordeaux — secondary accent
-  --amb:  #8B5A30;   // alias — day mode uses cognac for CTAs
+  --acc:  #8B5A30;     // cognac
+  --acc2: #5D1A29;     // bordeaux
+  --amb:  #D9A030;     // amber (shared with night via semantic)
 
-  // ── Type ──
-  --font-sans:  'Instrument Sans', system-ui, sans-serif;
-  --font-hero:  'Instrument Sans', system-ui, sans-serif;
-  --font-mono:  'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+  --font-hero: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  // ── 2. Semantic tokens (day) ──
+  // Instrument bar — always dark surface, light text
+  --bar-bg:        var(--ink);
+  --bar-fg:        var(--bg);
+  --bar-fg-mut:    rgba(245, 238, 224, 0.5);
+  --bar-fg-active: var(--bg);
+
+  // Targa bar gradient
+  --targa-gradient: linear-gradient(to bottom, var(--sil2) 0%, var(--sil) 40%, var(--sil2) 60%, var(--sil) 100%);
+  --rivet-bg: rgba(0, 0, 0, 0.4);
+
+  // Primary brand action (CTAs, route links, hover) — NOT used for live elements
+  --primary:       var(--acc);
+  --primary-hover: var(--acc2);
+
+  // Italic emphasis (surname, hero em, tagline em)
+  --emphasis:        var(--acc2);
+  --emphasis-weight: 500;
+
+  // Phosphor — live-state elements (status, gauges, panel IDs, data)
+  // Day: just muted; no glow. Night: phosphor green with bloom.
+  --phos:      var(--mut);
+  --phos-glow: none;
+
+  // Accent rule on top of project panels
+  --rule: var(--acc);
+
+  // Live dot in logo (visible only in night)
+  --dot-bg: transparent;
+  --dot-glow: none;
+
+  // Gauge fill — uses phosphor in night, accent in day
+  --gauge-fill: var(--acc);
+  --gauge-glow: none;
+
+  // Theme toggle — active label sits on a coloured slider, needs contrast
+  --toggle-active-fg: var(--bar-fg);
 }
 
 [data-theme="night"] {
-  // ── Surfaces ──
-  --bg:   #090A07;   // warm near-black
-  --bg2:  #141210;   // card / section
-  --ink:  #1E1A15;   // graphite — secondary CTA fill, recessed
+  // ── 1. Raw palette overrides ──
+  --bg:   #090A07;
+  --bg2:  #141210;
+  --ink:  #1E1A15;
   --bd:   rgba(180, 160, 110, 0.12);
-  --sil:  #182015;   // targa bar — dark green-grey at night
-  --sil2: #0F160C;
+  --sil:  #3A332B;     // dark chrome — night targa highlight
+  --sil2: #1F1B16;     // dark chrome — night targa shadow
 
-  // ── Text ──
-  --fg:   #E8DFC8;   // bone — body, hero, logo, primary content
-  --fg2:  #CFC6B2;   // dimmed bone — paragraphs
-  --mut:  #8A7D64;   // muted warm — labels, inactive nav
+  --fg:   #E8DFC8;     // bone — body, hero, logo
+  --fg2:  #CFC6B2;
+  --mut:  #8A7D64;
 
-  // ── Accents ──
-  // PHOSPHOR DISCIPLINE: --acc is for live-state elements only
-  // (status, gauges, panel IDs, data values). Never logo / CTA / body.
-  --acc:  #14CC4A;
-  --acc2: #0A8830;   // dim phosphor — secondary live readouts
-  --amb:  #D9A030;   // amber — CTAs, interactive accents
+  --acc:  #14CC4A;     // phosphor (live-element discipline)
+  --acc2: #0A8830;
+  --amb:  #D9A030;     // amber
 
-  // ── Type ──
-  --font-hero:  'Chakra Petch', system-ui, sans-serif;
-  // --font-sans and --font-mono inherit from :root
+  --font-hero: 'Chakra Petch', system-ui, sans-serif;
+
+  // ── 2. Semantic token overrides ──
+  --bar-bg:        var(--bg2);
+  --bar-fg:        var(--fg);
+  --bar-fg-mut:    var(--mut);
+  --bar-fg-active: var(--fg);
+
+  --targa-gradient: linear-gradient(to bottom, var(--sil) 0%, var(--sil2) 50%, var(--sil) 100%);
+  --rivet-bg: rgba(0, 0, 0, 0.6);
+
+  --primary:       var(--amb);
+  --primary-hover: #E8B850;
+
+  --emphasis:        var(--amb);
+  --emphasis-weight: 400;
+
+  --phos:      var(--acc);
+  --phos-glow: 0 0 8px rgba(20, 204, 74, 0.45), 0 0 18px rgba(20, 204, 74, 0.15);
+
+  --rule: var(--amb);
+
+  --dot-bg: var(--acc);
+  --dot-glow: 0 0 6px rgba(20, 204, 74, 0.85), 0 0 14px rgba(20, 204, 74, 0.35);
+
+  --gauge-fill: var(--acc);
+  --gauge-glow: 0 0 6px rgba(20, 204, 74, 0.7), 0 0 16px rgba(20, 204, 74, 0.3);
+
+  --toggle-active-fg: var(--ink);
 }
 
 
 // ═══════════════════════════════════════════════════════════
-// Phosphor glow mixin — night-mode CRT bloom
-// Double-radius text-shadow simulates real CRT phosphor.
-// Apply only to live-state elements (status, IDs, gauges, data).
+// Phosphor glow mixin — for SCSS authors who want the raw
+// double-radius shadow. Most components should use --phos and
+// --phos-glow semantic tokens instead, which auto-disable in day.
 // ═══════════════════════════════════════════════════════════
 @mixin phosphor-glow {
   color: var(--acc);
@@ -74,7 +135,7 @@
 
 
 // ═══════════════════════════════════════════════════════════
-// Breakpoints — mobile-first
+// Breakpoints
 // ═══════════════════════════════════════════════════════════
 $bp-sm: 640px;
 $bp-md: 900px;

@@ -1,30 +1,36 @@
-// Single entry point for global styles.
-// Imported once from src/layouts/Shell.astro.
-// Order matters: tokens first (CSS custom properties), then reset.
+// Single entry point for global styles. Imported once from Shell.astro.
+// Order matters: tokens first (CSS custom properties), then reset, then base.
 
 @use 'tokens';
 @use 'reset';
 
-html {
+html, body {
+  height: 100%;
   background: var(--bg);
   color: var(--fg);
-  color-scheme: light dark;
 }
+html { color-scheme: light dark; }
 
 body {
-  background: var(--bg);
-  color: var(--fg);
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
+  overflow: hidden;
   transition:
     background-color 320ms ease,
     color 320ms ease;
 }
 
-// Mono is reserved for telemetry surfaces (instrument readouts, panel IDs,
-// data values). Apply via class — not by default.
+// Mono reserved for telemetry surfaces (instrument readouts, panel IDs,
+// data values). Apply via class — never default.
 .mono { font-family: var(--font-mono); }
 
 // Hero font — Chakra Petch in night, Instrument Sans in day (locked via tokens).
 .hero { font-family: var(--font-hero); }
+
+// Mobile fallback — allow scroll when below the breakpoint where things stop fitting.
+@media (max-width: 899px) {
+  body { overflow: auto; }
+}

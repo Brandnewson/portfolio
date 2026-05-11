@@ -1,20 +1,43 @@
 ---
 import '../styles/global.scss';
+import TargaBar from '../components/shell/TargaBar.astro';
+import InstrumentBar from '../components/shell/InstrumentBar.astro';
+import BottomBar from '../components/shell/BottomBar.astro';
 
 interface Props {
   title?: string;
-  theme?: 'day' | 'night';
+  active?: 'work' | 'writing' | 'about' | 'contact';
 }
 
-const { title = 'Branson — Portfolio', theme = 'day' } = Astro.props;
+const { title = 'Branson — Portfolio', active = 'work' } = Astro.props;
 ---
 <!DOCTYPE html>
-<html lang="en" data-theme={theme}>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
-  <!-- TODO: replace with self-hosted @font-face declarations once size-adjust width-match is dialled -->
+
+  <!--
+    Anti-flash: set data-theme synchronously from localStorage BEFORE styles
+    parse. Without this, a night-mode user sees a brief day-mode flash on
+    every page load.
+  -->
+  <script is:inline>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        document.documentElement.setAttribute(
+          'data-theme',
+          stored === 'night' ? 'night' : 'day'
+        );
+      } catch (_) {
+        document.documentElement.setAttribute('data-theme', 'day');
+      }
+    })();
+  </script>
+
+  <!-- TODO: replace with self-hosted @font-face once size-adjust width-match is dialled -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -23,6 +46,27 @@ const { title = 'Branson — Portfolio', theme = 'day' } = Astro.props;
   />
 </head>
 <body>
-  <slot />
+  <TargaBar />
+  <InstrumentBar active={active} />
+
+  <main class="page">
+    <slot />
+  </main>
+
+  <BottomBar />
 </body>
 </html>
+
+<style is:global>
+  .page {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  @media (max-width: 899px) {
+    .page { overflow: visible; }
+  }
+</style>

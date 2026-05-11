@@ -1,0 +1,33 @@
+---
+// Bottom status bar — minimal. Placeholder values for now.
+---
+<footer class="bottom-bar">
+  <span class="cell mono left">READY</span>
+  <span class="cell mono center">NYC · LDN</span>
+  <span class="cell mono right">REV 0.0.1</span>
+</footer>
+
+<style lang="scss">
+.bottom-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 5px 36px;
+  border-top: 1px solid var(--bd);
+  background: var(--bg2);
+  color: var(--mut);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.left   { justify-self: flex-start; color: var(--phos); text-shadow: var(--phos-glow); }
+.center { justify-self: center; }
+.right  { justify-self: flex-end; }
+</style>

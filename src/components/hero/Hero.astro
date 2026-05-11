@@ -1,0 +1,169 @@
+---
+// Hero — two-column. Left: name + tagline + sub. Right: resume download + role highlights.
+// Roles are placeholders — replace ROLES[] with real history.
+const ROLES = [
+  { name: 'Company One',   role: 'Role title', date: '2024 — now' },
+  { name: 'Company Two',   role: 'Role title', date: '2022 — 24'  },
+  { name: 'Company Three', role: 'Role title', date: '2020 — 22'  },
+];
+---
+<section class="hero" id="top">
+  <div class="hero-left">
+    <h1 class="name">Branson Tay</h1>
+
+    <p class="tagline">Full-stack AI engineer with a passion for engineering and motorsport</p>
+
+    <p class="sub">
+      Currently exploring forward-deployed AI tooling and real-time vehicle simulation.
+    </p>
+  </div>
+
+  <aside class="hero-right" aria-label="Resume and recent roles">
+    <a class="resume-link mono" href="/resume.pdf" download>
+      <span class="resume-icon" aria-hidden="true">↓</span>
+      <span>RESUME.PDF</span>
+    </a>
+
+    <ul class="roles" role="list">
+      {ROLES.map((r) => (
+        <li class="role">
+          <span class="role-meta">
+            <span class="role-name">{r.name}</span>
+            <span class="role-title">{r.role}</span>
+          </span>
+          <span class="role-date mono">{r.date}</span>
+        </li>
+      ))}
+    </ul>
+  </aside>
+</section>
+
+<style lang="scss">
+.hero {
+  padding: 14px 36px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  width: 100%;
+}
+
+.hero-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.resume-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+  width: 88px;
+  padding: 10px 8px;
+  border: 1px solid var(--bd);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+}
+
+.resume-icon {
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.roles {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+  padding-left: 18px;
+  border-left: 1px solid var(--bd);
+}
+
+.role {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.role-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.role-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+.role-title {
+  font-size: 10px;
+  color: var(--mut);
+  line-height: 1.3;
+}
+
+.role-date {
+  flex-shrink: 0;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+}
+
+@media (max-width: 900px) {
+  .hero { flex-direction: column; gap: 18px; }
+  .hero-right { min-width: 0; width: 100%; }
+}
+
+.name {
+  font-family: var(--font-hero);
+  font-size: clamp(36px, 4.6vw, 60px);
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--fg);
+  margin-top: -2px;
+}
+
+.tagline {
+  font-size: 15px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--emphasis);
+}
+
+.sub {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg2);
+  max-width: 680px;
+}
+
+</style>

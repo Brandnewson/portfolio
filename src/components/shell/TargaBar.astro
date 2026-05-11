@@ -1,0 +1,31 @@
+---
+// Thin silver gradient bar at the very top. References the structural targa bar
+// on a 911 Targa — small dot markers reference the rivets that hold it in place.
+// Pure CSS, no JS. Gradient + rivet colour are theme-aware via semantic tokens.
+---
+<div class="targa-bar" aria-hidden="true">
+  <span class="rivet"></span>
+  <span class="rivet"></span>
+  <span class="rivet"></span>
+  <span class="rivet"></span>
+  <span class="rivet"></span>
+</div>
+
+<style lang="scss">
+.targa-bar {
+  position: relative;
+  height: 5px;
+  background: var(--targa-gradient);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.rivet {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--rivet-bg);
+}
+</style>

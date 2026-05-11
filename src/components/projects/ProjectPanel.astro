@@ -1,0 +1,233 @@
+---
+// Project panel — the visual focus of the landing page.
+// Three of these fill the horizontal space below the hero. Each has a
+// .preview region that's reserved for the eventual interactive island
+// (MARL canvas, FS sim sliders, Helm screenshot, etc).
+// Theme-aware via semantic tokens — no [data-theme] selectors.
+
+interface Props {
+  panelId: string;
+  title: string;
+  summary: string;
+  stack: string[];
+  route?: string;
+  progress?: number;
+  offset?: 'low' | 'mid' | 'high';
+}
+
+const {
+  panelId,
+  title,
+  summary,
+  stack,
+  route,
+  progress = 0,
+  offset = 'mid',
+} = Astro.props;
+---
+<article class="panel" data-offset={offset}>
+  <span class="acc-rule" aria-hidden="true"></span>
+
+  <header class="head mono">
+    <span class="pid">{panelId}</span>
+  </header>
+
+  <div class="title-row">
+    <h3 class="title">{title}</h3>
+    {route && <a class="route mono" href={route}>{route} →</a>}
+  </div>
+  <p class="summary">{summary}</p>
+
+  <div class="preview" aria-hidden="true">
+    <span class="preview-marker mono">PRJ_PREVIEW</span>
+    <span class="preview-hint mono">awaiting hydration</span>
+    <div class="preview-grid"></div>
+  </div>
+
+  <ul class="stack" role="list">
+    {stack.map((tech) => <li class="chip mono">{tech}</li>)}
+  </ul>
+
+  <footer class="gauge">
+    <div class="gauge-head mono">
+      <span>LOAD</span>
+      <span class="val">{progress}%</span>
+    </div>
+    <div class="gauge-track">
+      <div class="gauge-fill" style={`width:${progress}%`}></div>
+    </div>
+  </footer>
+</article>
+
+<style lang="scss">
+.panel {
+  position: relative;
+  background: var(--bg2);
+  border: 1px solid var(--bd);
+  border-radius: 2px;
+  padding: 18px 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+  }
+
+  &[data-offset="low"]  { margin-top: 16px; }
+  &[data-offset="mid"]  { margin-top: 0; }
+  &[data-offset="high"] { margin-top: 8px; }
+}
+
+.acc-rule {
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 2px;
+  background: var(--rule);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+.pid {
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+  font-weight: 500;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  font-family: var(--font-hero);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--fg);
+  line-height: 1.08;
+}
+
+.route {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--primary);
+  text-decoration: none;
+  letter-spacing: 0.14em;
+  &:hover { color: var(--primary-hover); }
+}
+
+.summary {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg2);
+}
+
+// ── Preview region — placeholder for the eventual interactive island ──
+.preview {
+  position: relative;
+  flex: 1;
+  min-height: 140px;
+  background: var(--bg);
+  border: 1px dashed var(--bd);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px 12px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.preview-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--bd) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bd) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.preview-marker {
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+}
+.preview-hint {
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: 0.7;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chip {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1px solid var(--bd);
+  color: var(--mut);
+}
+
+.gauge {
+  padding-top: 10px;
+  border-top: 1px solid var(--bd);
+}
+
+.gauge-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+.gauge-head .val {
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+}
+
+.gauge-track {
+  height: 3px;
+  background: var(--bd);
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  background: var(--gauge-fill);
+  box-shadow: var(--gauge-glow);
+  transition: width 0.4s ease;
+}
+</style>
