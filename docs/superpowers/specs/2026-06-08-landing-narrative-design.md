@@ -54,7 +54,7 @@ Narrative: **builder who ships → drawn to AI-meets-physical → three projects
 - **Landing has no `InstrumentBar`.** The hero is full-bleed; identity lives in the hero (`Branson Tay` masthead) and the theme toggle becomes the hero's "calibrate" beat.
 - **Deep pages keep `InstrumentBar`** (logo + toggle) — they need a persistent home for identity + toggle.
 - The hero toggle **must reuse the existing `ThemeToggle` island + `stores/theme.ts`** (not a new toggle) so theme persistence, the anti-flash script, and the tunnel transition all still apply. The black "flash" in the clone is a stand-in for the real tunnel transition in `_animations.scss`.
-- `TargaBar` (5px silver) on the landing: **open question** — keep as a thin top flourish or drop for a fully clean full-bleed hero. Default: drop on landing.
+- `TargaBar` (5px silver) is **dropped completely** (removed from `Shell.astro`, site-wide) per Branson 2026-06-08. The landing hero is fully clean full-bleed.
 
 ---
 
@@ -151,7 +151,7 @@ Profile content (experience, education, stack, looking-for) goes in a typed data
 | `SectionRail.tsx` | New island. Desktop rail + mobile strip + scroll-spy. |
 | `src/data/profile.ts` | New typed data module. |
 | `ProjectFeature.astro` | Add `list-style: none` to `.stack`; add `id` per band (`marl`, `helm`). |
-| `Shell.astro` / `index.astro` | Landing renders full-bleed (no `InstrumentBar`); add section anchors. Coordinate — concurrent edit. |
+| `Shell.astro` / `index.astro` | Remove `TargaBar` (site-wide); landing renders full-bleed (no `InstrumentBar`); add section anchors. |
 | `_tokens.scss` | Add `--primary-tint` (day + night). |
 | `QuickRead.astro` | Retire from the hero (content relocated to Profile). |
 
@@ -165,8 +165,8 @@ Profile content (experience, education, stack, looking-for) goes in a typed data
 
 ---
 
-## 11. Open items to confirm at build
+## 11. Resolved (2026-06-08)
 
-1. **TechNote for `SectionRail`** — CLAUDE.md hard rule says every interactive element gets a `(i)` TechNote. Add a short one for the scroll-spy nav, or treat nav chrome as exempt? (Needs Branson's call.)
-2. **`TargaBar` on the landing** — keep as a thin top flourish, or drop for a clean full-bleed hero? (Default: drop.)
-3. Confirm build ownership of `index.astro` / `Hero.astro` with the concurrent session before editing.
+1. **No TechNote for `SectionRail`** — nav chrome is exempt from the `(i)` TechNote rule; the prototype behaviour is the reference.
+2. **`TargaBar` dropped completely** — removed from `Shell.astro`, site-wide.
+3. **Build ownership confirmed** — the concurrent session is finished; this build owns `index.astro` and `Hero.astro`.
