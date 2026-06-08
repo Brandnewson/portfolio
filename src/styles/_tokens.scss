@@ -48,6 +48,9 @@
   --primary:       var(--acc);
   --primary-hover: var(--acc2);
 
+  // Faint accent fill — lighter primary CTA + tinted chips
+  --primary-tint: rgba(139, 90, 48, 0.07);
+
   // Italic emphasis (surname, hero em, tagline em)
   --emphasis:        var(--acc2);
   --emphasis-weight: 500;
@@ -110,6 +113,9 @@
 
   --primary:       var(--amb);
   --primary-hover: #E8B850;
+
+  // Faint accent fill — lighter primary CTA + tinted chips
+  --primary-tint: rgba(217, 160, 48, 0.09);
 
   --emphasis:        var(--amb);
   --emphasis-weight: 400;
