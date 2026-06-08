@@ -37,6 +37,7 @@ interface Props {
   // When true, swap the column order so the preview sits on the LEFT and the
   // copy sits on the right. Mobile always stacks copy-first regardless.
   reverse?: boolean;
+  anchorId?: string;
 }
 
 const {
@@ -52,6 +53,7 @@ const {
   download,
   downloadAs,
   reverse = false,
+  anchorId,
 } = Astro.props;
 
 const downloadLabel = download ? download.split('/').pop()?.toUpperCase() : null;
@@ -59,7 +61,7 @@ const isExternal = route?.startsWith('http');
 const routeText = routeLabel ?? route;
 const hasPreview = Astro.slots.has('default');
 ---
-<section class:list={['project-feature', reverse && 'is-reverse']}>
+<section id={anchorId} class:list={['project-feature', reverse && 'is-reverse']}>
   <span class="acc-rule" aria-hidden="true"></span>
 
   <div class="copy">
@@ -318,6 +320,7 @@ const hasPreview = Astro.slots.has('default');
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 2px;
+  list-style: none;
 }
 
 .chip {
