@@ -3,6 +3,7 @@
 
 @use 'tokens';
 @use 'reset';
+@use 'components';
 
 html, body {
   background: var(--bg);

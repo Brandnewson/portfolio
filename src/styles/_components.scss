@@ -1,0 +1,59 @@
+// ── Shared narrative-page container ──
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 48px;
+
+  @media (max-width: 900px) {
+    padding: 0 26px;
+  }
+}
+
+// ── ThemeToggle island (global so it styles wherever it mounts) ──
+.theme-toggle {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  min-width: 124px;
+  border: 1px solid var(--bar-fg-mut);
+  border-radius: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: var(--bar-fg);
+  transition: border-color 0.15s ease;
+
+  &:hover { border-color: var(--primary); }
+
+  .label {
+    position: relative;
+    z-index: 1;
+    padding: 5px 0;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-align: center;
+    color: var(--bar-fg-mut);
+    pointer-events: none;
+    transition: color 0.18s ease;
+
+    &.is-active { color: var(--toggle-active-fg); }
+  }
+
+  .slider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    background: var(--primary);
+    transition: transform 0.22s ease;
+    pointer-events: none;
+    z-index: 0;
+
+    &[data-position="day"]   { transform: translateX(0); }
+    &[data-position="night"] { transform: translateX(100%); }
+  }
+}
