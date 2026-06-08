@@ -4,9 +4,10 @@ import InstrumentBar from '../components/shell/InstrumentBar.astro';
 
 interface Props {
   title?: string;
+  hideBar?: boolean;
 }
 
-const { title = 'Branson — Portfolio' } = Astro.props;
+const { title = 'Branson — Portfolio', hideBar = false } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +44,7 @@ const { title = 'Branson — Portfolio' } = Astro.props;
   />
 </head>
 <body>
-  <InstrumentBar />
+  {!hideBar && <InstrumentBar />}
 
   <main class="page">
     <slot />
