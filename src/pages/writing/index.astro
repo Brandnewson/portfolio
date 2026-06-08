@@ -1,0 +1,164 @@
+---
+// /writing — index of the tech notes (the "(i)" explainers for each
+// interactive island). Lists every entry in the tech-notes collection,
+// sorted by panel id, each linking to its own rendered page.
+import { getCollection } from 'astro:content';
+import Shell from '../../layouts/Shell.astro';
+import BackLink from '../../components/shell/BackLink.astro';
+
+const notes = (await getCollection('tech-notes')).sort((a, b) =>
+  a.data.panel.localeCompare(b.data.panel),
+);
+---
+<Shell title="Writing — Branson Tay">
+  <section class="writing">
+    <BackLink href="/#work" label="Back to work" />
+
+    <header class="writing-head">
+      <p class="eyebrow mono">NOTES</p>
+      <h1 class="writing-title">Writing</h1>
+      <p class="writing-intro">
+        Short notes on how the interactive pieces of this site are built, and the
+        reasoning behind each one. Less blog, more engineering log.
+      </p>
+    </header>
+
+    <ul class="note-list" role="list">
+      {notes.map((note) => (
+        <li class="note">
+          <a class="note-link" href={`/writing/${note.id}`}>
+            <span class="note-pid mono">{note.data.panel}</span>
+            <span class="note-body">
+              <span class="note-title">{note.data.title}</span>
+              <span class="note-meta mono">{note.data.mechanism} · {note.data.substrate}</span>
+            </span>
+            <span class="note-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Shell>
+
+<style lang="scss">
+.writing {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 36px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.writing-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  margin: 0;
+}
+
+.writing-title {
+  font-family: var(--font-hero);
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.014em;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+}
+
+.writing-intro {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--fg2);
+  max-width: 56ch;
+  margin: 0;
+}
+
+// ── Note list ──
+.note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.note {
+  border-top: 1px solid var(--bd);
+
+  &:last-child {
+    border-bottom: 1px solid var(--bd);
+  }
+}
+
+.note-link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 4px;
+  text-decoration: none;
+  color: var(--fg);
+  transition: background 0.15s ease, padding-left 0.15s ease;
+
+  &:hover {
+    background: var(--bg2);
+    padding-left: 12px;
+
+    .note-arrow { transform: translateX(4px); color: var(--primary); }
+  }
+}
+
+// Panel id is a live system marker — phosphor is allowed here (matches the
+// project-band .pid treatment).
+.note-pid {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.note-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.note-title {
+  font-family: var(--font-hero);
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.note-meta {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+.note-arrow {
+  font-size: 15px;
+  color: var(--mut);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+@media (max-width: 560px) {
+  .writing { padding: 22px 20px 48px; }
+  .note-link { gap: 12px; }
+}
+</style>

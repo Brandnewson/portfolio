@@ -1,7 +1,7 @@
 ---
 id: marl-card
 title: MARL Racing Sim card
-panel: PRJ/001
+panel: PRJ/002
 component: src/islands/MarlCard.tsx
 mechanism: phase-scrub
 substrate: discrete-overtaking-zones

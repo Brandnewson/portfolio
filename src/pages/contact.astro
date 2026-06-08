@@ -1,0 +1,136 @@
+---
+// /contact — how to reach Branson. Intentionally minimal: a short line, the
+// availability note, and a list of channels. Channels are data-driven so
+// adding GitHub / LinkedIn later is a one-line change.
+import Shell from '../layouts/Shell.astro';
+import BackLink from '../components/shell/BackLink.astro';
+
+const channels = [
+  { label: 'Email', value: 'bransontay@gmail.com', href: 'mailto:bransontay@gmail.com' },
+  { label: 'GitHub', value: 'github.com/Brandnewson', href: 'https://github.com/Brandnewson' },
+  { label: 'LinkedIn', value: 'linkedin.com/in/bransontay', href: 'https://www.linkedin.com/in/bransontay' },
+];
+---
+<Shell title="Contact — Branson Tay">
+  <section class="contact">
+    <BackLink href="/#work" label="Back to work" />
+
+    <header class="contact-head">
+      <p class="eyebrow mono">CONTACT</p>
+      <h1 class="contact-title">Get in touch</h1>
+      <p class="contact-intro">
+        Happiest building applied-AI tools in the space between product and client.
+        Open to full-stack, forward-deployed, and ML/AI roles in New York and London,
+        from September 2026.
+      </p>
+    </header>
+
+    <ul class="channel-list" role="list">
+      {channels.map((c) => {
+        const external = c.href.startsWith('http');
+        return (
+          <li class="channel">
+            <span class="channel-label mono">{c.label}</span>
+            <a
+              class="channel-value"
+              href={c.href}
+              target={external ? '_blank' : undefined}
+              rel={external ? 'noopener noreferrer' : undefined}
+            >{c.value}</a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+</Shell>
+
+<style lang="scss">
+.contact {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 28px 36px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.contact-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  margin: 0;
+}
+
+.contact-title {
+  font-family: var(--font-hero);
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.014em;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+}
+
+.contact-intro {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg2);
+  max-width: 54ch;
+  margin: 0;
+}
+
+// ── Channels ──
+.channel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.channel {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 4px;
+  border-top: 1px solid var(--bd);
+
+  &:last-child {
+    border-bottom: 1px solid var(--bd);
+  }
+}
+
+.channel-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+.channel-value {
+  font-family: var(--font-hero);
+  font-size: 18px;
+  color: var(--fg);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  word-break: break-word;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+@media (max-width: 560px) {
+  .contact { padding: 22px 20px 48px; }
+  .channel { grid-template-columns: 1fr; gap: 4px; }
+}
+</style>
