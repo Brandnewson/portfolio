@@ -1,0 +1,135 @@
+---
+import { BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES, AVAILABLE } from '../../data/profile';
+---
+<section class="profile" id="profile">
+  <div class="wrap">
+    <div class="profile-head">
+      <div class="phead mono"><span class="pid">PROFILE</span><span aria-hidden="true">·</span><span class="tier">WHO I AM</span></div>
+      <h2 class="ptitle">Background</h2>
+      <p class="bio">{BIO}</p>
+    </div>
+
+    <div class="pgrid">
+      <div class="pcol">
+        <div class="col-key mono">Experience</div>
+        <ol class="timeline" role="list">
+          {EXPERIENCE.map((e) => (
+            <li>
+              <div class="tl-when mono">{e.when}</div>
+              <div class="tl-main">
+                <span class="tl-org">{e.org}</span>
+                <span class="tl-role">{e.role}</span>
+                <span class="tl-loc mono">{e.location}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="pcol">
+        <div class="col-key mono">Education</div>
+        <div class="edu">
+          {EDUCATION.map((e) => (
+            <div class="edu-item">
+              <div class="edu-top"><span class="edu-org">{e.org}</span><span class="edu-when mono">{e.when}</span></div>
+              <div class="edu-qual">{e.qual}</div>
+              <div class="edu-desc">{e.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-block">
+      <div class="col-key mono">Stack</div>
+      <div class="stk">
+        {STACK.map((s) => (
+          <div class="stk-row"><span class="stk-key">{s.key}</span><span class="stk-val">{s.value}</span></div>
+        ))}
+      </div>
+    </div>
+
+    <div class="lookingfor">
+      <div class="lf-head mono">Looking for</div>
+      <div class="lf-grid">
+        <div>
+          <span class="lf-sub mono">Roles</span>
+          <div class="chips">
+            {ROLES.map((r) => <span class="chip-lg">{r}</span>)}
+          </div>
+        </div>
+        <div>
+          <span class="lf-sub mono">Locations</span>
+          <div class="cities">
+            {CITIES.map((c) => (
+              <div class="city"><span class="city-name">{c.name}</span><span class="city-coord mono">{c.coord}</span></div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <span class="lf-sub mono">Available</span>
+          <div class="avail-val mono"><span class="live-dot" aria-hidden="true"></span> {AVAILABLE}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+.profile { padding: 108px 0; }
+.profile-head { margin-bottom: 44px; max-width: 60ch; }
+
+.phead { display: flex; align-items: center; gap: 10px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mut); margin-bottom: 14px; }
+.pid { color: var(--phos); text-shadow: var(--phos-glow); font-weight: 600; }
+.tier { color: var(--fg); font-weight: 600; }
+
+.ptitle { font-family: var(--font-hero); font-weight: 600; font-size: clamp(28px, 3vw, 42px); line-height: 1.05; letter-spacing: -0.015em; color: var(--fg); margin: 10px 0 0; }
+.bio { margin-top: 18px; font-size: 16px; line-height: 1.6; color: var(--fg2); }
+
+.pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+.col-key { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; }
+
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline li { display: grid; grid-template-columns: 78px 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--bd); }
+.tl-when { font-size: 11px; color: var(--mut); letter-spacing: 0.04em; padding-top: 3px; }
+.tl-main { display: flex; flex-direction: column; gap: 2px; }
+.tl-org { font-size: 17px; font-weight: 600; color: var(--fg); }
+.tl-role { font-size: 14px; color: var(--fg2); }
+.tl-loc { font-size: 11px; color: var(--mut); letter-spacing: 0.04em; margin-top: 2px; }
+
+.edu { margin: 0; }
+.edu-item { padding: 18px 0; border-top: 1px solid var(--bd); }
+.edu-top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+.edu-org { font-size: 17px; font-weight: 600; color: var(--fg); }
+.edu-when { font-size: 11px; color: var(--mut); letter-spacing: 0.04em; white-space: nowrap; }
+.edu-qual { font-size: 14px; color: var(--fg2); margin-top: 2px; }
+.edu-desc { font-size: 13.5px; color: var(--mut); line-height: 1.55; margin-top: 9px; }
+
+.stack-block { margin-top: 56px; }
+.stk { margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px; }
+.stk-row { display: grid; grid-template-columns: 118px 1fr; gap: 16px; padding: 14px 0; border-top: 1px solid var(--bd); align-items: baseline; }
+.stk-key { font-size: 12px; font-weight: 600; color: var(--mut); }
+.stk-val { font-size: 15px; color: var(--fg); line-height: 1.5; }
+
+.lookingfor { margin-top: 52px; border: 1px solid var(--bd); background: var(--bg2); padding: 34px 38px; }
+.lf-head { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--primary); margin-bottom: 26px; }
+.lf-grid { display: grid; grid-template-columns: 1.5fr 1.3fr 1fr; gap: 44px; }
+.lf-sub { display: block; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mut); margin-bottom: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-lg { font-size: 13px; padding: 9px 14px; border: 1px solid var(--bd); color: var(--fg); background: var(--bg); }
+.cities { display: flex; gap: 30px; }
+.city { display: flex; flex-direction: column; gap: 3px; }
+.city-name { font-family: var(--font-hero); font-size: 22px; font-weight: 600; color: var(--fg); line-height: 1; }
+.city-coord { font-size: 10.5px; color: var(--mut); letter-spacing: 0.04em; }
+.avail-val { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .pgrid { grid-template-columns: 1fr; gap: 44px; }
+  .stk { grid-template-columns: 1fr; column-gap: 0; }
+  .lf-grid { grid-template-columns: 1fr; gap: 28px; }
+  .cities { gap: 24px; }
+}
+
+.mono { font-family: var(--font-mono); }
+</style>
