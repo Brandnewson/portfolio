@@ -61,7 +61,7 @@ export default function SectionRail() {
             className={`rail-item${active === s.id ? ' is-active' : ''}`}
           >
             <span className="rl-label">{s.label}</span>
-            <span className="rl-tick" />
+            <span className="rl-tick" aria-hidden="true" />
           </a>
         ))}
       </nav>
