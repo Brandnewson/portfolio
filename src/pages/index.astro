@@ -2,15 +2,19 @@
 import Shell from '../layouts/Shell.astro';
 import Hero from '../components/hero/Hero.astro';
 import ProjectFeature from '../components/projects/ProjectFeature.astro';
+import Profile from '../components/profile/Profile.astro';
+import Closing from '../components/shell/Closing.astro';
+import SectionRail from '../islands/SectionRail.tsx';
 import FsSimCard from '../islands/FsSimCard';
 import MarlCard from '../islands/MarlCard';
 import HelmArchitecture from '../islands/HelmArchitecture';
 ---
-<Shell title="Branson Tay — Portfolio" active="work">
+<Shell title="Branson Tay — Portfolio" hideBar>
   <Hero />
 
-  <section class="projects" id="work">
+  <div class="band-wrap">
     <ProjectFeature
+      anchorId="work"
       panelId="PRJ/001"
       tier="FEATURED"
       title="Quasi-Static Lap Time Simulator"
@@ -27,8 +31,11 @@ import HelmArchitecture from '../islands/HelmArchitecture';
     >
       <FsSimCard client:load />
     </ProjectFeature>
+  </div>
 
+  <div class="band-wrap">
     <ProjectFeature
+      anchorId="marl"
       panelId="PRJ/002"
       tier="RESEARCH"
       title="MARL Racing Sim"
@@ -46,8 +53,11 @@ import HelmArchitecture from '../islands/HelmArchitecture';
     >
       <MarlCard client:load />
     </ProjectFeature>
+  </div>
 
+  <div class="band-wrap">
     <ProjectFeature
+      anchorId="helm"
       panelId="PRJ/003"
       tier="SHIPPING"
       title="Helm"
@@ -59,31 +69,24 @@ import HelmArchitecture from '../islands/HelmArchitecture';
       ]}
       why="Teach myself system design, and self-improving harnesses in production environments"
       stack={['typescript', 'fastapi', 'k8s', 'sqs', 'cloudflare']}
-      route="https://helmcv.app"
-      routeLabel="Visit helmcv.app"
+      route="/helm"
     >
       <HelmArchitecture client:load />
     </ProjectFeature>
-  </section>
+  </div>
+
+  <Profile />
+  <Closing />
+
+  <SectionRail client:idle />
 </Shell>
 
 <style lang="scss">
-.projects {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  // Generous side padding mirrors the hero rail so the band rules read as
-  // full-width within the page frame. Bottom padding keeps the last band
-  // breathing above the BottomBar.
-  padding: 8px 36px 48px;
-  display: flex;
-  flex-direction: column;
+.band-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 48px;
 
-  // Below the scroll breakpoint (matches Shell.astro), let .projects grow with
-  // content so the bottom padding is reachable via scroll instead of clipped.
-  @media (max-width: 1599px) {
-    flex: 1 0 auto;
-    min-height: auto;
-  }
+  @media (max-width: 900px) { padding: 0 26px; }
 }
 </style>
