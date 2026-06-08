@@ -1,0 +1,418 @@
+---
+// ProjectFeature — full-width featured project band. Three of these stack
+// vertically on the landing page with alternating sides (reverse prop) so
+// the eye zig-zags down the page instead of reading three identical rows.
+//
+// Visual model: this is a *band*, not a card.
+//   - top accent rule spans the band's full width
+//   - no outer border, no background wash
+//   - copy column on one side, preview slot on the other
+// The preview slot typically holds an island that already has its own card
+// chrome (FsSimCard, MarlCard) or a static SVG (HelmArchitecture). The band
+// stays transparent so we never end up with card-in-card.
+//
+// Each band gets generous vertical padding so it feels like its own "spread"
+// in the page flow rather than a row in a list.
+
+interface Props {
+  panelId: string;
+  tier: 'FEATURED' | 'RESEARCH' | 'SHIPPING';
+  title: string;
+  kicker?: string;
+  // Scannable point-form summary — 3 short lines, not prose. Replaces the old
+  // paragraph summary so the band reads at a glance and shrinks on mobile.
+  points: string[];
+  // Optional one-line "why it matters" angle. Renders inline (small WHY label
+  // + body), not as a boxed pull-quote — keeps emphasis without adding bulk.
+  why?: string;
+  stack: string[];
+  // Primary CTA target. May be an internal path (/report) or an external URL
+  // (https://…) — external links open in a new tab and get a ↗ glyph.
+  route?: string;
+  // Friendly label for the route button. Without it the raw `route` is shown,
+  // which is fine for short paths but ugly for full URLs.
+  routeLabel?: string;
+  download?: string;
+  downloadAs?: string;
+  // When true, swap the column order so the preview sits on the LEFT and the
+  // copy sits on the right. Mobile always stacks copy-first regardless.
+  reverse?: boolean;
+}
+
+const {
+  panelId,
+  tier,
+  title,
+  kicker,
+  points,
+  why,
+  stack,
+  route,
+  routeLabel,
+  download,
+  downloadAs,
+  reverse = false,
+} = Astro.props;
+
+const downloadLabel = download ? download.split('/').pop()?.toUpperCase() : null;
+const isExternal = route?.startsWith('http');
+const routeText = routeLabel ?? route;
+const hasPreview = Astro.slots.has('default');
+---
+<section class:list={['project-feature', reverse && 'is-reverse']}>
+  <span class="acc-rule" aria-hidden="true"></span>
+
+  <div class="copy">
+    <header class="head mono">
+      <span class="pid">{panelId}</span>
+      <span class="divider" aria-hidden="true">·</span>
+      <span class="tier">{tier}</span>
+    </header>
+
+    <div class="title-row">
+      <h2 class="title">{title}</h2>
+    </div>
+
+    {kicker && <p class="kicker">{kicker}</p>}
+
+    <ul class="points" role="list">
+      {points.map((pt) => <li class="point">{pt}</li>)}
+    </ul>
+
+    {why && (
+      <p class="why" aria-label="Why it matters">
+        <span class="why-label mono">WHY</span>
+        <span class="why-body">{why}</span>
+      </p>
+    )}
+
+    <div class="cta-row">
+      {download ? (
+        <a class="btn btn--secondary mono" href={download} download={downloadAs ?? true}>
+          <span class="btn-glyph" aria-hidden="true">↓</span> {downloadLabel}
+        </a>
+      ) : route && (
+        <a
+          class="btn btn--secondary mono"
+          href={route}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          {routeText} <span class="btn-glyph" aria-hidden="true">{isExternal ? '↗' : '→'}</span>
+        </a>
+      )}
+    </div>
+
+    <ul class="stack" role="list">
+      {stack.map((tech) => <li class="chip mono">{tech}</li>)}
+    </ul>
+  </div>
+
+  <div class="preview">
+    {hasPreview ? (
+      <slot />
+    ) : (
+      <div class="preview-placeholder" aria-hidden="true">
+        <span class="preview-marker mono">PRJ_PREVIEW</span>
+        <span class="preview-hint mono">awaiting hydration</span>
+        <div class="preview-grid"></div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style lang="scss">
+.project-feature {
+  position: relative;
+  width: 100%;
+  padding: 36px 0 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: 56px;
+  align-items: start;
+
+  // Reverse: preview on the left, copy on the right. Achieved by swapping the
+  // grid column of each child; this keeps DOM order copy-first for screen
+  // readers (important — copy is the meaningful summary).
+  &.is-reverse {
+    .copy { grid-column: 2; }
+    .preview { grid-column: 1; grid-row: 1; }
+  }
+}
+
+.acc-rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rule);
+}
+
+// ── Copy column ──
+.copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+// Phosphor lives here per the live-state discipline — the panel ID is a
+// "live system marker", same family as a status dot or instrument readout.
+.pid {
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+  font-weight: 500;
+}
+
+.divider {
+  color: var(--mut);
+  opacity: 0.6;
+}
+
+.tier {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-family: var(--font-hero);
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+}
+
+.kicker {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--emphasis);
+  line-height: 1.4;
+  margin: -4px 0 0;
+}
+
+// ── Point-form summary ──
+// Three short lines with a small squared bullet (matches the squared-button /
+// border-radius:0 vocabulary). Replaces the old prose paragraph so the band
+// scans instantly and stacks cleanly on mobile.
+.points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-width: 54ch;
+}
+
+.point {
+  position: relative;
+  padding-left: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--fg2);
+
+  // Squared pip in the primary accent — small, sits on the cap-line.
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 4px;
+    height: 4px;
+    background: var(--primary);
+  }
+}
+
+// ── "Why it matters" — single inline line ──
+// Quiet WHY label + one-line body on the same baseline. Downgraded from the
+// old boxed pull-quote so it adds meaning without adding visual bulk.
+.why {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: 2px 0 0;
+  max-width: 56ch;
+}
+
+.why-label {
+  flex-shrink: 0;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.why-body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg2);
+}
+
+// ── CTA row ──
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+
+  // When there's nothing in here, collapse so it doesn't add gap.
+  &:empty {
+    display: none;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--bd);
+
+  &:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+}
+
+.btn-glyph {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.chip {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1px solid var(--bd);
+  color: var(--mut);
+}
+
+// ── Preview column ──
+// All three previews share the same outer frame so the page has a consistent
+// visual rhythm — the reader's eye anchors to the same boundary every time.
+// flex-direction: column lets the cross-axis (width) stretch the slot child
+// to fill the column; without this, the FS Sim island sized to its intrinsic
+// content (~420px) inside a much wider 765px column.
+.preview {
+  min-width: 0;
+  width: 100%;
+  align-self: stretch;
+  border: 1px solid var(--bd);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+
+  // When the preview is still showing the placeholder, the bg2 wash should
+  // bleed edge-to-edge of the frame rather than sit inside another 16 px of
+  // padding. Drop the padding so the placeholder fills the frame.
+  &:has(.preview-placeholder) {
+    padding: 0;
+  }
+}
+
+// Placeholder shown until the real island/slot lands. The outer .preview
+// frame already carries the border — the placeholder just provides the
+// "awaiting hydration" affordance (bg2 wash + grid + label).
+.preview-placeholder {
+  position: relative;
+  flex: 1;
+  min-height: 280px;
+  background: var(--bg2);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px 14px;
+  overflow: hidden;
+}
+
+.preview-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--bd) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bd) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.preview-marker {
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+}
+
+.preview-hint {
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: 0.7;
+}
+
+// ── Responsive ──
+@media (max-width: 1100px) {
+  .project-feature {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+    padding: 28px 0 32px;
+  }
+  // Mobile: copy ALWAYS first, regardless of reverse. The reverse rule is a
+  // desktop rhythm device; on mobile, reading order trumps visual rhythm.
+  .project-feature.is-reverse {
+    .copy { grid-column: 1; grid-row: 1; }
+    .preview { grid-column: 1; grid-row: 2; }
+  }
+  .preview-placeholder {
+    min-height: 200px;
+  }
+}
+</style>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branson — MARL card mockup v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #141210;
+  padding: 32px 28px 56px;
+  color: #CFC6B2;
+  font-family: 'Instrument Sans', sans-serif;
+  min-height: 100vh;
+}
+
+.meta { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: #9C8F75; margin-bottom: 6px; }
+.meta-note { font-size: 12px; color: #8A7D64; max-width: 920px; line-height: 1.55; margin-bottom: 14px; }
+.meta-note strong { color: #C8B98A; font-weight: 500; }
+.meta-note code { background: #0A0A08; padding: 1px 5px; border: 1px solid rgba(180,160,110,.18); font-size: 11px; }
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 28px;
+}
+@media (max-width: 1180px) { .pair { grid-template-columns: 1fr; } }
+
+/* ============================================================ */
+/* CARD — mirrors the production ProjectPanel.astro layout       */
+/* ============================================================ */
+.card {
+  position: relative;
+  border-radius: 2px;
+  padding: 16px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Instrument Sans', sans-serif;
+  border: 1px solid;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 2px;
+}
+
+/* DAY card */
+.day {
+  background: #EDE4D0;
+  border-color: rgba(90,70,40,0.15);
+  color: #1A120A;
+}
+.day::before { background: #8B5A30; }
+.day .mut { color: #7A6050; }
+.day .phos { color: #7A6050; text-shadow: none; }
+.day .route { color: #8B5A30; }
+.day .route:hover { color: #5D1A29; }
+.day .track-line { stroke: #7A6050; }
+.day .track-line-faint { stroke: rgba(122,96,80,0.25); }
+.day .zone-marker { fill: #B8B2A6; stroke: #7A6050; }
+.day .slider-step { background: rgba(90,70,40,0.18); }
+.day .slider-step.is-active { background: #5D1A29; transform: scale(1.7); }
+.day .slider-step.is-passed { background: #8B5A30; }
+.day .slider-rule { background: rgba(90,70,40,0.18); }
+.day .phase-label { color: #8B5A30; }
+.day .legend-key { color: #7A6050; }
+.day .preview-grid {
+  background-image:
+    linear-gradient(to right, rgba(90,70,40,0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(90,70,40,0.08) 1px, transparent 1px);
+}
+
+/* NIGHT card */
+.night {
+  background: #141210;
+  border-color: rgba(180,160,110,0.12);
+  color: #E8DFC8;
+}
+.night::before { background: #D9A030; }
+.night .mut { color: #8A7D64; }
+.night .phos { color: #14CC4A; text-shadow: 0 0 8px rgba(20,204,74,0.45), 0 0 18px rgba(20,204,74,0.15); }
+.night .route { color: #D9A030; }
+.night .route:hover { color: #E8B850; }
+.night .track-line { stroke: #8A7D64; }
+.night .track-line-faint { stroke: rgba(138,125,100,0.25); }
+.night .zone-marker { fill: #1A1612; stroke: #8A7D64; }
+.night .slider-step { background: rgba(180,160,110,0.18); }
+.night .slider-step.is-active { background: #14CC4A; transform: scale(1.7); box-shadow: 0 0 8px rgba(20,204,74,0.6); }
+.night .slider-step.is-passed { background: #D9A030; }
+.night .slider-rule { background: rgba(180,160,110,0.18); }
+.night .phase-label { color: #D9A030; }
+.night .legend-key { color: #8A7D64; }
+.night .preview-grid {
+  background-image:
+    linear-gradient(to right, rgba(180,160,110,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(180,160,110,0.06) 1px, transparent 1px);
+}
+
+/* SHARED ELEMENTS */
+/* Legend chip colours (DOM elements) — identical across themes */
+.a1-dot   { background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,0.55); }
+.a2-dot   { background: #FFB820; box-shadow: 0 0 6px rgba(255,184,32,0.45); }
+.a3-dot   { background: #4FB3FF; box-shadow: 0 0 6px rgba(79,179,255,0.45); }
+.a4-dot   { background: #FF5A4A; box-shadow: 0 0 6px rgba(255,90,74,0.45); }
+.base-dot { background: #F0F0F0; border: 1.5px solid #2A2A2A; box-sizing: border-box; }
+.llm-dot  { background: #C84AFA; box-shadow: 0 0 6px rgba(200,74,250,0.55); }
+
+/* Agent circles INSIDE the SVG share the path's viewBox coords, so dots ride the track exactly. */
+.agent-circle             { transition: r 0.2s ease; }
+.agent-circle.is-passive  { opacity: 0.55; }
+.agent-circle.role-a1     { fill: #14CC4A; filter: drop-shadow(0 0 2px rgba(20,204,74,0.7)); }
+.agent-circle.role-a2     { fill: #FFB820; filter: drop-shadow(0 0 2px rgba(255,184,32,0.6)); }
+.agent-circle.role-a3     { fill: #4FB3FF; filter: drop-shadow(0 0 2px rgba(79,179,255,0.6)); }
+.agent-circle.role-a4     { fill: #FF5A4A; filter: drop-shadow(0 0 2px rgba(255,90,74,0.6)); }
+.agent-circle.role-base   { fill: #F0F0F0; stroke: #2A2A2A; stroke-width: 1; }
+.agent-circle.role-llm    { fill: #C84AFA; filter: drop-shadow(0 0 2px rgba(200,74,250,0.7)); }
+
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.night .mono, .night .title { font-family: 'IBM Plex Mono', monospace; }
+.night .title { font-family: 'Chakra Petch', sans-serif; }
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.card-head .pid { color: inherit; }
+.day .card-head .pid { color: #7A6050; font-weight: 500; }
+.night .card-head .pid { color: #14CC4A; text-shadow: 0 0 8px rgba(20,204,74,0.45); }
+.card-head .resume-link {
+  margin-left: auto;
+  text-decoration: none;
+  letter-spacing: 0.22em;
+  border: 1px solid;
+  padding: 4px 8px;
+  font-size: 9px;
+  transition: border-color .15s ease, color .15s ease;
+}
+.day .resume-link { color: #1A120A; border-color: rgba(90,70,40,0.25); }
+.day .resume-link:hover { color: #8B5A30; border-color: #8B5A30; }
+.night .resume-link { color: #E8DFC8; border-color: rgba(180,160,110,0.25); }
+.night .resume-link:hover { color: #D9A030; border-color: #D9A030; }
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.title-row .route { margin-left: auto; }
+.title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.05;
+}
+.night .title { font-family: 'Chakra Petch', sans-serif; }
+.route {
+  flex-shrink: 0;
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 0.14em;
+}
+
+.kicker {
+  font-size: 11.5px;
+  font-style: italic;
+  font-weight: 400;
+}
+.day .kicker { color: #4A3828; }
+.night .kicker { color: #CFC6B2; }
+/* Inline kicker beside title — wraps below on narrow widths */
+.title-row .kicker {
+  margin-left: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================================ */
+/* VIZ AREA — track + animated dots + hero number overlay         */
+/* ============================================================ */
+.viz {
+  position: relative;
+  flex: 1;
+  min-height: 300px;
+  margin-top: 4px;
+  border: 1px dashed;
+  overflow: hidden;
+}
+.day .viz { border-color: rgba(90,70,40,0.18); }
+.night .viz { border-color: rgba(180,160,110,0.14); }
+
+.preview-grid {
+  position: absolute;
+  inset: 0;
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+.track-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.track-line {
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.track-line-faint {
+  fill: none;
+  stroke-width: 0.8;
+  stroke-dasharray: 2 3;
+}
+
+.zone-marker {
+  stroke-width: 1;
+}
+
+.attempt-flash {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(20,204,74,0.6) 0%, transparent 70%);
+}
+
+/* ============================================================ */
+/* SLIDER ROW                                                    */
+/* ============================================================ */
+.slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 6px 4px 2px;
+  cursor: pointer;
+}
+.slider-track {
+  position: relative;
+  height: 14px;
+  display: flex;
+  align-items: center;
+}
+.slider-rule {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+.slider-step {
+  position: relative;
+  z-index: 1;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  flex: none;
+  margin: 0 auto;
+}
+.slider-track {
+  justify-content: space-between;
+  padding: 0 4px;
+}
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: inherit;
+}
+.day .slider-labels { color: #8A7060; }
+.night .slider-labels { color: #8A7D64; }
+.slider-labels .num.is-active { color: inherit; font-weight: 600; }
+.day .slider-labels .num.is-active { color: #5D1A29; }
+.night .slider-labels .num.is-active { color: #14CC4A; text-shadow: 0 0 6px rgba(20,204,74,0.5); }
+
+/* ============================================================ */
+/* NARRATIVE                                                     */
+/* ============================================================ */
+.narrative { margin-top: 2px; min-height: 76px; }
+.phase-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.phase-body {
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.day .phase-body { color: #4A3828; }
+.night .phase-body { color: #CFC6B2; }
+
+/* ============================================================ */
+/* LEGEND FOOTER                                                  */
+/* ============================================================ */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-top: 8px;
+  border-top: 1px solid;
+  margin-top: 2px;
+}
+.day .legend { border-color: rgba(90,70,40,0.15); }
+.night .legend { border-color: rgba(180,160,110,0.12); }
+.legend-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.dot-mini {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<p class="meta">MARL CARD MOCKUP · v5</p>
+<p class="meta-note">
+  Phase narratives now <strong>drawn from the thesis</strong> (Chapter 2 methodology + Chapter 4 results). Each phase teaches one beat: smoke-test → substrate → emergence under competition → the zero-sum cliff → the +83% non-zero-sum lift → the scaling collapse → the partial curriculum fix → LLM validity check → difference-rewards inversion. Numbers (0.835, 83%, −31%, −16%, the α=0.5/0.75 thresholds, 44%, ~70%) come straight from the thesis tables. Branson to polish copy; the underlying mechanism is discrete overtaking-zone decisions, not continuous racing.
+</p>
+
+<div class="pair">
+
+  <!-- ================= DAY CARD ================= -->
+  <article class="card day" id="card-day">
+    <header class="card-head">
+      <span class="pid">PRJ/001</span>
+      <a class="resume-link" href="#" target="_blank" rel="noopener">↓ RESUME.PDF</a>
+    </header>
+    <div class="title-row">
+      <h3 class="title">MARL Racing Sim</h3>
+      <span class="kicker">When teamwork helps and when it hurts</span>
+      <a class="route" href="#">/f1-sim →</a>
+    </div>
+
+    <div class="viz" data-viz>
+      <div class="preview-grid"></div>
+      <svg class="track-svg" viewBox="0 0 240 380" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <!-- Real Spa-Francorchamps centreline (SpaCentreLine.csv, Y-flipped, stride 4). Portrait natural orientation. -->
+        <path class="track-line" data-track-path
+          d="M89.5,75.7 L87.3,71.6 L85.0,67.4 L82.8,63.3 L80.5,59.3 L78.1,55.2 L75.7,51.2 L73.2,47.2 L70.9,43.1 L68.7,39.0 L66.5,34.9 L64.0,31.0 L61.0,27.1 L58.4,22.9 L58.3,19.7 L61.1,18.6 L65.8,19.6 L70.3,21.7 L74.5,23.7 L78.6,26.0 L82.7,28.2 L86.8,30.5 L90.8,32.9 L94.7,35.5 L98.4,38.4 L102.0,41.3 L105.5,44.5 L108.9,47.7 L112.0,51.2 L115.0,54.8 L118.0,58.4 L121.0,62.0 L124.0,65.6 L127.0,69.1 L130.0,72.7 L132.9,76.4 L135.7,80.2 L138.7,83.8 L142.1,86.8 L146.1,89.3 L150.0,91.8 L153.4,95.0 L156.1,98.8 L158.2,103.0 L159.5,107.5 L160.4,112.1 L161.6,116.6 L163.4,120.8 L165.8,124.9 L168.2,128.9 L170.7,132.8 L173.3,136.7 L175.9,140.7 L178.4,144.6 L180.8,148.6 L183.4,152.6 L185.8,156.6 L188.0,160.7 L189.9,164.9 L191.5,169.4 L193.0,173.8 L194.2,178.3 L195.4,182.8 L196.7,187.3 L198.0,191.8 L199.3,196.3 L200.6,200.8 L202.0,205.3 L203.4,209.8 L204.7,214.3 L205.9,218.8 L207.1,223.3 L208.4,227.8 L209.7,232.3 L211.0,236.8 L212.3,241.3 L213.6,245.8 L214.9,250.3 L216.0,254.9 L217.2,259.4 L218.5,263.9 L220.1,268.3 L221.6,272.7 L223.1,277.2 L224.5,281.7 L225.7,286.3 L225.9,290.8 L224.2,294.9 L221.1,298.3 L217.9,301.9 L216.1,305.9 L215.9,310.5 L217.0,315.0 L218.9,319.4 L220.0,323.8 L219.5,328.1 L216.9,332.0 L213.4,335.1 L209.5,337.7 L205.4,340.1 L201.5,342.6 L197.6,345.3 L193.8,347.9 L189.9,350.5 L186.2,353.3 L182.5,356.2 L178.8,359.0 L174.6,361.0 L170.0,361.3 L165.9,359.5 L163.2,355.8 L162.8,351.3 L164.7,347.2 L168.3,344.4 L172.5,342.3 L176.8,340.5 L180.9,338.3 L184.4,335.3 L186.6,331.4 L187.2,326.8 L186.6,322.1 L185.4,317.6 L183.7,313.2 L181.9,308.9 L180.1,304.5 L178.6,300.1 L177.6,295.5 L177.1,290.9 L176.7,286.2 L175.9,281.6 L175.1,277.0 L174.4,272.4 L173.7,267.7 L173.0,263.1 L172.0,258.5 L170.7,254.0 L168.8,249.7 L166.2,245.8 L162.8,242.6 L158.8,240.6 L154.2,239.7 L149.4,239.4 L144.8,239.4 L140.2,240.1 L135.8,241.7 L131.8,244.1 L128.1,247.0 L125.0,250.5 L122.5,254.4 L120.7,258.7 L119.2,263.2 L117.7,267.6 L116.1,272.0 L114.4,276.3 L112.5,280.7 L110.8,285.0 L109.1,289.3 L107.7,293.8 L106.3,298.3 L104.6,302.7 L102.1,306.4 L98.4,309.2 L94.0,310.6 L89.4,310.7 L85.1,309.2 L80.9,307.1 L76.6,305.8 L72.0,306.0 L67.7,307.8 L64.1,310.6 L61.3,314.3 L59.1,318.4 L57.0,322.6 L54.7,326.6 L52.2,330.6 L49.8,334.7 L47.0,338.4 L43.3,340.8 L38.9,341.0 L34.5,339.4 L30.4,336.9 L26.5,334.3 L22.6,331.7 L19.2,328.6 L16.6,324.8 L15.1,320.4 L14.2,315.7 L14.0,311.1 L14.8,306.6 L16.3,302.2 L18.4,298.0 L20.5,293.8 L23.0,289.9 L25.9,286.2 L28.9,282.6 L32.0,279.2 L35.1,275.6 L38.4,272.3 L41.8,269.1 L45.4,266.2 L49.2,263.5 L53.3,261.2 L57.4,259.0 L61.6,256.8 L65.7,254.6 L69.9,252.5 L74.1,250.4 L78.3,248.4 L82.4,246.2 L86.3,243.6 L89.9,240.7 L93.3,237.5 L96.5,234.0 L99.3,230.3 L101.7,226.3 L103.7,222.1 L105.5,217.8 L107.5,213.5 L109.4,209.3 L111.4,205.0 L112.9,200.6 L113.8,196.0 L114.0,191.3 L113.5,186.6 L112.5,182.1 L110.8,177.7 L108.6,173.6 L106.4,169.5 L104.8,165.1 L103.4,160.6 L102.0,156.2 L100.4,151.7 L98.9,147.3 L97.6,142.8 L96.6,138.2 L96.2,133.6 L96.0,128.9 L95.5,124.2 L94.7,119.6 L93.7,114.9 L93.7,110.1 L95.6,106.7 L99.4,104.9 L102.9,103.2 L104.0,100.1 L102.3,95.7 L99.5,91.8 L96.8,88.0 L94.3,84.0 L92.1,79.9 Z" />
+        <g data-agents></g>
+      </svg>
+    </div>
+
+    <div class="slider-row" data-slider>
+      <div class="slider-track">
+        <div class="slider-rule"></div>
+        <!-- 10 steps populated by JS -->
+      </div>
+      <div class="slider-labels">
+        <span class="num">01</span><span class="num">02</span><span class="num">03</span><span class="num">04</span><span class="num">05</span><span class="num">06</span><span class="num">07</span><span class="num">08</span><span class="num">09</span><span class="num">10</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p class="phase-label mono" data-phase-label>PHASE 01</p>
+      <p class="phase-body" data-phase-body>—</p>
+    </div>
+
+    <footer class="legend" data-legend></footer>
+  </article>
+
+  <!-- ================= NIGHT CARD ================= -->
+  <article class="card night" id="card-night">
+    <header class="card-head">
+      <span class="pid">PRJ/001</span>
+      <a class="resume-link" href="#" target="_blank" rel="noopener">↓ RESUME.PDF</a>
+    </header>
+    <div class="title-row">
+      <h3 class="title">MARL Racing Sim</h3>
+      <span class="kicker">When teamwork helps and when it hurts</span>
+      <a class="route" href="#">/f1-sim →</a>
+    </div>
+
+    <div class="viz" data-viz>
+      <div class="preview-grid"></div>
+      <svg class="track-svg" viewBox="0 0 320 220" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path class="track-line" data-track-path
+          d="M 75 50
+             Q 50 50 45 70
+             Q 42 92 60 100
+             Q 78 105 90 100
+             L 130 95
+             Q 145 95 150 108
+             Q 153 122 168 125
+             L 220 130
+             Q 250 132 265 145
+             Q 275 158 268 175
+             Q 258 192 230 192
+             L 145 188
+             Q 110 188 90 175
+             Q 70 162 75 145
+             Q 80 128 110 122
+             L 130 118
+             Q 145 115 145 100
+             Q 145 85 125 78
+             L 95 65
+             Q 80 55 75 50 Z" />
+      </svg>
+      <span class="hero-number" data-hero>+83%</span>
+    </div>
+
+    <div class="slider-row" data-slider>
+      <div class="slider-track">
+        <div class="slider-rule"></div>
+      </div>
+      <div class="slider-labels">
+        <span class="num">01</span><span class="num">02</span><span class="num">03</span><span class="num">04</span><span class="num">05</span><span class="num">06</span><span class="num">07</span><span class="num">08</span><span class="num">09</span><span class="num">10</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p class="phase-label mono" data-phase-label>PHASE 01</p>
+      <p class="phase-body" data-phase-body>—</p>
+    </div>
+
+    <footer class="legend" data-legend></footer>
+  </article>
+
+</div>
+
+<script>
+// ============================================================
+// PHASE CONFIG — each phase: label, hero number, narrative,
+// agent list (id, type, role-class)
+// ============================================================
+const ROLE_CLASSES = {
+  a1: 'a1-dot', a2: 'a2-dot', a3: 'a3-dot', a4: 'a4-dot',
+  base: 'base-dot', llm: 'llm-dot'
+};
+const ROLE_LABELS = {
+  a1: 'Agent 1', a2: 'Agent 2', a3: 'Agent 3', a4: 'Agent 4',
+  base: 'Base', llm: 'LLM (zero-shot)'
+};
+
+// Narratives drawn from the thesis (TAY26-FINAL). All agents share one lap speed;
+// only count, colour, and starting offset differ between phases.
+const PHASES = [
+  { n: 1, label: "PHASE 01 · DOES IT LEARN?",
+    body: "Smoke-test before committing the full experimental budget. One vanilla DQN against a fixed scripted bot at Spa, three seeds, 200 episodes each. The gate is a 0.5 win rate. All three seeds clear it — the learning signal is real and the rest of the matrix is worth running.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'base', role: 'base', offset: 0.5 }
+    ]},
+  { n: 2, label: "PHASE 02 · CHOOSING THE SUBSTRATE",
+    body: "Four DQN variants — vanilla, double, dueling, rainbow-lite — trained under identical conditions against the same bot. Rainbow-lite finishes first at a 0.835 win rate and is the most stable under stochastic noise. It becomes the substrate for every later phase, so subsequent results can't be blamed on a weak algorithm choice.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'base', role: 'base', offset: 0.5 }
+    ]},
+  { n: 3, label: "PHASE 03 · WHAT EMERGES UNDER COMPETITION",
+    body: "Two rainbow-lite agents race head-to-head, zero-sum, no shared reward, no coordination mechanism. Within hundreds of episodes they specialise — one takes the hard corners, the other plays it safe. It's the hawk-dove equilibrium from evolutionary game theory, discovered without being told. Weaker DQN variants collapse 44% of trials at the same task.",
+    agents: [
+      { id: 'a1', role: 'a1', offset: 0.0 },
+      { id: 'a2', role: 'a2', offset: 0.5 }
+    ]},
+  { n: 4, label: "PHASE 04 · SHARING REWARD IN A ZERO-SUM GAME",
+    body: "Same two agents, same zero-sum race, but each one's reward is now a weighted blend of its own and its teammate's — controlled by α. Sweep α from 0 to 1. Below α=0.5 nothing breaks. Above α=0.75, eight times out of nine both agents stop racing — every successful overtake now costs them through the teammate term. Cooperation in a zero-sum game collapses into mutual passivity.",
+    agents: [
+      { id: 'a1', role: 'a1', offset: 0.0 },
+      { id: 'a2', role: 'a2', offset: 0.5 }
+    ]},
+  { n: 5, label: "PHASE 05 · ADD A COMMON OPPONENT",
+    body: "Add the Base agent as a third car. Now both learners can improve at the same time by beating it instead of each other. At α=0.75 joint beat-base rises 83% over the no-sharing baseline. The gain comes from lifting the weaker agent. There's a minimum effective dose (low α is worse than none) and a clean optimum — the same threshold that destabilised the zero-sum game is now the peak.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'a2',   role: 'a2',   offset: 0.35 },
+      { id: 'base', role: 'base', offset: 0.7 }
+    ]},
+  { n: 6, label: "PHASE 06 · SCALING TO TWO TEAMS",
+    body: "Four learners in two teams of two, plus the Base agent — five cars on track. The +83% at three agents becomes −31% at five. Within-team position-deltas are negatively correlated in all 36 trials: agents improve individually while actively anti-coordinating with their teammate. The pairwise cooperative signal gets diluted by the extra competitors.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'a2',   role: 'a2',   offset: 0.2 },
+      { id: 'a3',   role: 'a3',   offset: 0.5 },
+      { id: 'a4',   role: 'a4',   offset: 0.7 },
+      { id: 'base', role: 'base', offset: 0.85 }
+    ]},
+  { n: 7, label: "PHASE 07 · WHERE IS THE CLIFF?",
+    body: "7A places three learners against Base — the cooperative effect is gone but the system hasn't broken. 7B sweeps every α value at five learners and recovers nothing. The boundary sits between three and four learners, and no reward-mixing value crosses it back. The failure is structural, not parametric.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'a2',   role: 'a2',   offset: 0.33 },
+      { id: 'a3',   role: 'a3',   offset: 0.66 },
+      { id: 'base', role: 'base', offset: 0.85 }
+    ]},
+  { n: 8, label: "PHASE 08 · CURRICULUM SCHEDULING",
+    body: "Train each agent independently first (α=0), then ramp α toward cooperation over 300 episodes. At five learners, curriculum recovers ~70% of the lost performance — but the cooperative team still never beats the competitive baseline. Two failure modes often discussed together separate cleanly: curriculum resolves training-order collapse; the credit-assignment failure stays.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'a2',   role: 'a2',   offset: 0.2 },
+      { id: 'a3',   role: 'a3',   offset: 0.4 },
+      { id: 'a4',   role: 'a4',   offset: 0.7 },
+      { id: 'base', role: 'base', offset: 0.85 }
+    ]},
+  { n: 9, label: "PHASE 09 · LLM VALIDITY CHECK",
+    body: "A zero-shot Claude Haiku receives the race state as natural language and outputs a zone plan. No replay buffer, no gradient, no training. It matches rainbow-lite within seed variance (0.819–0.837 vs 0.835–0.840), and avoids some simulator-specific pathologies the trained policy still develops. The simulator's strategy space is narrow enough that domain reasoning alone reaches it — a useful bound on the scope of the MARL findings.",
+    agents: [
+      { id: 'llm',  role: 'llm',  offset: 0.0 },
+      { id: 'base', role: 'base', offset: 0.5 }
+    ]},
+  { n: 10, label: "PHASE 10 · A DIFFERENT COOPERATIVE FORMULATION",
+    body: "Try difference rewards instead of α-mixing: credit each agent only for its own counterfactual contribution. At four learners, the mean-field approximation underperforms the IQL baseline by 16%. The math explains why — own-performance incentive is amplified, teammate improvement is penalised. The cooperative gradient doesn't just dilute, it inverts. The result is about this specific approximation, not difference rewards in general.",
+    agents: [
+      { id: 'a1',   role: 'a1',   offset: 0.0 },
+      { id: 'a2',   role: 'a2',   offset: 0.33 },
+      { id: 'a3',   role: 'a3',   offset: 0.66 },
+      { id: 'base', role: 'base', offset: 0.85 }
+    ]}
+];
+
+// ============================================================
+// CARD CONTROLLER — one instance per card (day, night)
+// ============================================================
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+const LAP_DURATION_S = 12;  // one full lap takes 12s for every agent
+
+class MarlCard {
+  constructor(rootEl) {
+    this.root = rootEl;
+    this.trackPath = rootEl.querySelector('[data-track-path]');
+    this.agentLayer = rootEl.querySelector('[data-agents]');
+    this.phaseLabel = rootEl.querySelector('[data-phase-label]');
+    this.phaseBody = rootEl.querySelector('[data-phase-body]');
+    this.legend = rootEl.querySelector('[data-legend]');
+    this.sliderTrack = rootEl.querySelector('.slider-track');
+    this.sliderLabels = rootEl.querySelectorAll('.slider-labels .num');
+
+    this.currentPhase = 1;
+    this.agentEls = new Map();
+    this.startTime = performance.now();
+    this.pathLength = this.trackPath.getTotalLength();
+
+    this.buildSlider();
+    this.setPhase(1);
+    this.tick = this.tick.bind(this);
+    requestAnimationFrame(this.tick);
+  }
+
+  buildSlider() {
+    for (let i = 1; i <= 10; i++) {
+      const step = document.createElement('button');
+      step.className = 'slider-step';
+      step.dataset.phase = i;
+      step.setAttribute('aria-label', `Phase ${i}`);
+      step.addEventListener('click', () => this.setPhase(i));
+      this.sliderTrack.appendChild(step);
+    }
+  }
+
+  setPhase(n) {
+    this.currentPhase = n;
+    const phase = PHASES[n - 1];
+
+    this.phaseLabel.textContent = phase.label;
+    this.phaseBody.textContent = phase.body;
+
+    this.sliderTrack.querySelectorAll('.slider-step').forEach((el, i) => {
+      el.classList.toggle('is-active', i + 1 === n);
+      el.classList.toggle('is-passed', i + 1 < n);
+    });
+    this.sliderLabels.forEach((el, i) => {
+      el.classList.toggle('is-active', i + 1 === n);
+    });
+
+    // Rebuild agent circles inside the SVG (same coord system as the path)
+    this.agentLayer.replaceChildren();
+    this.agentEls.clear();
+    phase.agents.forEach((agent) => {
+      const c = document.createElementNS(SVG_NS, 'circle');
+      c.setAttribute('r', '4');
+      c.setAttribute('class', `agent-circle role-${agent.role}`);
+      this.agentLayer.appendChild(c);
+      this.agentEls.set(agent.id, c);
+    });
+
+    this.legend.innerHTML = '';
+    const seen = new Set();
+    phase.agents.forEach(agent => {
+      if (seen.has(agent.role)) return;
+      seen.add(agent.role);
+      const k = document.createElement('span');
+      k.className = 'legend-key mono';
+      k.innerHTML = `<span class="dot-mini ${ROLE_CLASSES[agent.role]}"></span>${ROLE_LABELS[agent.role]}`;
+      this.legend.appendChild(k);
+    });
+  }
+
+  tick(now) {
+    const elapsed = (now - this.startTime) / 1000;
+    const phase = PHASES[this.currentPhase - 1];
+    const lapT = (elapsed / LAP_DURATION_S) % 1;  // shared phase across all agents
+
+    phase.agents.forEach((agent) => {
+      const c = this.agentEls.get(agent.id);
+      if (!c) return;
+      const t = (lapT + agent.offset) % 1;
+      const point = this.trackPath.getPointAtLength(t * this.pathLength);
+      c.setAttribute('cx', point.x);
+      c.setAttribute('cy', point.y);
+    });
+
+    requestAnimationFrame(this.tick);
+  }
+}
+
+// Initialise both cards once fonts/layout settle
+window.addEventListener('load', () => {
+  new MarlCard(document.getElementById('card-day'));
+  new MarlCard(document.getElementById('card-night'));
+});
+</script>
+
+</body>
+</html>

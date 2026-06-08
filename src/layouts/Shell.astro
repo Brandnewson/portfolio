@@ -2,14 +2,12 @@
 import '../styles/global.scss';
 import TargaBar from '../components/shell/TargaBar.astro';
 import InstrumentBar from '../components/shell/InstrumentBar.astro';
-import BottomBar from '../components/shell/BottomBar.astro';
 
 interface Props {
   title?: string;
-  active?: 'work' | 'writing' | 'about' | 'contact';
 }
 
-const { title = 'Branson — Portfolio', active = 'work' } = Astro.props;
+const { title = 'Branson — Portfolio' } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -47,13 +45,11 @@ const { title = 'Branson — Portfolio', active = 'work' } = Astro.props;
 </head>
 <body>
   <TargaBar />
-  <InstrumentBar active={active} />
+  <InstrumentBar />
 
   <main class="page">
     <slot />
   </main>
-
-  <BottomBar />
 </body>
 </html>
 
@@ -64,9 +60,8 @@ const { title = 'Branson — Portfolio', active = 'work' } = Astro.props;
     display: flex;
     flex-direction: column;
     background: var(--bg);
-    overflow: hidden;
   }
-  @media (max-width: 899px) {
-    .page { overflow: visible; }
-  }
+  /* The landing redesign (2026-05-13) made the page taller than the viewport
+     on purpose — three full-width project bands stacked vertically plus the
+     experience/education/contact sections. The page scrolls at every width. */
 </style>

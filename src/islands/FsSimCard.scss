@@ -1,0 +1,324 @@
+// FsSimCard styles — colocated with the TSX island.
+//
+// Theme-aware via semantic tokens from _tokens.scss — all colours are CSS
+// custom properties; no inline styles, no Tailwind. The component swaps
+// day/night automatically via [data-theme] on <html>.
+//
+// Phosphor discipline (from CLAUDE.md memory):
+//   --phos / --phos-glow are used on exactly three elements:
+//     1. The curve dot (live position indicator)
+//     2. The LAP TIME tile value (primary outcome)
+//     3. The baseline tick pip on the slider (anchors the stock-car reference)
+//   Everything else uses neutral tokens (--fg, --fg2, --mut, --bd).
+
+// ── Card root ──
+.fs-sim-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// ── 1. Curve plot ──
+// SVG uses `preserveAspectRatio="none"` so the polyline fills the full width
+// regardless of panel width — shape fidelity is more important than strict
+// x-axis accuracy at this scale. The plot sits inside a grid frame
+// (.fs-plot-frame) that adds the labelled X / Y axes alongside it.
+.fs-plot {
+  display: block;
+  width: 100%;
+  height: 90px;
+  overflow: visible;
+}
+
+// Dashed vertical at baseline mass (250 kg). Uses --mut (not --bd) so it
+// has real contrast in day mode — at --bd's day alpha (~0.15) the line was
+// effectively invisible against the cream bg. --mut sits between border
+// and body text contrast in both themes.
+.fs-baseline-line {
+  stroke: var(--mut);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0.8;
+}
+
+// The lap-time polyline — neutral stroke, matches track line idiom from MarlCard.
+.fs-curve {
+  fill: none;
+  stroke: var(--mut);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+// Position marker — HTML element, not SVG, so the SVG's preserveAspectRatio
+// "none" stretch can't oval it. Visual pattern mirrors the MARL agent disc:
+// 8 px phosphor dot, soft bloom in night, neutral in day, no hover affordance
+// (it's an indicator, not a control).
+.fs-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--phos);
+  filter: var(--phos-filter);
+  transform: translate(-50%, -50%);
+  transition: left 0.12s ease, top 0.12s ease;
+  pointer-events: none;
+}
+
+// ── Axis chrome ──
+// Minimal axis lines + named axes ("MASS →", "LAP TIME →"). No tick numbers —
+// the slider tick row carries the X scale, the LAP TIME readout carries Y.
+// Keeping the chart visually quiet so the curve and dot do the talking.
+.fs-plot-frame {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  column-gap: 6px;
+  row-gap: 4px;
+}
+
+// Axes use the same wordmark idiom as the day/night theme toggle (`DAY` /
+// `NIGHT`): short, mono, all caps, generous letter-spacing. Bigger than the
+// 8 px first pass so the axes register as labels, not micro-print.
+.fs-axis-y {
+  grid-row: 1;
+  grid-column: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg); // reads bottom-to-top
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mut);
+  align-self: center;
+  line-height: 1;
+}
+
+.fs-axis-x {
+  grid-row: 2;
+  grid-column: 2;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mut);
+  text-align: center;
+  line-height: 1;
+}
+
+.fs-plot-wrap {
+  grid-row: 1;
+  grid-column: 2;
+  position: relative;
+  width: 100%;
+  border-left: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+}
+
+// ── 2. Mass slider ──
+.fs-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// Snap markers — one tick per 5 kg step, sitting just above the track. Makes
+// the discrete step visible so the user can see *what they're snapping to*
+// rather than having to discover it by dragging. Padding-inline aligns the
+// outer ticks with the thumb-center positions at the value extremes (the
+// thumb is 16 px wide, so its centre travels from ~8 px inside each edge).
+.fs-snap-ticks {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 7px;
+  padding: 0 8px;
+  margin-bottom: -2px; // pull the row close to the track without overlapping
+}
+
+.fs-snap-tick {
+  display: inline-block;
+  width: 1px;
+  height: 4px;
+  background: var(--mut);
+  opacity: 0.6;
+
+  // Baseline tick (250 kg) — the only phosphor mark in the strip, so the
+  // stock-car reference stays visible without a separate label glyph.
+  &.is-baseline {
+    height: 7px;
+    background: var(--phos);
+    box-shadow: var(--phos-glow);
+    opacity: 1;
+  }
+}
+
+.fs-slider-label {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  display: block;
+}
+
+// Native range — styled via vendor pseudo-elements so it matches the panel
+// vocabulary (1px borders, neutral track, phosphor thumb).
+// `-webkit-appearance: none` is required or the custom styling is ignored.
+// Track + thumb sized up from the previous 1 px / 10 px treatment so the
+// element clearly *reads* as a slider rather than a divider with a pip. The
+// thumb gets a phosphor fill on hover/focus so the affordance is unmistakable.
+.fs-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 20px;        // tall hit target
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  // ── Chromium / Safari track ──
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    background: var(--bg);
+    border: 1px solid var(--bd);
+    border-radius: 2px;
+  }
+
+  // ── Chromium / Safari thumb ──
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--phos);
+    border: 1px solid var(--bd);
+    margin-top: -7px; // (track 4px + 2*border) / 2 - thumb / 2
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: var(--phos-glow);
+  }
+
+  &:hover::-webkit-slider-thumb,
+  &:focus-visible::-webkit-slider-thumb {
+    transform: scale(1.1);
+    box-shadow: var(--phos-glow);
+  }
+
+  // ── Firefox track ──
+  &::-moz-range-track {
+    height: 4px;
+    background: var(--bg);
+    border: 1px solid var(--bd);
+    border-radius: 2px;
+  }
+
+  // ── Firefox thumb ──
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--phos);
+    border: 1px solid var(--bd);
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: var(--phos-glow);
+  }
+
+  &:hover::-moz-range-thumb,
+  &:focus-visible::-moz-range-thumb {
+    transform: scale(1.1);
+    box-shadow: var(--phos-glow);
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+// Three tick labels below the track.
+// flex with space-between maps 200 / 250 / 300 to left / centre / right.
+.fs-tick-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fs-tick {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--mut);
+  line-height: 1;
+}
+
+// Centre tick label sits below the centre snap mark, which already carries
+// the phosphor anchor — no extra pip needed in the label row.
+.fs-tick--baseline {
+  display: inline-flex;
+  align-items: center;
+}
+
+// ── 3. Readout grid (2×2) ──
+.fs-readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+// Each tile: a labelled data box with 1px border, matching panel vocabulary.
+.fs-tile {
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  padding: 8px 10px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fs-tile-label {
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  line-height: 1;
+}
+
+.fs-tile-unit {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--mut);
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.fs-tile-value {
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+// Delta line below the LAP TIME value.
+.fs-tile-delta {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--mut);
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.fs-delta-baseline {
+  font-style: italic;
+  color: var(--mut);
+  opacity: 0.7;
+}
+
+// LAP TIME tile — phosphor value, second phosphor element in the card.
+.fs-tile--phos {
+  .fs-tile-value {
+    color: var(--phos);
+    text-shadow: var(--phos-glow);
+  }
+}
+

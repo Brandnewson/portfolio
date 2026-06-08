@@ -1,46 +1,69 @@
 ---
 import Shell from '../layouts/Shell.astro';
 import Hero from '../components/hero/Hero.astro';
-import ProjectPanel from '../components/projects/ProjectPanel.astro';
+import ProjectFeature from '../components/projects/ProjectFeature.astro';
+import FsSimCard from '../islands/FsSimCard';
+import MarlCard from '../islands/MarlCard';
+import HelmArchitecture from '../islands/HelmArchitecture';
 ---
 <Shell title="Branson Tay — Portfolio" active="work">
   <Hero />
 
   <section class="projects" id="work">
-    <div class="grid">
-      <ProjectPanel
-        panelId="PRJ/001"
-        title="MARL Racing Sim"
-        summary="Multi-agent reinforcement learning agents racing on procedurally generated tracks. Live λ-tuning of the reward function shifts strategy in real time."
-        stack={['canvas 2d', 'pytorch', 'webworker']}
-        route="/f1-sim"
-        progress={87}
-        offset="low"
-      />
-      <ProjectPanel
-        panelId="PRJ/002"
-        title="FS Quasi-Static Sim"
-        summary="Lap-time simulator for a Formula Student car. LP solver runs offline; the browser interpolates pre-computed surfaces in <1ms."
-        stack={['python lp', 'json lookup', 'react']}
-        route="/formula-sim"
-        progress={62}
-        offset="high"
-      />
-      <ProjectPanel
-        panelId="PRJ/003"
-        title="Helm Showcase"
-        summary="Forward-deployed CRM tooling for a YC-backed sales team. Custom dashboards, automation flows, and a GTM analytics pipeline."
-        stack={['typescript', 'cloudflare', 'd3']}
-        route="/helm"
-        progress={45}
-        offset="mid"
-      />
-    </div>
+    <ProjectFeature
+      panelId="PRJ/001"
+      tier="FEATURED"
+      title="Quasi-Static Lap Time Simulator"
+      kicker="Lap-time solver built from first principles, and fitted tyre model"
+      points={[
+        'Actively used by Leeds Gryphon Racing to determine design trade-offs',
+        'Predicts pace per track from mass, aero, tyres, gearing, tyres',
+        "Python FastAPI web app for engineers to easily use with RAG AI chatbot",
+      ]}
+      why="Let engineers reason design choices in minutes, instead of hours of expensive track time"
+      stack={['python', 'linear programming', 'web development', 'data modelling']}
+      route="https://lgr-simulator.fly.dev/"
+      routeLabel="Launch simulator"
+    >
+      <FsSimCard client:load />
+    </ProjectFeature>
 
-    <aside class="ambient" aria-label="Annotations">
-      <span class="ambient-label mono">ANNOTATIONS</span>
-      <p class="ambient-note">Reserved space — short asides, current reading, or what I'm tinkering with this week.</p>
-    </aside>
+    <ProjectFeature
+      panelId="PRJ/002"
+      tier="RESEARCH"
+      title="MARL Racing Sim"
+      kicker="When teamwork helps and when it hurts."
+      points={[
+        'Multi-Agent Reinforcement Learning in a custom-built F1-inspired action space',
+        'Find learning strategies for teammates in a dynamic competitive environment',
+        'Maps when team play speeds learning, and when it stalls it',
+      ]}
+      why="Investigate when cooperation and competition hurt AI agents working together."
+      stack={['python', 'pytorch', 'dqn family']}
+      route="/report"
+      routeLabel="View report"
+      reverse
+    >
+      <MarlCard client:load />
+    </ProjectFeature>
+
+    <ProjectFeature
+      panelId="PRJ/003"
+      tier="SHIPPING"
+      title="Helm"
+      kicker="Automatic CV generator app, built with an agentic harness on a self-improving loop."
+      points={[
+        'Live consumer product, pre-revenue',
+        'Generates a tailored CV from one job description',
+        'Agentic harness I tune the extractor against, scored by unit + e2e evals',
+      ]}
+      why="Teach myself system design, and self-improving harnesses in production environments"
+      stack={['typescript', 'fastapi', 'k8s', 'sqs', 'cloudflare']}
+      route="https://helmcv.app"
+      routeLabel="Visit helmcv.app"
+    >
+      <HelmArchitecture client:load />
+    </ProjectFeature>
   </section>
 </Shell>
 
@@ -48,51 +71,19 @@ import ProjectPanel from '../components/projects/ProjectPanel.astro';
 .projects {
   flex: 1;
   min-height: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;
-  padding: 6px 36px 18px;
   width: 100%;
-
-  @media (min-width: 900px) {
-    grid-template-columns: minmax(0, 1fr) 240px;
-  }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  align-items: stretch;
-  min-height: 0;
-
-  @media (min-width: 900px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-}
-
-.ambient {
+  // Generous side padding mirrors the hero rail so the band rules read as
+  // full-width within the page frame. Bottom padding keeps the last band
+  // breathing above the BottomBar.
+  padding: 8px 36px 48px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-left: 18px;
-  border-left: 1px solid var(--bd);
-  min-height: 0;
-}
 
-.ambient-label {
-  font-size: 9px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--phos);
-  text-shadow: var(--phos-glow);
-}
-
-.ambient-note {
-  font-size: 11px;
-  line-height: 1.5;
-  color: var(--mut);
-  font-style: italic;
+  // Below the scroll breakpoint (matches Shell.astro), let .projects grow with
+  // content so the bottom padding is reachable via scroll instead of clipped.
+  @media (max-width: 1599px) {
+    flex: 1 0 auto;
+    min-height: auto;
+  }
 }
 </style>

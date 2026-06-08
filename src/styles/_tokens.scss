@@ -54,11 +54,19 @@
 
   // Phosphor — live-state elements (status, gauges, panel IDs, data)
   // Day: just muted; no glow. Night: phosphor green with bloom.
-  --phos:      var(--mut);
-  --phos-glow: none;
+  --phos:        var(--mut);
+  --phos-glow:   none;
+  // `filter:` equivalent of --phos-glow — used on SVG primitives where
+  // box-shadow doesn't apply (e.g. <circle> dots on plots).
+  --phos-filter: none;
 
   // Accent rule on top of project panels
   --rule: var(--acc);
+
+  // Diagram deployment-zone wash (Helm topology boundaries) — a barely-there
+  // tint so a dashed boundary reads as a *zone* and connectors crossing it
+  // sit clearly on top instead of tangling with the line.
+  --zone-fill: rgba(90, 70, 40, 0.045);
 
   // Live dot in logo (visible only in night)
   --dot-bg: transparent;
@@ -106,10 +114,13 @@
   --emphasis:        var(--amb);
   --emphasis-weight: 400;
 
-  --phos:      var(--acc);
-  --phos-glow: 0 0 8px rgba(20, 204, 74, 0.45), 0 0 18px rgba(20, 204, 74, 0.15);
+  --phos:        var(--acc);
+  --phos-glow:   0 0 8px rgba(20, 204, 74, 0.45), 0 0 18px rgba(20, 204, 74, 0.15);
+  --phos-filter: drop-shadow(0 0 3px var(--acc)) drop-shadow(0 0 7px rgba(20, 204, 74, 0.45));
 
   --rule: var(--amb);
+
+  --zone-fill: rgba(180, 160, 110, 0.04);
 
   --dot-bg: var(--acc);
   --dot-glow: 0 0 6px rgba(20, 204, 74, 0.85), 0 0 14px rgba(20, 204, 74, 0.35);

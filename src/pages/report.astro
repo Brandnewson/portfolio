@@ -1,0 +1,183 @@
+---
+// /report — in-browser viewer for the MARL research report.
+//
+// Branson asked for a "simple visualiser" so a reader can view the report
+// without downloading it. The PDF (public/report.pdf) is embedded in an
+// <iframe>, which hands off to the browser's native PDF viewer — robust across
+// Chrome/Firefox/Safari and zero JS.
+//
+// Desktop layout: a left meta column (title + actions) beside a full-height
+// viewer column, so the PDF expands from just below the nav to the bottom of
+// the viewport — maximum vertical space. The page is reached from the MARL
+// project band but is itself a piece of writing, so the nav marks "writing".
+import Shell from '../layouts/Shell.astro';
+---
+<Shell title="MARL Research Report — Branson Tay" active="writing">
+  <section class="report">
+    <aside class="report-side">
+      <p class="report-eyebrow mono">PRJ/002 · RESEARCH</p>
+      <h1 class="report-title">MARL Racing Sim: Research Report</h1>
+      <div class="report-actions">
+        <a class="rbtn mono" href="/report.pdf" download="BRANSON TAY REPORT.pdf">
+          <span class="rbtn-glyph" aria-hidden="true">↓</span> Download PDF
+        </a>
+        <a class="rbtn mono" href="/#work">
+          <span class="rbtn-glyph" aria-hidden="true">←</span> Back
+        </a>
+      </div>
+    </aside>
+
+    <div class="report-frame">
+      <iframe
+        class="report-pdf"
+        src="/report.pdf#view=Fit"
+        title="MARL Racing Sim research report (PDF)"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </section>
+</Shell>
+
+<style is:global>
+  /* The report viewer should fit the viewport so the embedded page column can
+     use the full height. body is globally min-height:100vh (so the tall landing
+     page can scroll); here we pin a definite height chain so the iframe's
+     height:100% resolves. Scoped to this page only — each Astro page is its own
+     document, so this does NOT reintroduce the landing page's document scroll. */
+  html, body { height: 100%; }
+</style>
+
+<style lang="scss">
+// Two columns on desktop: a narrow meta rail (title + actions) and the viewer
+// filling the rest. Both span the full height below the nav, so the PDF gets
+// the maximum vertical real estate.
+.report {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding: 16px 36px 22px;
+  display: grid;
+  // Symmetric side columns so the viewer (centre, auto-width) sits centred on
+  // the PAGE, not just within the space left over beside the rail. The meta
+  // rail lives in the left gutter; the right gutter is empty and balances it.
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 8px 32px;
+  align-items: stretch;
+}
+
+// ── Left meta rail ──
+// Content sits at the top-left; the rail stretches full height but its items
+// stay anchored up top.
+.report-side {
+  grid-column: 1;
+  align-self: start;
+  justify-self: start;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 2px;
+  min-width: 0;
+}
+
+.report-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  margin: 0;
+}
+
+.report-title {
+  font-family: var(--font-hero);
+  font-size: clamp(20px, 1.7vw, 26px);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+}
+
+.report-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+// Local button vocab mirrors the secondary button used elsewhere (the .btn
+// styles are component-scoped, so they're re-declared here).
+.rbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--bd);
+  border-radius: 0;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--fg);
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+}
+
+.rbtn-glyph {
+  font-size: 12px;
+  line-height: 1;
+}
+
+// ── Viewer column ──
+// Fills the full height of the row; the iframe is centred inside it. The aspect
+// ratio is a touch wider than strict A4 (4:5 vs 0.707) so the page has a little
+// horizontal breathing room instead of being clamped tight to the paper edge.
+.report-frame {
+  grid-column: 2;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.report-pdf {
+  flex: 0 0 auto;
+  display: block;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 4 / 5;
+  max-width: 100%;
+  border: 1px solid var(--bd);
+  background: var(--bg2);
+}
+
+// ── Mobile: stack the rail above the viewer ──
+@media (max-width: 900px) {
+  .report {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px 20px 18px;
+  }
+  .report-side,
+  .report-frame {
+    grid-column: 1;
+  }
+  .report-side {
+    max-width: none;
+    padding-top: 0;
+  }
+  .report-actions {
+    flex-direction: row;
+  }
+}
+</style>

@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-05-13T10:43:27Z",
+  "track": "FSUK.txt",
+  "baseline_mass_kg": 250.0,
+  "mass_kg": {
+    "min": 200.0,
+    "max": 300.0,
+    "step": 5.0
+  },
+  "points": [
+    {
+      "mass_kg": 200.0,
+      "lap_time_s": 66.67061546761616,
+      "top_speed_kmh": 119.69983425905951,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5345379975790565
+    },
+    {
+      "mass_kg": 205.0,
+      "lap_time_s": 66.64418268132971,
+      "top_speed_kmh": 119.89167655373348,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5341190640397548
+    },
+    {
+      "mass_kg": 210.0,
+      "lap_time_s": 66.62609491054216,
+      "top_speed_kmh": 119.95022041470064,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5337145085326223
+    },
+    {
+      "mass_kg": 215.0,
+      "lap_time_s": 66.65477901183816,
+      "top_speed_kmh": 119.09283582631656,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5333237536606805
+    },
+    {
+      "mass_kg": 220.0,
+      "lap_time_s": 66.69466623007261,
+      "top_speed_kmh": 118.24786963962613,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5329462325415082
+    },
+    {
+      "mass_kg": 225.0,
+      "lap_time_s": 66.74167507285493,
+      "top_speed_kmh": 117.43324528108603,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5325813926581655
+    },
+    {
+      "mass_kg": 230.0,
+      "lap_time_s": 66.79585685172285,
+      "top_speed_kmh": 116.64730294510987,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5322286985080071
+    },
+    {
+      "mass_kg": 235.0,
+      "lap_time_s": 66.85503263659463,
+      "top_speed_kmh": 115.88850449933575,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5318876333391651
+    },
+    {
+      "mass_kg": 240.0,
+      "lap_time_s": 66.91895805463037,
+      "top_speed_kmh": 115.15542235822153,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.531557700196732
+    },
+    {
+      "mass_kg": 245.0,
+      "lap_time_s": 66.9888444220056,
+      "top_speed_kmh": 114.44672956937926,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5312384224490139
+    },
+    {
+      "mass_kg": 250.0,
+      "lap_time_s": 67.06293884329091,
+      "top_speed_kmh": 113.86049990789863,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5309293439248544
+    },
+    {
+      "mass_kg": 255.0,
+      "lap_time_s": 67.15096037422786,
+      "top_speed_kmh": 113.8759253694441,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5306300287628325
+    },
+    {
+      "mass_kg": 260.0,
+      "lap_time_s": 67.25299542664351,
+      "top_speed_kmh": 113.89064576389475,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5303400610499318
+    },
+    {
+      "mass_kg": 265.0,
+      "lap_time_s": 67.36316999155108,
+      "top_speed_kmh": 113.90470729086576,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.530059044309374
+    },
+    {
+      "mass_kg": 270.0,
+      "lap_time_s": 67.48151979300451,
+      "top_speed_kmh": 113.91716935878578,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5297841233458052
+    },
+    {
+      "mass_kg": 275.0,
+      "lap_time_s": 67.62720394745037,
+      "top_speed_kmh": 113.8224315299494,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5266813735273586
+    },
+    {
+      "mass_kg": 280.0,
+      "lap_time_s": 67.78494195805152,
+      "top_speed_kmh": 113.66565057158515,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5218963486340356
+    },
+    {
+      "mass_kg": 285.0,
+      "lap_time_s": 67.94093180344866,
+      "top_speed_kmh": 113.51396332748718,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5172875128407013
+    },
+    {
+      "mass_kg": 290.0,
+      "lap_time_s": 68.09753977153764,
+      "top_speed_kmh": 113.36708457754014,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5128452703904665
+    },
+    {
+      "mass_kg": 295.0,
+      "lap_time_s": 68.2554868057739,
+      "top_speed_kmh": 113.22474620348274,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5085607039218274
+    },
+    {
+      "mass_kg": 300.0,
+      "lap_time_s": 68.4138938822354,
+      "top_speed_kmh": 113.08669538828359,
+      "max_abs_g_lat": 1.3125,
+      "max_abs_g_long": 1.5044255147645793
+    }
+  ]
+}

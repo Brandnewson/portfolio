@@ -11,8 +11,13 @@ interface Props {
   summary: string;
   stack: string[];
   route?: string;
-  progress?: number;
-  offset?: 'low' | 'mid' | 'high';
+  download?: string;
+  // Suggested save-as filename for the downloaded file. The visible label still
+  // comes from the URL basename — `downloadAs` only affects what the browser
+  // names the saved file (e.g. "BRANSON TAY REPORT.pdf" while the button reads
+  // "REPORT.PDF").
+  downloadAs?: string;
+  kicker?: string;
 }
 
 const {
@@ -21,11 +26,17 @@ const {
   summary,
   stack,
   route,
-  progress = 0,
-  offset = 'mid',
+  download,
+  downloadAs,
+  kicker,
 } = Astro.props;
+
+const downloadLabel = download ? download.split('/').pop()?.toUpperCase() : null;
+
+// When a child is passed, the .preview slot replaces the placeholder content.
+const hasPreview = Astro.slots.has('default');
 ---
-<article class="panel" data-offset={offset}>
+<article class="panel">
   <span class="acc-rule" aria-hidden="true"></span>
 
   <header class="head mono">
@@ -34,29 +45,31 @@ const {
 
   <div class="title-row">
     <h3 class="title">{title}</h3>
-    {route && <a class="route mono" href={route}>{route} →</a>}
+    {download ? (
+      <a class="download mono" href={download} download={downloadAs ?? true}>
+        <span class="download-icon" aria-hidden="true">↓</span>
+        <span>{downloadLabel}</span>
+      </a>
+    ) : route && <a class="route mono" href={route}>{route} →</a>}
   </div>
+  {kicker && <p class="kicker">{kicker}</p>}
   <p class="summary">{summary}</p>
 
-  <div class="preview" aria-hidden="true">
-    <span class="preview-marker mono">PRJ_PREVIEW</span>
-    <span class="preview-hint mono">awaiting hydration</span>
-    <div class="preview-grid"></div>
-  </div>
+  {hasPreview ? (
+    <div class="preview is-hydrated">
+      <slot />
+    </div>
+  ) : (
+    <div class="preview" aria-hidden="true">
+      <span class="preview-marker mono">PRJ_PREVIEW</span>
+      <span class="preview-hint mono">awaiting hydration</span>
+      <div class="preview-grid"></div>
+    </div>
+  )}
 
   <ul class="stack" role="list">
     {stack.map((tech) => <li class="chip mono">{tech}</li>)}
   </ul>
-
-  <footer class="gauge">
-    <div class="gauge-head mono">
-      <span>LOAD</span>
-      <span class="val">{progress}%</span>
-    </div>
-    <div class="gauge-track">
-      <div class="gauge-fill" style={`width:${progress}%`}></div>
-    </div>
-  </footer>
 </article>
 
 <style lang="scss">
@@ -69,18 +82,12 @@ const {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100%;
-  min-height: 0;
   transition: transform 0.18s ease, border-color 0.18s ease;
 
   &:hover {
     transform: translateY(-2px);
     border-color: var(--primary);
   }
-
-  &[data-offset="low"]  { margin-top: 16px; }
-  &[data-offset="mid"]  { margin-top: 0; }
-  &[data-offset="high"] { margin-top: 8px; }
 }
 
 .acc-rule {
@@ -109,8 +116,16 @@ const {
 .title-row {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
   gap: 12px;
+  justify-content: space-between;
+}
+
+.kicker {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--emphasis);
+  line-height: 1.35;
+  margin: -4px 0 0;
 }
 
 .title {
@@ -129,6 +144,36 @@ const {
   text-decoration: none;
   letter-spacing: 0.14em;
   &:hover { color: var(--primary-hover); }
+}
+
+// Download affordance — same pattern as the hero resume link (mono uppercase
+// label + phosphor ↓ glyph) but inlined into the title row instead of a
+// chunky vertical card, so it sits alongside the panel title.
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--bd);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+}
+
+.download-icon {
+  color: var(--phos);
+  text-shadow: var(--phos-glow);
+  font-size: 12px;
+  line-height: 1;
 }
 
 .summary {
@@ -150,6 +195,20 @@ const {
   padding: 10px 12px;
   overflow: hidden;
   margin-top: 4px;
+
+  // When a live island fills the slot, the dashed frame + placeholder
+  // affordances disappear so the content reads as the panel's own.
+  // overflow is `visible` here so the island can drive panel height — with
+  // overflow:hidden the island would get clipped at the preview's flex-sized
+  // box instead of growing the panel to fit.
+  &.is-hydrated {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    justify-content: stretch;
+    overflow: visible;
+    flex: none;
+  }
 }
 
 .preview-grid {
@@ -195,39 +254,5 @@ const {
   padding: 3px 7px;
   border: 1px solid var(--bd);
   color: var(--mut);
-}
-
-.gauge {
-  padding-top: 10px;
-  border-top: 1px solid var(--bd);
-}
-
-.gauge-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 5px;
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--mut);
-}
-
-.gauge-head .val {
-  color: var(--phos);
-  text-shadow: var(--phos-glow);
-}
-
-.gauge-track {
-  height: 3px;
-  background: var(--bd);
-  overflow: hidden;
-}
-
-.gauge-fill {
-  height: 100%;
-  background: var(--gauge-fill);
-  box-shadow: var(--gauge-glow);
-  transition: width 0.4s ease;
 }
 </style>

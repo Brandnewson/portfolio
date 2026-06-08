@@ -1,0 +1,271 @@
+// MarlCard styles — colocated with the TSX island.
+//
+// Theme-aware bits (track stroke, dividers, label colours) reference semantic
+// tokens defined in _tokens.scss and swap automatically with [data-theme].
+// Agent colours are deliberately theme-INDEPENDENT primaries: each agent keeps
+// the same identity in day and night so the legend stays consistent.
+
+// Card layout is intrinsic: each section sizes to its own content/min-height,
+// the card is as tall as the sum, and the parent panel grows to fit. An
+// earlier version used `flex: 1` on the viz (ate the legend when short) and a
+// later version used grid with `minmax(0, 1fr)` on the narrative (track
+// collapsed to 0 and the narrative's own min-height overflowed into the
+// legend row). Intrinsic sizing has no such trap — each row is what it is.
+.marl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// ── Viz: SVG track + agent circles ──
+// aspect-ratio keeps the viz proportional to the viewBox (240×380) instead of
+// stretching to fill leftover flex space. max-height caps it inside cramped
+// columns so it never crowds out the narrative or legend below.
+.marl-viz {
+  position: relative;
+  aspect-ratio: 240 / 380;
+  width: 100%;
+  /* Sized so the row fits the *real* viewport on a 1080p monitor: a Chrome
+     window has 100–160 px of chrome (tabs, URL, bookmarks), so usable height
+     is ~880–960 px. With the hero + padding eating ~180 px, the panel budget
+     is ~700 px. No viewport-width override — bigger monitors get more bottom
+     padding instead of taller cards. */
+  max-height: 200px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.marl-track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// In-frame control cluster. Sits top-right over the viz so it never crowds the
+// track centreline (the track renders as a narrow centred band, leaving the
+// right gutter free). Pause/play on top, a PREV/NEXT phase-step row beneath it.
+.marl-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.marl-ctrl-row {
+  display: flex;
+  gap: 6px;
+}
+
+// Shared control button vocab — neutral palette (not status, not a CTA the eye
+// should chase); just unobtrusive controls over the agent motion.
+.marl-ctrl {
+  padding: 4px 8px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  background: var(--bg2);
+  border: 1px solid var(--bd);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+
+  &:hover {
+    color: var(--fg);
+    border-color: var(--primary);
+  }
+
+  &.is-paused {
+    color: var(--fg);
+  }
+
+  // At the first/last phase the matching step button is inert — dim it and
+  // drop the affordance so it reads as unavailable.
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    color: var(--mut);
+    border-color: var(--bd);
+  }
+}
+
+.marl-track-line {
+  fill: none;
+  stroke: var(--mut);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+// Agent circles inside the SVG share the path's viewBox coords, so cx/cy
+// updates ride the track exactly with no preserveAspectRatio bookkeeping.
+.marl-agent {
+  transition: r 0.2s ease;
+
+  &.role-a1 { fill: #14CC4A; filter: drop-shadow(0 0 2px rgba(20,204,74,0.7)); }
+  &.role-a2 { fill: #FFB820; filter: drop-shadow(0 0 2px rgba(255,184,32,0.6)); }
+  &.role-a3 { fill: #4FB3FF; filter: drop-shadow(0 0 2px rgba(79,179,255,0.6)); }
+  &.role-a4 { fill: #FF5A4A; filter: drop-shadow(0 0 2px rgba(255,90,74,0.6)); }
+  &.role-base { fill: #F0F0F0; stroke: #2A2A2A; stroke-width: 1; }
+  &.role-llm  { fill: #C84AFA; filter: drop-shadow(0 0 2px rgba(200,74,250,0.7)); }
+}
+
+// ── Slider: 10 discrete steps with generous hit targets ──
+// Each <button> spans an equal segment of the row (flex: 1) and is 36px tall,
+// well above the 44px-recommended floor when combined with the number label.
+// The visual dot is a ::before pseudo-element centred on the button so the
+// hit area is large but the affordance still reads as a discrete step.
+.marl-slider {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.marl-slider-rule {
+  position: absolute;
+  // Aligns with the dot center: button padding-top (4px) + dot margin-top (8px)
+  // + half-dot (3px) = 15px from the slider's top edge.
+  top: 15px;
+  left: 4px;
+  right: 4px;
+  height: 1px;
+  background: var(--bd);
+  pointer-events: none;
+}
+
+.marl-step {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 4px 0 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--mut);
+  transition: color 0.15s ease;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bd);
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    margin-top: 8px;
+  }
+
+  &:hover::before { transform: scale(1.4); }
+
+  &.is-passed::before { background: var(--primary); }
+
+  &.is-active {
+    color: var(--phos);
+
+    &::before {
+      background: var(--phos);
+      box-shadow: var(--phos-glow);
+      transform: scale(1.7);
+    }
+
+    .marl-step-num {
+      text-shadow: var(--phos-glow);
+      font-weight: 600;
+    }
+  }
+}
+
+.marl-step-num {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  user-select: none;
+}
+
+.marl-slider-hint {
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: 0.7;
+  text-align: center;
+  margin: 0;
+}
+
+// ── Narrative: phase label + body copy ──
+// min-height reserves the WORST-CASE phase height (phase 04, the alpha
+// explanation) so the card height is fixed and the legend + the rest of the
+// landing band never shift when scrubbing phases. Measured label+body across
+// the two-column range: ~152px @1440, ~171px @1280, ~191px @1101 (the narrowest
+// width before the band stacks). 196px covers the whole range with a small
+// margin. Trade: short phases leave some empty space below the text, which is
+// the intended cost of a stable, non-jumping layout.
+.marl-narrative {
+  min-height: 196px;
+}
+
+.marl-phase-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.marl-phase-body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg2);
+  margin: 0;
+}
+
+// ── Legend: which colour is which agent ──
+// min-height reserves space for the 5-agent case (Phase 06/08) wrapping to two
+// rows in a narrow column. 2-agent phases sit at the same overall card height
+// — short legend just leaves whitespace below.
+.marl-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--bd);
+  min-height: 42px;
+}
+
+.marl-legend-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mut);
+
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &.role-a1   { background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,0.55); }
+    &.role-a2   { background: #FFB820; box-shadow: 0 0 6px rgba(255,184,32,0.45); }
+    &.role-a3   { background: #4FB3FF; box-shadow: 0 0 6px rgba(79,179,255,0.45); }
+    &.role-a4   { background: #FF5A4A; box-shadow: 0 0 6px rgba(255,90,74,0.45); }
+    &.role-base { background: #F0F0F0; border: 1.5px solid #2A2A2A; box-sizing: border-box; }
+    &.role-llm  { background: #C84AFA; box-shadow: 0 0 6px rgba(200,74,250,0.55); }
+  }
+}

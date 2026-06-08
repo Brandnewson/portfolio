@@ -1,0 +1,393 @@
+// HelmArchitecture styles — colocated with the TSX island.
+//
+// Theme-aware via semantic tokens (_tokens.scss): boxes/lines use neutral
+// surface + border tokens; the hovered "live" node and its active edges use
+// --phos / --phos-filter, which are muted in day and bloom phosphor-green at
+// night — so the phosphor discipline (live/attention elements only) holds
+// automatically with no [data-theme] branching.
+
+.helm-arch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// Diagram frame. On small screens the SVG keeps a min-width and this frame
+// scrolls horizontally, so the 11 cells stay legible instead of shrinking to
+// an unreadable size; on desktop the SVG fits and there is nothing to scroll.
+.helm-arch-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+// Mobile-only "swipe" affordance (the diagram overflows its frame here).
+.helm-arch-swipe {
+  display: none;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: 0.75;
+  text-align: center;
+  margin-top: -2px;
+}
+
+// ── Header strip ──
+.helm-arch-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.helm-arch-title {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.helm-arch-hint {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: 0.75;
+}
+
+// ── SVG canvas ──
+.helm-arch-svg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 680 / 600;
+  display: block;
+  overflow: visible;
+}
+
+// ── Deployment boundaries ──
+// A faint zone wash + dashed outline so each boundary reads as a *region* and
+// the connectors that cross it sit clearly on top instead of tangling.
+.helm-boundary rect {
+  fill: var(--zone-fill);
+  stroke: var(--bd);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.helm-boundary-label,
+.helm-rail-label {
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  fill: var(--mut);
+  opacity: 0.85;
+}
+
+// ── Edges ──
+.helm-edge {
+  fill: none;
+  stroke: var(--bd);
+  stroke-width: 1.4;
+  transition: stroke 0.15s ease, opacity 0.15s ease;
+
+  &.is-dashed {
+    stroke-dasharray: 4 3;
+  }
+
+  // Lit path: phosphor stroke + a directional dash flow (the only animated,
+  // phosphor element — appears only on hover, i.e. on attention).
+  &.is-active {
+    stroke: var(--phos);
+    stroke-width: 1.8;
+    filter: var(--phos-filter);
+    stroke-dasharray: 5 4;
+    animation: helm-flow 0.55s linear infinite;
+  }
+
+  &.is-dim {
+    opacity: 0.18;
+  }
+}
+
+@keyframes helm-flow {
+  to { stroke-dashoffset: -18; }
+}
+
+// ── Edge labels ──
+.helm-edge-label-bg {
+  fill: var(--bg2);
+  opacity: 0.92;
+}
+
+.helm-edge-label-text {
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  fill: var(--mut);
+  transition: fill 0.15s ease;
+}
+
+.helm-edge-label {
+  transition: opacity 0.15s ease;
+
+  &.is-active .helm-edge-label-text {
+    fill: var(--fg);
+    font-weight: 600;
+  }
+
+  &.is-dim {
+    opacity: 0.2;
+  }
+}
+
+// ── Nodes ──
+.helm-node {
+  cursor: default;
+  transition: opacity 0.15s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible .helm-node-box {
+    stroke: var(--phos);
+  }
+}
+
+.helm-node-box {
+  fill: var(--bg2);
+  stroke: var(--bd);
+  stroke-width: 1.3;
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.helm-node-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  fill: var(--fg);
+}
+
+.helm-node-sub {
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: var(--mut);
+
+  &.is-trust {
+    fill: var(--emphasis);
+  }
+}
+
+// The "live" status dot — hidden until the node is the active (hovered) one,
+// where it reads as a live-system marker (phosphor discipline).
+.helm-node-dot {
+  fill: var(--phos);
+  filter: var(--phos-filter);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+// Group tints — subtle left-of-default differentiation via the box surface.
+.helm-node {
+  &.is-edge .helm-node-box { fill: var(--bg); }
+  &.is-store .helm-node-box,
+  &.is-aws .helm-node-box { fill: var(--bg2); }
+  &.is-external .helm-node-box {
+    fill: var(--bg);
+    stroke-dasharray: 3 2;
+  }
+
+  // web — the public trust boundary — reads heavier by default.
+  &.is-trust .helm-node-box {
+    stroke: var(--mut);
+    stroke-width: 1.6;
+  }
+}
+
+// Interaction states
+.helm-node.is-active {
+  .helm-node-box {
+    stroke: var(--phos);
+    stroke-width: 2;
+    filter: var(--phos-filter);
+  }
+  .helm-node-dot { opacity: 1; }
+}
+
+.helm-node.is-neighbour .helm-node-box {
+  stroke: var(--primary);
+  stroke-width: 1.6;
+}
+
+.helm-node.is-dim {
+  opacity: 0.32;
+}
+
+// ── Detail panel ──
+// min-height reserves the worst-case node detail so the band never jumps as
+// the reader moves between nodes. With the teaching-length copy the tallest
+// content is ~190px at the narrowest 2-col width (most wrapping); 192px covers
+// the whole range. Trade: short nodes + the resting legend leave some space
+// below, which is the intended cost of a non-jumping layout (and this is the
+// last band on the page, so nothing downstream shifts anyway).
+.helm-arch-detail {
+  min-height: 192px;
+  border-top: 1px solid var(--bd);
+  padding-top: 10px;
+}
+
+.helm-detail-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.helm-detail-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+
+.helm-detail-role {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.helm-detail-tech {
+  margin: 4px 0 0;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+.helm-detail-desc {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--fg2);
+  max-width: 88ch;
+}
+
+// 6-stage harness — a single inline numbered sequence that wraps compactly,
+// so the worker detail stays close in height to every other node's detail.
+.helm-stages {
+  margin: 7px 0 0;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  line-height: 1.7;
+}
+
+.helm-stage {
+  white-space: nowrap;
+}
+
+.helm-stage-n {
+  color: var(--phos);
+  font-weight: 600;
+  margin-right: 3px;
+}
+
+.helm-stage-sep {
+  color: var(--mut);
+}
+
+.helm-detail-note {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--mut);
+  max-width: 90ch;
+}
+
+// ── Default legend (resting state) ──
+.helm-legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.helm-legend-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+.helm-swatch {
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--mut);
+  flex-shrink: 0;
+
+  &.is-k3s { border-style: dashed; background: var(--bg2); }
+  &.is-aws { border-style: dashed; background: var(--bg); }
+  &.is-ext { border-style: dashed; background: var(--bg); opacity: 0.7; }
+}
+
+.helm-legend-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg2);
+  max-width: 68ch;
+}
+
+// ── Responsive: mobile enlarge + desktop floating overlay ──
+//
+// Small screens (the diagram would otherwise be unreadable): give the SVG a
+// min-width so it overflows its frame and becomes swipeable at a legible size,
+// and surface the swipe hint. The detail panel stays stacked below.
+@media (max-width: 600px) {
+  .helm-arch-svg { min-width: 560px; }
+  .helm-arch-swipe { display: block; }
+}
+
+// Desktop (the band is two-column at >1100px, matching ProjectFeature): the
+// detail floats over the diagram's empty top corner instead of stacking below,
+// so the explanation is always in view without scrolling. pointer-events:none
+// means the panel never blocks hovering the nodes beneath it, and is-flip moves
+// it to the opposite side of a right-hand node so it never hides the target.
+@media (min-width: 1101px) {
+  .helm-arch-detail {
+    position: absolute;
+    top: 38px;
+    right: 0;
+    width: 326px;
+    max-width: 46%;
+    min-height: 0;
+    max-height: calc(100% - 50px);
+    overflow: hidden;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--bd);
+    border-top: 1px solid var(--bd);
+    border-radius: 2px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  // Resting legend is short — keep it narrow and tucked top-right above the
+  // external rail so it doesn't cover any node.
+  .helm-arch-detail.is-legend {
+    width: 296px;
+  }
+
+  .helm-arch-detail.is-flip {
+    right: auto;
+    left: 0;
+  }
+}

@@ -25,3 +25,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# verification screenshots / scratch output
+scripts/_out/
+
+# agent / tool local state
+.claude/
+.superpowers/

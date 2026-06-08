@@ -1,34 +1,10 @@
 ---
 import ThemeToggle from '../../islands/ThemeToggle.tsx';
-
-interface Props {
-  active?: 'work' | 'writing' | 'about' | 'contact';
-}
-
-const { active = 'work' } = Astro.props;
-
-const NAV = [
-  { id: 'work', label: 'work', href: '#work' },
-  { id: 'writing', label: 'writing', href: '#writing' },
-  { id: 'about', label: 'about', href: '#about' },
-  { id: 'contact', label: 'contact', href: '#contact' },
-] as const;
 ---
 <header class="instrument-bar">
   <a class="logo" href="/" aria-label="Branson — home">
     Branson<span class="live-dot" aria-hidden="true"></span>
   </a>
-
-  <nav class="nav" aria-label="Primary">
-    {NAV.map((item) => (
-      <a
-        href={item.href}
-        class:list={['nav-link', { 'is-active': active === item.id }]}
-      >
-        {item.label}
-      </a>
-    ))}
-  </nav>
 
   <div class="bar-right">
     <span class="inspiration-wrap" aria-live="polite">
@@ -40,9 +16,12 @@ const NAV = [
 </header>
 
 <style lang="scss">
+// Two columns: 1fr | auto. The nav was removed (the page's own CTAs carry the
+// navigation intent), so the bar is now just identity on the left and the
+// inspiration line + theme toggle pushed to the right.
 .instrument-bar {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 24px;
   padding: 6px 36px;
@@ -75,24 +54,6 @@ const NAV = [
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.55; }
-}
-
-.nav {
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-}
-
-.nav-link {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--bar-fg-mut);
-  transition: color 0.15s ease;
-
-  &.is-active { color: var(--bar-fg-active); }
-  &:hover     { color: var(--primary); }
 }
 
 .bar-right {

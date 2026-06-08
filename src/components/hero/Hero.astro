@@ -1,169 +1,161 @@
 ---
-// Hero — two-column. Left: name + tagline + sub. Right: resume download + role highlights.
-// Roles are placeholders — replace ROLES[] with real history.
-const ROLES = [
-  { name: 'Company One',   role: 'Role title', date: '2024 — now' },
-  { name: 'Company Two',   role: 'Role title', date: '2022 — 24'  },
-  { name: 'Company Three', role: 'Role title', date: '2020 — 22'  },
-];
+// Hero — name-led layout. Two columns on desktop:
+//   Left:  h1 name + fields eyebrow + tagline + CTA row
+//   Right: QuickRead aside (3-bullet recruiter glance)
+// The hero leads with identity ("Branson Tay") as the masthead; the fields
+// line and a short tagline support it. This reverses the earlier value-first
+// framing — the name now carries the top-left, and the tagline is the hook.
+//
+// The InstrumentBar already carries the name; the hero earns the scroll with
+// the value-prop, not the personal brand. Copy is locked here rather than
+// passed via props — this is the page's pitch line.
+import QuickRead from './QuickRead.astro';
 ---
 <section class="hero" id="top">
   <div class="hero-left">
     <h1 class="name">Branson Tay</h1>
 
-    <p class="tagline">Full-stack AI engineer with a passion for engineering and motorsport</p>
+    <p class="eyebrow mono">FULL-STACK · SIMULATION · AI</p>
 
-    <p class="sub">
-      Currently exploring forward-deployed AI tooling and real-time vehicle simulation.
-    </p>
+    <p class="tagline">Building AI tools that ship.<br />Lives in the space between product and client.</p>
+
+    <div class="cta-row">
+      <a class="btn btn--primary" href="#work">
+        See featured project <span class="btn-glyph" aria-hidden="true">↓</span>
+      </a>
+      <a
+        class="btn btn--secondary mono"
+        href="/resume.pdf"
+        download="BRANSON TAY.pdf"
+      >
+        <span class="btn-glyph" aria-hidden="true">↓</span> RESUME
+      </a>
+      <a class="btn btn--secondary mono" href="#contact">
+        <span class="btn-glyph" aria-hidden="true">✉</span> CONTACT
+      </a>
+    </div>
   </div>
 
-  <aside class="hero-right" aria-label="Resume and recent roles">
-    <a class="resume-link mono" href="/resume.pdf" download>
-      <span class="resume-icon" aria-hidden="true">↓</span>
-      <span>RESUME.PDF</span>
-    </a>
-
-    <ul class="roles" role="list">
-      {ROLES.map((r) => (
-        <li class="role">
-          <span class="role-meta">
-            <span class="role-name">{r.name}</span>
-            <span class="role-title">{r.role}</span>
-          </span>
-          <span class="role-date mono">{r.date}</span>
-        </li>
-      ))}
-    </ul>
-  </aside>
+  <div class="hero-right">
+    <QuickRead />
+  </div>
 </section>
 
 <style lang="scss">
 .hero {
-  padding: 14px 36px 12px;
-  display: flex;
-  align-items: flex-start;
-  gap: 48px;
+  padding: 18px 36px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 720px;
+  align-items: start;
+  gap: 40px;
   width: 100%;
 }
 
 .hero-left {
-  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .hero-right {
-  flex-shrink: 0;
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding-top: 4px;
+  justify-content: flex-end;
 }
 
-.resume-link {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  flex-shrink: 0;
-  width: 88px;
-  padding: 10px 8px;
-  border: 1px solid var(--bd);
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+// Name masthead — the hero leads with identity. Hero display font, large,
+// neutral fg (phosphor stays reserved for live-state markers, not the name).
+.name {
+  font-family: var(--font-hero);
+  font-size: clamp(36px, 4.6vw, 58px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-weight: 600;
   color: var(--fg);
+  margin: 0;
+}
+
+// Fields line — sits tight under the name as its subtitle.
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: -2px 0 0;
+}
+
+// Tagline — the value-prop hook, below the name + fields. Smaller than the
+// name so identity leads; still hero font so it reads as a statement.
+.tagline {
+  font-family: var(--font-hero);
+  font-size: clamp(20px, 2.1vw, 27px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  color: var(--fg2);
+  max-width: 600px;
+  margin: 4px 0 0;
+}
+
+// ── CTA row ──
+// Squared per design.md (border-radius 0). Three variants:
+// primary (filled), secondary (outline), ghost (text-only — unused here).
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   text-decoration: none;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn--primary {
+  background: var(--primary);
+  color: var(--bar-fg);
+  border-color: var(--primary);
 
   &:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
   }
 }
 
-.resume-icon {
-  color: var(--phos);
-  text-shadow: var(--phos-glow);
-  font-size: 18px;
+.btn--secondary {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--bd);
+
+  &:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+}
+
+.btn-glyph {
+  font-size: 13px;
   line-height: 1;
 }
 
-.roles {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 220px;
-  padding-left: 18px;
-  border-left: 1px solid var(--bd);
-}
-
-.role {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.role-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.role-name {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--fg);
-  line-height: 1.2;
-}
-
-.role-title {
-  font-size: 10px;
-  color: var(--mut);
-  line-height: 1.3;
-}
-
-.role-date {
-  flex-shrink: 0;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  color: var(--phos);
-  text-shadow: var(--phos-glow);
-}
-
 @media (max-width: 900px) {
-  .hero { flex-direction: column; gap: 18px; }
-  .hero-right { min-width: 0; width: 100%; }
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .hero-right {
+    justify-content: flex-start;
+  }
 }
-
-.name {
-  font-family: var(--font-hero);
-  font-size: clamp(36px, 4.6vw, 60px);
-  line-height: 0.96;
-  letter-spacing: -0.015em;
-  font-weight: 600;
-  color: var(--fg);
-  margin-top: -2px;
-}
-
-.tagline {
-  font-size: 15px;
-  font-weight: 500;
-  font-style: italic;
-  color: var(--emphasis);
-}
-
-.sub {
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--fg2);
-  max-width: 680px;
-}
-
 </style>

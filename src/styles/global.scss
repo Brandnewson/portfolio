@@ -5,19 +5,25 @@
 @use 'reset';
 
 html, body {
-  height: 100%;
   background: var(--bg);
   color: var(--fg);
 }
 html { color-scheme: light dark; }
 
 body {
+  // min-height (not height) so the body grows with content instead of being
+  // capped at viewport height. Previously body was height:100% which silently
+  // disables document scroll even with overflow:visible — the body never
+  // exceeds the viewport box so the browser thinks there's nothing to scroll.
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
-  overflow: hidden;
+  // Landing redesign (2026-05-13) made the page intentionally taller than
+  // the viewport — three full-width project bands, plus experience, education,
+  // contact below. Document scroll is the page's primary nav mechanism now.
   transition:
     background-color 320ms ease,
     color 320ms ease;
@@ -29,8 +35,3 @@ body {
 
 // Hero font — Chakra Petch in night, Instrument Sans in day (locked via tokens).
 .hero { font-family: var(--font-hero); }
-
-// Mobile fallback — allow scroll when below the breakpoint where things stop fitting.
-@media (max-width: 899px) {
-  body { overflow: auto; }
-}
