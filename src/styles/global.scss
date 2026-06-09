@@ -35,5 +35,5 @@ body {
 // data values). Apply via class — never default.
 .mono { font-family: var(--font-mono); }
 
-// Hero font — Chakra Petch in night, Instrument Sans in day (locked via tokens).
+// Hero font — Instrument Sans in both themes (via --font-hero token).
 .hero { font-family: var(--font-hero); }

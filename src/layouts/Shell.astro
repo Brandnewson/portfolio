@@ -36,13 +36,11 @@ const { title = 'Branson — Portfolio', hideBar = false } = Astro.props;
   </script>
 
   <!--
-    Self-hosted fonts (see src/styles/_fonts.scss). Preload BOTH heading faces —
-    Instrument Sans (day) and Chakra Petch (night) — so the night font is already
-    resident before the first day↔night toggle and the swap causes no flash or
-    reflow. Metric overrides in _fonts.scss keep the two faces the same size.
+    Self-hosted fonts (see src/styles/_fonts.scss). Preload the heading face so
+    it is resident at first paint. Instrument Sans is the heading font in both
+    themes now, so there is only one face to preload.
   -->
   <link rel="preload" href="/fonts/instrument-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/chakra-petch-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   {!hideBar && <InstrumentBar />}

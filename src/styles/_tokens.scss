@@ -109,7 +109,8 @@
   --acc2: #0A8830;
   --amb:  #D9A030;     // amber
 
-  --font-hero: 'Chakra Petch', system-ui, sans-serif;
+  // Headings use Instrument Sans in both themes (see :root --font-hero) — night
+  // no longer swaps the heading face, so there is no override here.
 
   // ── 2. Semantic token overrides ──
   --bar-bg:        var(--bg2);

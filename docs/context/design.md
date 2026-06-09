@@ -24,7 +24,7 @@ All-green phosphor instrument cluster. Everything glows. The background is near-
 
 **Alive but not animated.** The site should feel like a running engine at idle — there is motion, but it is purposeful and unhurried. The breathing status dot, the live MARL agents, the EQ bars. Nothing spins for the sake of spinning.
 
-**Typography as material.** Chakra Petch in night mode feels like vintage JDM cluster lettering. Instrument Sans in day mode feels like a considered editorial sans. IBM Plex Mono is reserved for telemetry surfaces only. The font itself carries meaning — treat it as a design material, not just a vehicle for words.
+**Typography as material.** Instrument Sans carries every heading and body run in both themes — a considered editorial sans. IBM Plex Mono is reserved for telemetry surfaces only (panel IDs, labels, readouts). The font itself carries meaning — treat it as a design material, not just a vehicle for words. (Night mode previously swapped headings to Chakra Petch; that swap was dropped in favour of a single heading face across themes.)
 
 ---
 
@@ -102,9 +102,8 @@ Two fonts per mode, width-matched via `@font-face { size-adjust: … }` so the t
 - Hero, body, nav, labels, CTAs: **Instrument Sans** (400, 500, 600, 700)
 - No monospace surfaces in day mode — Courier-style text was tested in v3 and rejected as breaking the aesthetic.
 
-**Night mode — three-font system:**
-- Hero title: **Chakra Petch** (500, italic 400) — street-racer carryover, high letter definition at display sizes
-- Body, nav, CTAs: **Instrument Sans** — width-matched to day so the tunnel swap is seamless
+**Night mode — two-font system (same as day):**
+- Hero title, headings, body, nav, CTAs: **Instrument Sans** — one heading face across both themes (Chakra Petch was dropped; no font swap on toggle)
 - Instrument readouts, panel IDs, data values, gauges: **IBM Plex Mono** (400, 500, 600) — mono is reserved for telemetry, not prose
 
 **Letter spacing:** Generous on labels and IDs — 0.18em to 0.26em. This is how instrument panels read. Body text stays at 0 to -0.005em.
