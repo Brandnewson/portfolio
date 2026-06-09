@@ -138,6 +138,13 @@
   overflow: visible;
 }
 
+// Full-canvas catch behind everything. `transparent` (not `none`) so it still
+// receives pointer events: hovering empty space clears the active node and the
+// diagram falls back to its default whole-system state.
+.helm-arch-bg {
+  fill: transparent;
+}
+
 // ── Deployment boundaries ──
 // A faint zone wash + dashed outline so each boundary reads as a *region* and
 // the connectors that cross it sit clearly on top instead of tangling.

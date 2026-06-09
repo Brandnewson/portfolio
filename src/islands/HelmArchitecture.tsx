@@ -331,6 +331,22 @@ export default function HelmArchitecture(): ReactNode {
           </marker>
         </defs>
 
+        {/* Transparent catch behind everything: moving the pointer off a node
+            onto empty diagram space re-enters this rect and clears the active
+            selection, returning the diagram to its default (whole-system) state.
+            Node→node moves never cross it (nodes sit on top), so there is no
+            flicker. In the inline view it is suppressed while the overlay is
+            opening (a node click sets active just before mounting the overlay);
+            in the overlay it always clears. */}
+        <rect
+          className="helm-arch-bg"
+          x={0}
+          y={0}
+          width={VW}
+          height={VH}
+          onMouseEnter={() => { if (scalable || !expandedRef.current) setActive(null); }}
+        />
+
         {/* Deployment boundaries (behind everything) */}
         {BOUNDARIES.map((b) => (
           <g key={b.id} className="helm-boundary">
