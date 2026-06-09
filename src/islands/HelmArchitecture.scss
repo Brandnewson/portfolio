@@ -24,6 +24,14 @@
   overflow-x: auto;
   overflow-y: visible;
   overscroll-behavior-x: contain;
+  // The whole inline canvas opens the full-screen view, so it reads as clickable
+  // (nodes included — see the node cursor override below). The overlay copy is
+  // not clickable and keeps the default cursor.
+  cursor: pointer;
+}
+
+.helm-arch-scroll .helm-node {
+  cursor: pointer;
 }
 
 // Mobile-only "swipe" affordance (the diagram overflows its frame here).
@@ -55,35 +63,31 @@
 }
 
 // ── Expand affordance (inline head → opens the overlay) ──
-// The Expand button is the single trigger for the full-screen view, shown on
-// every device. (Hover-to-open was removed so a reader can't fall into the
-// overlay by accident.)
+// Rendered as a plain muted hint line ("click to expand"), not a bordered
+// button: the whole diagram canvas is clickable, and this is the matching
+// keyboard/AT-accessible trigger. Kept as a real <button> for that reason.
 .helm-arch-expand {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  border: 1px solid var(--bd);
+  gap: 6px;
+  border: 0;
   background: transparent;
-  color: var(--fg);
+  color: var(--mut);
   font-size: 9px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 5px 11px;
+  padding: 0;
   cursor: pointer;
-  border-radius: 0;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease;
 
-  &:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-  }
+  &:hover { color: var(--primary); }
 
   .hx-icon { font-size: 12px; line-height: 1; }
 
   &:focus-visible {
     outline: none;
-    border-color: var(--primary);
     color: var(--primary);
+    text-decoration: underline;
   }
 }
 

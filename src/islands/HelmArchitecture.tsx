@@ -316,6 +316,12 @@ export default function HelmArchitecture(): ReactNode {
         role="group"
         aria-label="Helm system architecture diagram"
         onMouseLeave={() => { if (!expandedRef.current) setActive(null); }}
+        // Inline, clicking anywhere on the diagram opens the full-screen view —
+        // a node click sets that node active first (its own handler) and then
+        // bubbles here, so the overlay opens already focused on it; a click on
+        // empty space opens the whole-system view. In the overlay there is
+        // nothing to open into, so no click handler.
+        onClick={scalable ? undefined : openOverlay}
       >
         <defs>
           <marker
@@ -411,10 +417,10 @@ export default function HelmArchitecture(): ReactNode {
               role="button"
               aria-label={`${n.label} — ${n.detail.role}`}
               onMouseEnter={() => setActive(n.id)}
-              // Selecting a node in the inline diagram also expands it into the
-              // overlay (with that node active); inside the overlay it just
-              // selects. Enter/Space mirror the click for keyboard users.
-              onClick={() => { setActive(n.id); if (!scalable) openOverlay(); }}
+              // Set this node active on select (this matters on touch, which has
+              // no hover). Opening the overlay is handled by the SVG-level click
+              // above, which this bubbles to. Enter/Space mirror it for keyboard.
+              onClick={() => setActive(n.id)}
               onKeyDown={(e) => {
                 if (!scalable && (e.key === 'Enter' || e.key === ' ')) {
                   e.preventDefault();
@@ -498,10 +504,12 @@ export default function HelmArchitecture(): ReactNode {
     <div className="helm-arch">
       <div className="helm-arch-head">
         <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
-        {/* The diagram is compact at rest; the Expand button is the only way to
-            open the full-screen view, on every device. */}
+        {/* The diagram is compact at rest and the whole canvas is clickable to
+            open the full-screen view. This is the same trigger styled as a plain
+            hint line — it stays a real button so keyboard and AT users have an
+            explicit, focusable way in. */}
         <button type="button" className="helm-arch-expand mono" onClick={openOverlay} aria-haspopup="dialog">
-          <span className="hx-icon" aria-hidden="true">⤢</span> Expand
+          <span className="hx-icon" aria-hidden="true">⤢</span> click to expand
         </button>
       </div>
 
