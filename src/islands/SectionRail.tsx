@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './SectionRail.scss';
 
 const SECTIONS = [
+  { id: 'top', label: 'Home' },
   { id: 'work', label: 'Helm' },
   { id: 'marl', label: 'MARL' },
   { id: 'sim', label: 'Lap Time Sim' },

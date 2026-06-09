@@ -214,6 +214,13 @@ export default function HelmArchitecture(): ReactNode {
 
   const closeTimer = useRef<number | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  // Mirror `expanded` into a ref so the inline diagram's blur/mouse-leave
+  // handlers can read the latest value: when a node click opens the overlay,
+  // focusing the dialog blurs the node (and the overlay occludes the inline
+  // SVG, firing mouse-leave) — neither should wipe the active selection that
+  // the overlay is meant to show.
+  const expandedRef = useRef(false);
+  expandedRef.current = expanded;
 
   // The overlay is opened only by the explicit Expand button (desktop, touch,
   // and keyboard alike) — hovering the diagram does nothing, so a reader can
@@ -308,7 +315,7 @@ export default function HelmArchitecture(): ReactNode {
         style={scalable ? { width: `${zoom * 100}%`, height: 'auto' } : { width: '100%' }}
         role="group"
         aria-label="Helm system architecture diagram"
-        onMouseLeave={() => setActive(null)}
+        onMouseLeave={() => { if (!expandedRef.current) setActive(null); }}
       >
         <defs>
           <marker
@@ -388,9 +395,19 @@ export default function HelmArchitecture(): ReactNode {
               role="button"
               aria-label={`${n.label} — ${n.detail.role}`}
               onMouseEnter={() => setActive(n.id)}
-              onClick={() => setActive(n.id)}
+              // Selecting a node in the inline diagram also expands it into the
+              // overlay (with that node active); inside the overlay it just
+              // selects. Enter/Space mirror the click for keyboard users.
+              onClick={() => { setActive(n.id); if (!scalable) openOverlay(); }}
+              onKeyDown={(e) => {
+                if (!scalable && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  setActive(n.id);
+                  openOverlay();
+                }
+              }}
               onFocus={() => setActive(n.id)}
-              onBlur={() => setActive(null)}
+              onBlur={() => { if (!expandedRef.current) setActive(null); }}
             >
               <rect className="helm-node-box" x={n.x} y={n.y} width={n.w} height={n.h} rx="2" />
               <circle className="helm-node-dot" cx={n.x + 9} cy={n.y + 9} r="2.5" />
