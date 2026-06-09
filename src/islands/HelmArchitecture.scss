@@ -478,8 +478,10 @@
   display: flex;
   flex-direction: column;
   // Capped width → genuine side whitespace on typical laptop screens.
-  width: min(1120px, 92vw);
-  max-height: 90vh;
+  width: min(1360px, 94vw);
+  // Definite height (not just max-height) so the stage has a resolvable height
+  // for the diagram to fill — capped so it never gets absurd on tall monitors.
+  height: min(90vh, 960px);
   background: var(--bg);
   border: 1px solid var(--bd);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
@@ -526,14 +528,30 @@
 }
 
 .helm-overlay-detail {
-  flex: 0 0 clamp(260px, 30%, 360px);
+  flex: 0 0 clamp(300px, 32%, 440px);
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  // Centre the (usually short) text against the tall diagram. margin-block:auto
+  // on the child does this without clipping: when the content is taller than the
+  // column the margins collapse to 0 and it simply scrolls from the top.
+  display: flex;
+  flex-direction: column;
 
   // The detail's own border-top/min-height are for the stacked inline layout;
   // here it's a side column, so strip them.
-  .helm-arch-detail { border-top: 0; padding-top: 0; min-height: 0; }
+  .helm-arch-detail { border-top: 0; padding-top: 0; min-height: 0; margin-block: auto; }
+
+  // Expanded view has room to breathe — step the reading text up from the
+  // compact inline sizes so it reads comfortably alongside the larger diagram.
+  .helm-detail-name { font-size: 14px; }
+  .helm-detail-role,
+  .helm-detail-tech { font-size: 10px; }
+  .helm-detail-desc { font-size: 14.5px; line-height: 1.55; }
+  .helm-stages { font-size: 11px; }
+  .helm-detail-note { font-size: 13px; line-height: 1.5; }
+  .helm-legend-key { font-size: 10px; }
+  .helm-legend-note { font-size: 14px; line-height: 1.55; }
 }
 
 // The diagram. block + margin:auto centres it while still allowing scroll to
@@ -548,12 +566,16 @@
 
   // block + margin:auto centres the diagram when it fits, and still lets the
   // far edge scroll into view when zoomed past the stage (flex centring would
-  // clip the overflow start instead).
+  // clip the overflow start instead). width AND height fill the stage so the
+  // drawing (contained by preserveAspectRatio) grows to the largest size that
+  // fits both dimensions; both are overridden inline to zoom×100% when zoomed.
   .helm-arch-svg {
     display: block;
     margin: 0 auto;
-    width: 100%; // overridden inline to zoom×100% when zoomed in
+    width: 100%;
+    height: 100%;
     max-width: none;
+    aspect-ratio: auto; // height is definite here; let it fill, not self-size
   }
 }
 

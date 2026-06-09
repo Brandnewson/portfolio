@@ -312,7 +312,12 @@ export default function HelmArchitecture(): ReactNode {
       <svg
         className="helm-arch-svg"
         viewBox={`0 0 ${VW} ${VH}`}
-        style={scalable ? { width: `${zoom * 100}%`, height: 'auto' } : { width: '100%' }}
+        // Inline: fill the column width. Overlay: fill the stage in BOTH
+        // dimensions (the SVG's preserveAspectRatio contains the drawing, so it
+        // grows to the largest size that fits the stage's width AND height), and
+        // multiply by the zoom factor — past 100% it overflows and the stage
+        // scrolls for panning.
+        style={scalable ? { width: `${zoom * 100}%`, height: `${zoom * 100}%` } : { width: '100%' }}
         role="group"
         aria-label="Helm system architecture diagram"
         onMouseLeave={() => { if (!expandedRef.current) setActive(null); }}
