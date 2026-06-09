@@ -10,7 +10,9 @@ export interface EducationItem {
   when: string;
   org: string;
   qual: string;
-  desc: string;
+  // Short, separated achievement lines — NOT a paragraph, and NOT a restatement
+  // of the qualification line above. Each renders on its own row.
+  points: string[];
 }
 
 export interface StackRow {
@@ -37,13 +39,19 @@ export const EDUCATION: EducationItem[] = [
     when: '2022 – 26',
     org: 'University of Leeds',
     qual: 'BSc Computer Science, Year in Industry · Leeds, UK',
-    desc: 'The software half. Formula Student Performance & Simulation sub-team lead across aero, tyres, powertrain and vehicle dynamics; final-year project on multi-agent reinforcement learning for race strategy.',
+    points: [
+      'Predicted first-class',
+      'Formula Student Performance & Simulation sub-team lead',
+    ],
   },
   {
     when: '2017 – 20',
     org: 'Ngee Ann Polytechnic',
     qual: 'Diploma, Mechanical Engineering · Singapore',
-    desc: 'The mechanical foundation: gearbox design to load, speed and dimensional spec, CAD/CAM fabrication, and core engineering method. Graduated with the Good Progress and School of Engineering Merit awards.',
+    points: [
+      'Designed gearbox to load, speed and dimensional spec in CAD',
+      'Graduated with Good Progress and School of Engineering Merit awards',
+    ],
   },
 ];
 
@@ -51,7 +59,7 @@ export const STACK: StackRow[] = [
   { key: 'Languages', value: 'Python, TypeScript, C++, Rust, MATLAB, Java' },
   { key: 'AI / ML', value: 'PyTorch, RAG, Claude Code, Codex, agentic harnesses, NumPy / SciPy' },
   { key: 'Web / Infra', value: 'React, Node, FastAPI / Flask, MongoDB, AWS, Azure, Docker, CI/CD' },
-  { key: 'Tools', value: 'Git, Docker, Azure DevOps, ATLAS telemetry' },
+  { key: 'Tools', value: 'Git, Docker, Azure DevOps, Plotly' },
 ];
 
 export const ROLES = ['Forward-Deployed Engineer', 'Applied AI Engineer', 'Solutions Architect', 'Full-stack Engineer'];

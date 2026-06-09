@@ -27,7 +27,9 @@ interface Props {
   why?: string;
   stack: string[];
   // Primary CTA target. May be an internal path (/report) or an external URL
-  // (https://…) — external links open in a new tab and get a ↗ glyph.
+  // (https://…). All route buttons carry a ↗ glyph — it signals "goes to another
+  // page/app", distinct from the hero's ↓ jump-links which only scroll this page.
+  // External URLs additionally open in a new tab.
   route?: string;
   // Friendly label for the route button. Without it the raw `route` is shown,
   // which is fine for short paths but ugly for full URLs.
@@ -100,7 +102,7 @@ const hasPreview = Astro.slots.has('default');
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
         >
-          {routeText} <span class="btn-glyph" aria-hidden="true">{isExternal ? '↗' : '→'}</span>
+          {routeText} <span class="btn-glyph" aria-hidden="true">↗</span>
         </a>
       )}
     </div>

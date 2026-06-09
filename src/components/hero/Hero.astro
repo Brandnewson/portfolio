@@ -5,13 +5,13 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
   <div class="wrap">
     <p class="name">Branson Tay</p>
     <p class="eyebrow mono">Full-stack engineer · AI × physical systems</p>
-    <h1 class="headline">I build applied-AI tools that <em>ship.</em></h1>
-    <p class="sub">A full-stack engineer who ships real things end to end. What pulls me is the intersection of AI and physical systems, where learning models meet real hardware and dynamics.</p>
+    <h1 class="headline">I build applied-AI<br class="hbrk" />tools that <em>ship.</em></h1>
+    <p class="sub">A full-stack engineer who ships real code end-to-end that lives on the internet and trackside. I'm pulled to the intersection of AI, simulations and software engineering, where learning models meet the real world.</p>
 
     <p class="status mono"><span class="live-dot" aria-hidden="true"></span> <b>OPEN TO WORK</b> · LONDON + NYC · FROM SEP 2026</p>
 
     <div class="calibrate">
-      <span class="cal-label mono">Calibrate your view →</span>
+      <span class="cal-label mono">Calibrate your view ↓</span>
       <ThemeToggle client:load />
       <span class="inspo" aria-live="polite">
         <span class="inspo-day">Inspired by a 911 Targa sitting in Maranello</span>
@@ -20,9 +20,9 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
     </div>
 
     <nav class="heronav" aria-label="Jump to section">
-      <a class="navcta navcta--primary" href="#work">
+      <a class="navcta navcta--primary" href="#helm">
         <span class="nc-top"><span class="nc-label mono">Featured project</span><span class="nc-arrow" aria-hidden="true">↓</span></span>
-        <span class="nc-sub">Quasi-static lap-time simulator</span>
+        <span class="nc-sub">Automatic CV generator app</span>
       </a>
       <a class="navcta" href="#profile">
         <span class="nc-top"><span class="nc-label mono">Profile</span><span class="nc-arrow" aria-hidden="true">↓</span></span>
@@ -39,12 +39,19 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
 <style lang="scss">
 .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 88px 0 56px; }
 
-.name { font-family: var(--font-hero); font-size: clamp(22px, 2.5vw, 32px); font-weight: 700; letter-spacing: -0.01em; color: var(--fg); margin: 0 0 8px; }
+/* explicit line-height (not `normal`, which is font-metric dependent) so the
+   name keeps the same height in Instrument Sans (day) and Chakra Petch (night). */
+.name { font-family: var(--font-hero); font-size: clamp(22px, 2.5vw, 32px); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; color: var(--fg); margin: 0 0 8px; }
 .name::after { content: ''; display: block; width: 34px; height: 2px; background: var(--rule); margin-top: 12px; }
 
 .eyebrow { font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--primary); margin: 16px 0 22px; }
 
-.headline { font-family: var(--font-hero); font-weight: 600; font-size: clamp(40px, 6vw, 80px); line-height: 0.98; letter-spacing: -0.025em; color: var(--fg); max-width: 14ch; margin: 0; }
+/* The explicit break (.hbrk) fixes the headline at two lines so the line COUNT
+   is identical in Instrument Sans (day) and the wider Chakra Petch (night).
+   With line-height unitless × an identical font-size, equal line count = equal
+   height, so toggling restyles the type in place without shifting the toggle or
+   CTAs below it. No max-width: the break governs wrapping, not a soft column. */
+.headline { font-family: var(--font-hero); font-weight: 600; font-size: clamp(40px, 6vw, 80px); line-height: 0.98; letter-spacing: -0.025em; color: var(--fg); margin: 0; }
 .headline em { font-style: normal; color: var(--emphasis); }
 
 .sub { font-size: clamp(16px, 1.5vw, 20px); line-height: 1.5; color: var(--fg2); max-width: 54ch; margin-top: 24px; }
@@ -54,13 +61,15 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; animation: pulse 2.4s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-.calibrate { margin-top: 38px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+/* Centred stack: the DAY|NIGHT switch sits centred, with its label above and
+   the inspiration line below — a deliberate "calibrate" control, centred within
+   the hero column rather than tucked into a left-aligned row. */
+.calibrate { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
 .cal-label { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--mut); }
 /* The toggle's shared styles use --bar-* (tuned for the dark InstrumentBar).
    On the hero background, remap to page fg/mut so border + inactive labels stay visible. */
 .calibrate :global(.theme-toggle) { --bar-fg: var(--fg); --bar-fg-mut: var(--mut); }
 .inspo span { font-style: italic; font-size: 12.5px; color: var(--mut); }
-.inspo .inspo-day, .inspo .inspo-night { display: none; }
 
 .heronav { margin-top: 44px; display: flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
 .navcta { display: inline-flex; flex-direction: column; gap: 6px; min-width: 188px; padding: 16px 18px; border: 1px solid var(--bd); text-decoration: none; background: transparent; transition: border-color 0.15s ease, background 0.15s ease; }
@@ -81,12 +90,22 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
   .heronav { flex-direction: column; }
   .navcta { min-width: 0; width: 100%; }
 }
+
+/* On phones the fixed break can't fit "I build applied-AI" on one line, so let
+   it wrap naturally — both fonts wrap alike at this size, so no jump. */
+@media (max-width: 560px) {
+  .hbrk { display: none; }
+}
 </style>
 
 <style is:global>
   /* Inspiration line swaps with theme (Astro scoped CSS mangles [data-theme]
      descendant selectors, so this lives in a global block — same pattern the
-     old InstrumentBar used for its day/night lines). */
+     old InstrumentBar used for its day/night lines). The hide rule lives here
+     too: as a scoped rule its attribute-boosted specificity outweighed these
+     theme rules, so the line never showed. Keeping hide + show at the same
+     (global) specificity lets the theme selectors win. */
+  .inspo .inspo-day, .inspo .inspo-night { display: none; }
   html[data-theme="day"] .inspo .inspo-day { display: inline; }
   html[data-theme="night"] .inspo .inspo-night { display: inline; }
 </style>

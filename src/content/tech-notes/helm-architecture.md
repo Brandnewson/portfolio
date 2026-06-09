@@ -46,6 +46,19 @@ a bullet cache keyed by `(user, source, content-hash)` that grows and displaces
 LLM calls, gated by unit + e2e evals. This is where the project's differentiator
 gets its spotlight without cluttering the topology.
 
+## Expanding the diagram
+
+At rest the diagram is compact — it shares the band with the Helm copy at the
+same width as the FS Sim widget, which keeps the layout tidy but leaves the
+topology small. An **Expand ⤢** control in the diagram header lifts it into a
+full-screen overlay (rendered through `createPortal` to `document.body`, so it
+escapes the band's box) where it renders far larger and a **− zoom +** control
+(100 %–250 %) enlarges it further, panning inside a scrollable stage. The same
+hover/detail behaviour works in the overlay, with the detail panel below the
+canvas. The backdrop, an **✕ Close** button, and the **Escape** key all dismiss
+it, and page scroll is locked while it is open. Zoom lives only in the overlay
+(there is room there); the inline view stays a clean, fixed-size preview.
+
 ## Why phosphor stays disciplined
 
 Nodes and connectors use neutral surface/border tokens. The hovered node's

@@ -1,15 +1,44 @@
 ---
-// Closing / contact section. Email is the primary action; resume secondary.
+// Closing / contact section. This is the single "what I want + reach me" moment
+// on the page — it carries the structured roles/locations/availability panel
+// (the one that used to live in Profile) directly above the email CTA, so the
+// page has one cohesive ending instead of two that repeat each other.
+import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
 ---
 <section class="close" id="contact">
   <div class="wrap">
     <span class="acc-rule" aria-hidden="true"></span>
-    <h2 class="close-title">Let's build something that ships.</h2>
-    <p class="close-lede">Open to Forward-Deployed, Applied AI, Solutions Architect, and Full-stack roles in London and New York from September 2026.</p>
+    <h2 class="close-title">Let's build something<br class="cbrk" /> that ships.</h2>
+
+    <div class="lookingfor">
+      <div class="lf-head mono">Looking for</div>
+      <div class="lf-grid">
+        <div>
+          <span class="lf-sub mono">Roles</span>
+          <div class="chips">
+            {ROLES.map((r) => <span class="chip-lg">{r}</span>)}
+          </div>
+        </div>
+        <div>
+          <span class="lf-sub mono">Locations</span>
+          <div class="cities">
+            {CITIES.map((c) => (
+              <div class="city"><span class="city-name">{c.name}</span><span class="city-coord mono">{c.coord}</span></div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <span class="lf-sub mono">Available</span>
+          <div class="avail-val mono"><span class="live-dot" aria-hidden="true"></span> {AVAILABLE}</div>
+        </div>
+      </div>
+    </div>
+
     <div class="cta-row">
       <a class="btn btn--primary mono" href="mailto:bransontay@gmail.com">✉ bransontay@gmail.com</a>
       <a class="btn mono" href="/resume.pdf" download="BRANSON TAY.pdf"><span aria-hidden="true">↓</span> Résumé</a>
     </div>
+
     <div class="foot mono">
       <a href="https://github.com/Brandnewson" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://linkedin.com/in/bransontay" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -22,14 +51,40 @@
 .close { min-height: 84vh; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 80px 0; }
 .acc-rule { display: block; height: 2px; width: 120px; margin: 0 auto 40px; background: var(--rule); }
 .close-title { font-family: var(--font-hero); font-weight: 600; font-size: clamp(34px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.02em; color: var(--fg); margin: 0; }
-.close-lede { margin: 20px auto 0; font-size: 16px; color: var(--fg2); max-width: 48ch; }
+
+// Structured "Looking for" block — same editorial language as the Profile
+// section: a hairline-bracketed strip (no filled box) with primary mono
+// sub-labels, like Profile's .col-key rows. Roles are horizontal wrapping chips
+// (not a vertical stack) so the three columns balance instead of leaving a void.
+.lookingfor { margin: 48px auto 0; max-width: 960px; text-align: left; border-top: 1px solid var(--bd); border-bottom: 1px solid var(--bd); padding: 28px 0; }
+.lf-head { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--mut); margin-bottom: 24px; }
+.lf-grid { display: grid; grid-template-columns: 1.7fr 1.2fr 0.7fr; gap: 40px; align-items: start; }
+.lf-sub { display: block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--primary); margin-bottom: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-lg { font-size: 12.5px; padding: 8px 13px; border: 1px solid var(--bd); color: var(--fg); background: var(--bg2); white-space: nowrap; }
+.cities { display: flex; gap: 26px; }
+.city { display: flex; flex-direction: column; gap: 3px; }
+.city-name { font-family: var(--font-hero); font-size: 20px; font-weight: 600; line-height: 1.05; color: var(--fg); }
+.city-coord { font-size: 10.5px; color: var(--mut); letter-spacing: 0.04em; }
+.avail-val { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; }
+
 .cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 36px; }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 15px 26px; border: 1px solid var(--bd); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); text-decoration: none; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
 .btn:hover { color: var(--primary); border-color: var(--primary); }
 .btn--primary { border-color: var(--primary); background: var(--primary-tint); color: var(--primary); }
 .btn--primary:hover { border-color: var(--primary-hover); color: var(--primary-hover); }
-.foot { margin-top: 64px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+.foot { margin-top: 56px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 .foot a { color: var(--mut); text-decoration: none; }
 .foot a:hover { color: var(--primary); }
 .mono { font-family: var(--font-mono); }
+
+@media (max-width: 760px) {
+  .lf-grid { grid-template-columns: 1fr; gap: 28px; }
+  .cities { gap: 24px; }
+}
+
+@media (max-width: 560px) {
+  .cbrk { display: none; }
+}
 </style>

@@ -1,8 +1,9 @@
 ---
-import { BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES, AVAILABLE } from '../../data/profile';
+import { BIO, EXPERIENCE, EDUCATION, STACK } from '../../data/profile';
 ---
 <section class="profile" id="profile">
   <div class="wrap">
+    <span class="sec-rule" aria-hidden="true"></span>
     <div class="profile-head">
       <div class="phead mono"><span class="pid">PROFILE</span><span aria-hidden="true">·</span><span class="tier">WHO I AM</span></div>
       <h2 class="ptitle">Background</h2>
@@ -33,7 +34,9 @@ import { BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES, AVAILABLE } from '../
             <div class="edu-item">
               <div class="edu-top"><span class="edu-org">{e.org}</span><span class="edu-when mono">{e.when}</span></div>
               <div class="edu-qual">{e.qual}</div>
-              <div class="edu-desc">{e.desc}</div>
+              <ul class="edu-points" role="list">
+                {e.points.map((pt) => <li class="edu-point">{pt}</li>)}
+              </ul>
             </div>
           ))}
         </div>
@@ -49,34 +52,14 @@ import { BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES, AVAILABLE } from '../
       </div>
     </div>
 
-    <div class="lookingfor">
-      <div class="lf-head mono">Looking for</div>
-      <div class="lf-grid">
-        <div>
-          <span class="lf-sub mono">Roles</span>
-          <div class="chips">
-            {ROLES.map((r) => <span class="chip-lg">{r}</span>)}
-          </div>
-        </div>
-        <div>
-          <span class="lf-sub mono">Locations</span>
-          <div class="cities">
-            {CITIES.map((c) => (
-              <div class="city"><span class="city-name">{c.name}</span><span class="city-coord mono">{c.coord}</span></div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <span class="lf-sub mono">Available</span>
-          <div class="avail-val mono"><span class="live-dot" aria-hidden="true"></span> {AVAILABLE}</div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
 <style lang="scss">
-.profile { padding: 108px 0; }
+.profile { padding: 72px 0 108px; }
+/* Divider that separates the Helm band above from the Background section —
+   matches the 2px accent rule that tops each project band. */
+.sec-rule { display: block; height: 2px; width: 100%; background: var(--rule); margin-bottom: 52px; }
 .profile-head { margin-bottom: 44px; max-width: 60ch; }
 
 .phead { display: flex; align-items: center; gap: 10px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mut); margin-bottom: 14px; }
@@ -103,7 +86,11 @@ import { BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES, AVAILABLE } from '../
 .edu-org { font-size: 17px; font-weight: 600; color: var(--fg); }
 .edu-when { font-size: 11px; color: var(--mut); letter-spacing: 0.04em; white-space: nowrap; }
 .edu-qual { font-size: 14px; color: var(--fg2); margin-top: 2px; }
-.edu-desc { font-size: 13.5px; color: var(--mut); line-height: 1.55; margin-top: 9px; }
+/* Achievement lines — separated rows with the same squared primary pip used by
+   the project bands, so they scan as distinct points rather than a paragraph. */
+.edu-points { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.edu-point { position: relative; padding-left: 14px; font-size: 13.5px; line-height: 1.5; color: var(--fg2); }
+.edu-point::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 4px; height: 4px; background: var(--primary); }
 
 .stack-block { margin-top: 56px; }
 .stk { margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px; }
@@ -111,24 +98,9 @@ import { BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES, AVAILABLE } from '../
 .stk-key { font-size: 12px; font-weight: 600; color: var(--mut); }
 .stk-val { font-size: 15px; color: var(--fg); line-height: 1.5; }
 
-.lookingfor { margin-top: 52px; border: 1px solid var(--bd); background: var(--bg2); padding: 34px 38px; }
-.lf-head { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--primary); margin-bottom: 26px; }
-.lf-grid { display: grid; grid-template-columns: 1.5fr 1.3fr 1fr; gap: 44px; }
-.lf-sub { display: block; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mut); margin-bottom: 14px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip-lg { font-size: 13px; padding: 9px 14px; border: 1px solid var(--bd); color: var(--fg); background: var(--bg); }
-.cities { display: flex; gap: 30px; }
-.city { display: flex; flex-direction: column; gap: 3px; }
-.city-name { font-family: var(--font-hero); font-size: 22px; font-weight: 600; color: var(--fg); line-height: 1; }
-.city-coord { font-size: 10.5px; color: var(--mut); letter-spacing: 0.04em; }
-.avail-val { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; }
-
 @media (max-width: 900px) {
   .pgrid { grid-template-columns: 1fr; gap: 44px; }
   .stk { grid-template-columns: 1fr; column-gap: 0; }
-  .lf-grid { grid-template-columns: 1fr; gap: 28px; }
-  .cities { gap: 24px; }
 }
 
 .mono { font-family: var(--font-mono); }

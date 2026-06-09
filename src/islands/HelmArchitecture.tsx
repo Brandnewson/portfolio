@@ -22,7 +22,8 @@
 // boundaries; labels render over a small background mask so connector lines
 // never strike through the text. Copy avoids colons and semicolons by request.
 
-import { Fragment, useState, type ReactNode } from 'react';
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import './HelmArchitecture.scss';
 
 type Group = 'edge' | 'app' | 'store' | 'aws' | 'external';
@@ -191,8 +192,95 @@ function pathFromPoints(pts: [number, number][]): string {
   return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ');
 }
 
+// The diagram is compact at rest (same width as the FS Sim widget). To view it
+// full-sized the reader EXPANDS it into a full-screen overlay, where there is
+// room to enlarge it well past the column and pan around. Zoom lives in the
+// overlay (Z_MIN..Z_MAX) and scales the diagram by viewport height so the whole
+// topology fits at 100% and grows from there.
+const Z_MIN = 1;
+const Z_MAX = 2.5;
+const Z_STEP = 0.25;
+
 export default function HelmArchitecture(): ReactNode {
   const [active, setActive] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1);
+  // `expanded` = overlay mounted; `show` = the visible class that drives the
+  // enter/exit transition. We keep the node mounted briefly after `show` flips
+  // off so the close animation can play before unmount.
+  const [expanded, setExpanded] = useState(false);
+  const [show, setShow] = useState(false);
+  const zoomOut = () => setZoom((z) => Math.max(Z_MIN, +(z - Z_STEP).toFixed(2)));
+  const zoomIn = () => setZoom((z) => Math.min(Z_MAX, +(z + Z_STEP).toFixed(2)));
+
+  const closeTimer = useRef<number | null>(null);
+  const hoverTimer = useRef<number | null>(null);
+  const openedByHover = useRef(false);
+  const openedAt = useRef(0);
+  // After a close, briefly ignore hover-opens so dismissing (Esc/✕) while the
+  // cursor still rests on the diagram doesn't immediately reopen it.
+  const reopenBlockedUntil = useRef(0);
+  const now = () => (typeof performance !== 'undefined' ? performance.now() : 0);
+
+  const openOverlay = (byHover = false) => {
+    if (closeTimer.current != null) { clearTimeout(closeTimer.current); closeTimer.current = null; }
+    openedByHover.current = byHover;
+    openedAt.current = now();
+    setZoom(1);
+    setExpanded(true);
+    requestAnimationFrame(() => setShow(true)); // next frame → eased fade/scale in
+  };
+  const closeOverlay = () => {
+    setShow(false);
+    openedByHover.current = false;
+    reopenBlockedUntil.current = now() + 450;
+    if (closeTimer.current != null) clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => { setExpanded(false); closeTimer.current = null; }, 320);
+  };
+
+  // Desktop: hovering the diagram opens the overlay after a short intent delay
+  // (so scrolling past doesn't trigger it). Touch has no hover and uses the
+  // explicit Expand button instead.
+  const handleDiagramEnter = () => {
+    if (expanded) return;
+    if (now() < reopenBlockedUntil.current) return;
+    if (typeof window === 'undefined' || !window.matchMedia('(hover: hover)').matches) return;
+    if (hoverTimer.current != null) clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => openOverlay(true), 180);
+  };
+  const handleDiagramLeave = () => {
+    if (hoverTimer.current != null) { clearTimeout(hoverTimer.current); hoverTimer.current = null; }
+  };
+  // Pointer leaving the panel retracts it — but only for hover-opened overlays
+  // (button/keyboard opens stay until Esc/✕), and only after a grace window so
+  // the open animation can't immediately bounce it closed.
+  const handlePanelLeave = () => {
+    if (!openedByHover.current) return;
+    if (now() - openedAt.current < 250) return;
+    closeOverlay();
+  };
+
+  // While the overlay is open: close on Escape and lock page scroll behind it.
+  useEffect(() => {
+    if (!expanded) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeOverlay(); };
+    document.addEventListener('keydown', onKey);
+    const docEl = document.documentElement;
+    const prevHtml = docEl.style.overflow;
+    const prevBody = document.body.style.overflow;
+    docEl.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      docEl.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+  }, [expanded]);
+
+  // Clear any pending timers on unmount.
+  useEffect(() => () => {
+    if (closeTimer.current != null) clearTimeout(closeTimer.current);
+    if (hoverTimer.current != null) clearTimeout(hoverTimer.current);
+  }, []);
 
   // Edges touching the active node, and the neighbour set those edges reach.
   const activeEdges = new Set<number>();
@@ -209,29 +297,25 @@ export default function HelmArchitecture(): ReactNode {
 
   const isLit = (id: string) => !active || id === active || neighbours.has(id);
   const node = active ? NODE_BY_ID[active] : null;
-  // On desktop the detail floats over the diagram. Flip it to the opposite
-  // side of the hovered node so the panel never covers what you're pointing at:
-  // right-half nodes (the external rail) push the panel to the left.
-  const panelFlip = !!node && node.x + node.w / 2 > VW / 2;
 
-  return (
-    <div className="helm-arch">
-      <div className="helm-arch-head">
-        <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
-        <span className="helm-arch-hint mono">{active ? 'select another node' : 'hover or tap a node'}</span>
-      </div>
-
-      <div className="helm-arch-scroll">
+  // The diagram SVG, rendered both inline and (larger) inside the overlay.
+  // `scalable` switches sizing: inline fits its column width; the overlay sizes
+  // by viewport height and multiplies by the zoom factor. Marker ids differ per
+  // instance so the two copies never collide on a duplicate id.
+  const renderSvg = (scalable: boolean): ReactNode => {
+    const arrowId = scalable ? 'helm-arrow-exp' : 'helm-arrow';
+    return (
       <svg
         className="helm-arch-svg"
         viewBox={`0 0 ${VW} ${VH}`}
+        style={scalable ? { width: `${zoom * 100}%`, height: 'auto' } : { width: '100%' }}
         role="group"
         aria-label="Helm system architecture diagram"
         onMouseLeave={() => setActive(null)}
       >
         <defs>
           <marker
-            id="helm-arrow"
+            id={arrowId}
             viewBox="0 0 10 10"
             refX="9"
             refY="5"
@@ -264,7 +348,7 @@ export default function HelmArchitecture(): ReactNode {
                 active && !activeEdges.has(i) && 'is-dim',
               ].filter(Boolean).join(' ')}
               d={pathFromPoints(e.pts)}
-              markerEnd="url(#helm-arrow)"
+              markerEnd={`url(#${arrowId})`}
             />
           ))}
         </g>
@@ -326,48 +410,116 @@ export default function HelmArchitecture(): ReactNode {
           ))}
         </g>
       </svg>
+    );
+  };
+
+  // Detail / legend panel — TEACHES the hovered node, or shows the legend at
+  // rest. Shared between the inline view and the overlay (sits below the diagram
+  // in both).
+  const renderDetail = (): ReactNode => (
+    <div
+      className={['helm-arch-detail', node ? 'is-detail' : 'is-legend'].filter(Boolean).join(' ')}
+      aria-live="polite"
+    >
+      {node ? (
+        <div className="helm-detail">
+          <div className="helm-detail-head">
+            <span className="helm-detail-name mono">{node.label}</span>
+            <span className="helm-detail-role mono">{node.detail.role}</span>
+          </div>
+          <p className="helm-detail-tech mono">{node.detail.tech}</p>
+          <p className="helm-detail-desc">{node.detail.desc}</p>
+          {node.detail.stages && (
+            <p className="helm-stages mono" role="list" aria-label="6-stage pipeline">
+              {node.detail.stages.map((s, i) => (
+                <Fragment key={s}>
+                  {i > 0 && <span className="helm-stage-sep" aria-hidden="true"> › </span>}
+                  <span className="helm-stage" role="listitem">
+                    <span className="helm-stage-n">{i + 1}</span>{s}
+                  </span>
+                </Fragment>
+              ))}
+            </p>
+          )}
+          {node.detail.note && <p className="helm-detail-note">{node.detail.note}</p>}
+        </div>
+      ) : (
+        <div className="helm-legend">
+          <div className="helm-legend-row">
+            <span className="helm-legend-key mono"><span className="helm-swatch is-k3s" />k3s cluster · EC2</span>
+            <span className="helm-legend-key mono"><span className="helm-swatch is-aws" />AWS managed</span>
+            <span className="helm-legend-key mono"><span className="helm-swatch is-ext" />external SaaS</span>
+          </div>
+          <p className="helm-legend-note">Helm exposes one public surface (<span className="mono">web</span>) and keeps every other service private behind a shared key. Hover any component to see what it does, and why it sits where it does.</p>
+        </div>
+      )}
+    </div>
+  );
+
+  const zoomControl = (
+    <span className="helm-arch-zoom mono" role="group" aria-label="Zoom diagram">
+      <button type="button" className="hz-btn" onClick={zoomOut} disabled={zoom <= Z_MIN} aria-label="Zoom out">−</button>
+      <span className="hz-val">{Math.round(zoom * 100)}%</span>
+      <button type="button" className="hz-btn" onClick={zoomIn} disabled={zoom >= Z_MAX} aria-label="Zoom in">+</button>
+    </span>
+  );
+
+  return (
+    <div className="helm-arch">
+      <div className="helm-arch-head">
+        <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
+        {/* Desktop affordance: a quiet hint (hover opens it). Touch devices hide
+            this and show the Expand button instead — see the SCSS media query. */}
+        <span className="helm-arch-hint-hover mono" aria-hidden="true">
+          <span className="hx-icon">⤢</span> Hover to expand
+        </span>
+        <button type="button" className="helm-arch-expand mono" onClick={() => openOverlay(false)} aria-haspopup="dialog">
+          <span className="hx-icon" aria-hidden="true">⤢</span> Expand
+        </button>
+      </div>
+
+      <div
+        className="helm-arch-scroll"
+        aria-hidden={expanded || undefined}
+        onMouseEnter={handleDiagramEnter}
+        onMouseLeave={handleDiagramLeave}
+      >
+        {renderSvg(false)}
       </div>
       <span className="helm-arch-swipe mono" aria-hidden="true">swipe to explore the diagram →</span>
 
-      {/* Detail panel — floats top-right/left over the diagram on desktop,
-          stacks below on mobile. */}
-      <div
-        className={['helm-arch-detail', node ? 'is-detail' : 'is-legend', panelFlip && 'is-flip'].filter(Boolean).join(' ')}
-        aria-live="polite"
-      >
-        {node ? (
-          <div className="helm-detail">
-            <div className="helm-detail-head">
-              <span className="helm-detail-name mono">{node.label}</span>
-              <span className="helm-detail-role mono">{node.detail.role}</span>
+      {renderDetail()}
+
+      {expanded && createPortal(
+        <div
+          className={['helm-overlay', show && 'is-visible'].filter(Boolean).join(' ')}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Helm system topology, expanded view"
+        >
+          <div className="helm-overlay-backdrop" onClick={closeOverlay} />
+          <div className="helm-overlay-panel" onMouseLeave={handlePanelLeave}>
+            <div className="helm-overlay-head">
+              <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
+              {zoomControl}
+              <button type="button" className="helm-overlay-close mono" onClick={closeOverlay} aria-label="Close expanded view">
+                ✕ Close
+              </button>
             </div>
-            <p className="helm-detail-tech mono">{node.detail.tech}</p>
-            <p className="helm-detail-desc">{node.detail.desc}</p>
-            {node.detail.stages && (
-              <p className="helm-stages mono" role="list" aria-label="6-stage pipeline">
-                {node.detail.stages.map((s, i) => (
-                  <Fragment key={s}>
-                    {i > 0 && <span className="helm-stage-sep" aria-hidden="true"> › </span>}
-                    <span className="helm-stage" role="listitem">
-                      <span className="helm-stage-n">{i + 1}</span>{s}
-                    </span>
-                  </Fragment>
-                ))}
-              </p>
-            )}
-            {node.detail.note && <p className="helm-detail-note">{node.detail.note}</p>}
-          </div>
-        ) : (
-          <div className="helm-legend">
-            <div className="helm-legend-row">
-              <span className="helm-legend-key mono"><span className="helm-swatch is-k3s" />k3s cluster · EC2</span>
-              <span className="helm-legend-key mono"><span className="helm-swatch is-aws" />AWS managed</span>
-              <span className="helm-legend-key mono"><span className="helm-swatch is-ext" />external SaaS</span>
+            {/* Body splits left (explanatory text) / right (diagram) so the
+                reader sees the whole thing at once without scrolling down. */}
+            <div className="helm-overlay-body">
+              <div className="helm-overlay-detail">
+                {renderDetail()}
+              </div>
+              <div className="helm-overlay-stage">
+                {renderSvg(true)}
+              </div>
             </div>
-            <p className="helm-legend-note">Helm exposes one public surface (<span className="mono">web</span>) and keeps every other service private behind a shared key. Hover any component to see what it does, and why it sits where it does.</p>
           </div>
-        )}
-      </div>
+        </div>,
+        document.body,
+      )}
     </div>
   );
 }

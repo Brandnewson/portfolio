@@ -155,32 +155,38 @@
   color: var(--mut);
   transition: color 0.15s ease;
 
+  // Dots carry the burgundy "you can touch this" affordance (same pattern as
+  // the FS Sim slider thumb). Upcoming phases sit at low opacity; visited and
+  // the active one fill in, with the active dot blooming + scaling so the
+  // current position still stands out. Phosphor is no longer used on this
+  // control — it belongs to live indicators, not interactive elements.
   &::before {
     content: '';
     display: block;
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--bd);
-    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    background: var(--interactive);
+    opacity: 0.4;
+    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
     margin-top: 8px;
   }
 
-  &:hover::before { transform: scale(1.4); }
+  &:hover::before { transform: scale(1.4); opacity: 0.75; }
 
-  &.is-passed::before { background: var(--primary); }
+  &.is-passed::before { opacity: 0.8; }
 
   &.is-active {
-    color: var(--phos);
+    color: var(--interactive);
 
     &::before {
-      background: var(--phos);
-      box-shadow: var(--phos-glow);
+      opacity: 1;
+      box-shadow: var(--interactive-glow);
       transform: scale(1.7);
     }
 
     .marl-step-num {
-      text-shadow: var(--phos-glow);
+      text-shadow: var(--interactive-glow);
       font-weight: 600;
     }
   }

@@ -140,6 +140,55 @@ Note: styles in .astro files are scoped by default. Use `:global()` to target el
 
 ---
 
+## Gotcha: scoped CSS beats a global rule on specificity
+
+Astro scopes `<style>` rules by appending a `[data-astro-cid-…]` attribute to
+every selector. That attribute *adds specificity*. So a scoped rule like
+`.inspo .inspo-day { display: none }` compiles to roughly
+`.inspo[data-astro-cid] .inspo-day[data-astro-cid]` — four "class-level" hits —
+which **outweighs** a plainer `<style is:global>` rule such as
+`html[data-theme="day"] .inspo .inspo-day { display: inline }`.
+
+Symptom I hit: the hero's themed inspiration line had its hide rule in the
+scoped block and its per-theme show rules in a global block. The scoped hide
+silently won in *both* themes, so the line never appeared.
+
+**Fix:** keep the hide and the show at the *same* specificity tier. Move the
+`display:none` base into the same global block as the theme `display:inline`
+rules, so the more specific `html[data-theme]` selector wins normally. (Don't
+reach for `!important` — just stop mixing scoped and global for the same
+property on the same element.)
+
+---
+
+## Gotcha: a long-running `astro dev` can serve stale CSS (wedged HMR)
+
+A dev server left running across many file edits (especially edits made while
+the process was up but not actively HMR-ing, e.g. across a tool/session change)
+can wedge its module graph and serve **stale scoped styles** — the element keeps
+its `data-astro-cid` attribute but the matching rules are missing, so everything
+renders unstyled (grids collapse to `display:block`, etc.) with **zero console
+errors**. It looks like a CSS bug but isn't.
+
+**Tell:** the same page renders correctly from a freshly started `astro dev` on
+another port. **Fix:** restart the dev server. When a render looks broken,
+confirm against a fresh server before debugging the CSS.
+
+---
+
+## React islands: fullscreen overlays via `createPortal`
+
+To lift an island's UI out of its in-page box (modal / fullscreen viewer),
+render it through `createPortal(node, document.body)` so it escapes any parent
+`overflow`/stacking context. Pair it with a `useEffect` that, while open, adds an
+Escape-key listener and sets `overflow:hidden` on `documentElement` *and* `body`
+(restoring both on cleanup) to lock background scroll. If the same SVG is drawn
+both inline and in the overlay, give per-instance `<marker>`/def ids (a suffix)
+so the two copies don't collide on a duplicate DOM id. See
+`src/islands/HelmArchitecture.tsx`.
+
+---
+
 ## Add patterns here as you encounter them
 
 This section grows with your learning. When you figure out how something works, write it down here in plain English. Future sessions will thank you.

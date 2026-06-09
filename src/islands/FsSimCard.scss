@@ -187,23 +187,26 @@
   }
 
   // ── Chromium / Safari thumb ──
+  // Burgundy (--interactive), not phosphor: this is the one control the user
+  // drags, so it carries the "touch me" affordance colour. The phosphor in this
+  // card stays reserved for the read-only indicators (curve dot, baseline tick).
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--phos);
+    background: var(--interactive);
     border: 1px solid var(--bd);
     margin-top: -7px; // (track 4px + 2*border) / 2 - thumb / 2
     transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: var(--phos-glow);
+    box-shadow: var(--interactive-glow);
   }
 
   &:hover::-webkit-slider-thumb,
   &:focus-visible::-webkit-slider-thumb {
     transform: scale(1.1);
-    box-shadow: var(--phos-glow);
+    box-shadow: var(--interactive-glow);
   }
 
   // ── Firefox track ──
@@ -219,16 +222,16 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--phos);
+    background: var(--interactive);
     border: 1px solid var(--bd);
     transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: var(--phos-glow);
+    box-shadow: var(--interactive-glow);
   }
 
   &:hover::-moz-range-thumb,
   &:focus-visible::-moz-range-thumb {
     transform: scale(1.1);
-    box-shadow: var(--phos-glow);
+    box-shadow: var(--interactive-glow);
   }
 
   &:focus-visible {

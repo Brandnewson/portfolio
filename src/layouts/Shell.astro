@@ -35,13 +35,14 @@ const { title = 'Branson — Portfolio', hideBar = false } = Astro.props;
     })();
   </script>
 
-  <!-- TODO: replace with self-hosted @font-face once size-adjust width-match is dialled -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-  />
+  <!--
+    Self-hosted fonts (see src/styles/_fonts.scss). Preload BOTH heading faces —
+    Instrument Sans (day) and Chakra Petch (night) — so the night font is already
+    resident before the first day↔night toggle and the swap causes no flash or
+    reflow. Metric overrides in _fonts.scss keep the two faces the same size.
+  -->
+  <link rel="preload" href="/fonts/instrument-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/chakra-petch-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   {!hideBar && <InstrumentBar />}

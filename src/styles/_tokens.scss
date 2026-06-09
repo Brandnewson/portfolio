@@ -81,6 +81,15 @@
 
   // Theme toggle — active label sits on a coloured slider, needs contrast
   --toggle-active-fg: var(--bar-fg);
+
+  // Interactive affordance — burgundy. Marks "you can touch this" controls
+  // inside the data widgets (the FS Sim slider thumb, the MARL phase scrubber
+  // dots). Deliberately distinct from --primary (page CTAs / route links) and
+  // from --phos (live/indicator elements) so the three roles never blur.
+  // Day value is the brand bordeaux; night lifts it so it stays legible on the
+  // near-black widget surface (raw bordeaux would disappear there).
+  --interactive:      #5D1A29;
+  --interactive-glow: none;
 }
 
 [data-theme="night"] {
@@ -135,6 +144,12 @@
   --gauge-glow: 0 0 6px rgba(20, 204, 74, 0.7), 0 0 16px rgba(20, 204, 74, 0.3);
 
   --toggle-active-fg: var(--ink);
+
+  // Night keeps phosphor for interactive controls — the burgundy affordance is
+  // a day-only treatment (burgundy reads as "muddy" against the 300ZX palette,
+  // and phosphor already carries the touch cue cleanly at night).
+  --interactive:      var(--phos);
+  --interactive-glow: var(--phos-glow);
 }
 
 

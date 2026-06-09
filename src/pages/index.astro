@@ -14,22 +14,22 @@ import HelmArchitecture from '../islands/HelmArchitecture';
 
   <div class="band-wrap">
     <ProjectFeature
-      anchorId="work"
+      anchorId="helm"
       panelId="PRJ/001"
       tier="FEATURED"
-      title="Quasi-Static Lap Time Simulator"
-      kicker="Lap-time solver built from first principles, and fitted tyre model"
+      title="Helm"
+      kicker="Automatic CV generator app, built with an agentic harness on a self-improving loop."
       points={[
-        'Actively used by Leeds Gryphon Racing to determine design trade-offs',
-        'Predicts pace per track from mass, aero, tyres, gearing, tyres',
-        "Python FastAPI web app for engineers to easily use with RAG AI chatbot",
+        'Live consumer product, pre-revenue',
+        'Generates a tailored CV from one job description',
+        'Uses end-to-end evals and agentic harness to determine the quality of the CV output',
       ]}
-      why="Let engineers reason design choices in minutes, instead of hours of expensive track time"
-      stack={['python', 'linear programming', 'web development', 'data modelling']}
-      route="https://lgr-simulator.fly.dev/"
-      routeLabel="Launch simulator"
+      why="Teach myself system design, and self-improving harnesses in production environments"
+      stack={['typescript', 'fastapi', 'k8s', 'sqs', 'cloudflare']}
+      route="https://helmcv.app"
+      routeLabel="Launch Helm"
     >
-      <FsSimCard client:load />
+      <HelmArchitecture client:load />
     </ProjectFeature>
   </div>
 
@@ -57,21 +57,22 @@ import HelmArchitecture from '../islands/HelmArchitecture';
 
   <div class="band-wrap">
     <ProjectFeature
-      anchorId="helm"
+      anchorId="work"
       panelId="PRJ/003"
       tier="SHIPPING"
-      title="Helm"
-      kicker="Automatic CV generator app, built with an agentic harness on a self-improving loop."
+      title="Quasi-Static Lap Time Simulator"
+      kicker="Lap-time solver built from first principles, and fitted tyre model"
       points={[
-        'Live consumer product, pre-revenue',
-        'Generates a tailored CV from one job description',
-        'Agentic harness I tune the extractor against, scored by unit + e2e evals',
+        'Actively used by Leeds Gryphon Racing to determine design trade-offs',
+        'Predicts pace per track from mass, aero, tyres, gearing, tyres',
+        "Python FastAPI web app for engineers to easily use with RAG AI chatbot",
       ]}
-      why="Teach myself system design, and self-improving harnesses in production environments"
-      stack={['typescript', 'fastapi', 'k8s', 'sqs', 'cloudflare']}
-      route="/helm"
+      why="Let engineers reason design choices in minutes, instead of hours of expensive track time"
+      stack={['python', 'linear programming', 'web development', 'data modelling']}
+      route="https://lgr-simulator.fly.dev/"
+      routeLabel="Launch simulator"
     >
-      <HelmArchitecture client:load />
+      <FsSimCard client:load />
     </ProjectFeature>
   </div>
 
@@ -83,6 +84,11 @@ import HelmArchitecture from '../islands/HelmArchitecture';
 
 <style lang="scss">
 .band-wrap {
+  // width:100% is required because .band-wrap is a flex item of main.page (a
+  // column flexbox): the `margin: 0 auto` centring otherwise disables stretch
+  // and shrink-wraps the band to its content width. Split bands only looked
+  // full-width by coincidence of wide content; the stacked Helm band collapsed.
+  width: 100%;
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 48px;

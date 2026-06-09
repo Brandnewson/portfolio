@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const URL = 'http://localhost:59608/';
+const out = 'scripts/_out';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto(URL, { waitUntil: 'networkidle' });
+await page.waitForTimeout(600);
+const profile = await page.$('#profile');
+await profile.screenshot({ path: `${out}/profile-day.png` });
+await page.click('#toggle');
+await page.waitForTimeout(700);
+await (await page.$('#profile')).screenshot({ path: `${out}/profile-night.png` });
+await browser.close();
+console.log('done');

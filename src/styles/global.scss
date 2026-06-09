@@ -1,6 +1,7 @@
 // Single entry point for global styles. Imported once from Shell.astro.
 // Order matters: tokens first (CSS custom properties), then reset, then base.
 
+@use 'fonts';
 @use 'tokens';
 @use 'reset';
 @use 'components';

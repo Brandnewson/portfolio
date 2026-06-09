@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import './SectionRail.scss';
 
 const SECTIONS = [
-  { id: 'work', label: 'FS Sim' },
-  { id: 'marl', label: 'MARL' },
   { id: 'helm', label: 'Helm' },
+  { id: 'marl', label: 'MARL' },
+  { id: 'work', label: 'FS Sim' },
   { id: 'profile', label: 'Profile' },
   { id: 'contact', label: 'Contact' },
 ] as const;
 
 export default function SectionRail() {
   const [visible, setVisible] = useState(false);
-  const [active, setActive] = useState<string>('work');
+  const [active, setActive] = useState<string>('helm');
   const activeRef = useRef(active);
   activeRef.current = active;
 
