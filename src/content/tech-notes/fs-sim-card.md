@@ -28,9 +28,6 @@ A 2×2 readout grid shows four values derived from the active data point:
 - **MAX G LONG** — neutral `--fg`
 - **MAX G LAT** — neutral `--fg`, always 1.3125 (the teaching moment)
 
-An italic caption links to the full writeup at `/writing/quasi-static-sim`
-(404s until the article is written — expected).
-
 ## Phosphor discipline
 
 Three phosphor elements, no more:
@@ -45,8 +42,8 @@ green is for live/attention elements only.
 
 `src/data/fs-mass-sweep.json` — 21 points, imported directly into the island
 at build time. No fetch, no loading state. Notable: `max_abs_g_lat` is flat at
-1.3125 across the entire sweep — tyre-limited, not a bug. This is the canonical
-quasi-static-sim limitation that the article writeup explains.
+1.3125 across the entire sweep — tyre-limited, not a bug. This is a canonical
+quasi-static-sim limitation of the model.
 
 ## Performance
 
@@ -65,5 +62,3 @@ the data array.
 
 - If more sweeps are added (tyre compound, drag, downforce level) the slider
   would need to become tabbed — but mass-only is the locked scope for this card.
-- The article at `/writing/quasi-static-sim` needs to be written before the
-  "Read writeup →" link resolves.

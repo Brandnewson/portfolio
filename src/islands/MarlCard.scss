@@ -108,12 +108,14 @@
 .marl-agent {
   transition: r 0.2s ease;
 
-  &.role-a1 { fill: #14CC4A; filter: drop-shadow(0 0 2px rgba(20,204,74,0.7)); }
-  &.role-a2 { fill: #FFB820; filter: drop-shadow(0 0 2px rgba(255,184,32,0.6)); }
-  &.role-a3 { fill: #4FB3FF; filter: drop-shadow(0 0 2px rgba(79,179,255,0.6)); }
-  &.role-a4 { fill: #FF5A4A; filter: drop-shadow(0 0 2px rgba(255,90,74,0.6)); }
-  &.role-base { fill: #F0F0F0; stroke: #2A2A2A; stroke-width: 1; }
-  &.role-llm  { fill: #C84AFA; filter: drop-shadow(0 0 2px rgba(200,74,250,0.7)); }
+  // Fills come from the categorical --marl-* tokens; the drop-shadow glows keep
+  // their rgba literals (the sanctioned shadow exception, mirroring each hue).
+  &.role-a1 { fill: var(--marl-a1); filter: drop-shadow(0 0 2px rgba(20,204,74,0.7)); }
+  &.role-a2 { fill: var(--marl-a2); filter: drop-shadow(0 0 2px rgba(255,184,32,0.6)); }
+  &.role-a3 { fill: var(--marl-a3); filter: drop-shadow(0 0 2px rgba(79,179,255,0.6)); }
+  &.role-a4 { fill: var(--marl-a4); filter: drop-shadow(0 0 2px rgba(255,90,74,0.6)); }
+  &.role-base { fill: var(--marl-base); stroke: var(--marl-base-stroke); stroke-width: 1; }
+  &.role-llm  { fill: var(--marl-llm); filter: drop-shadow(0 0 2px rgba(200,74,250,0.7)); }
 }
 
 // ── Slider: 10 discrete steps with generous hit targets ──
@@ -267,11 +269,11 @@
     border-radius: 50%;
     flex-shrink: 0;
 
-    &.role-a1   { background: #14CC4A; box-shadow: 0 0 6px rgba(20,204,74,0.55); }
-    &.role-a2   { background: #FFB820; box-shadow: 0 0 6px rgba(255,184,32,0.45); }
-    &.role-a3   { background: #4FB3FF; box-shadow: 0 0 6px rgba(79,179,255,0.45); }
-    &.role-a4   { background: #FF5A4A; box-shadow: 0 0 6px rgba(255,90,74,0.45); }
-    &.role-base { background: #F0F0F0; border: 1.5px solid #2A2A2A; box-sizing: border-box; }
-    &.role-llm  { background: #C84AFA; box-shadow: 0 0 6px rgba(200,74,250,0.55); }
+    &.role-a1   { background: var(--marl-a1); box-shadow: 0 0 6px rgba(20,204,74,0.55); }
+    &.role-a2   { background: var(--marl-a2); box-shadow: 0 0 6px rgba(255,184,32,0.45); }
+    &.role-a3   { background: var(--marl-a3); box-shadow: 0 0 6px rgba(79,179,255,0.45); }
+    &.role-a4   { background: var(--marl-a4); box-shadow: 0 0 6px rgba(255,90,74,0.45); }
+    &.role-base { background: var(--marl-base); border: 1.5px solid var(--marl-base-stroke); box-sizing: border-box; }
+    &.role-llm  { background: var(--marl-llm); box-shadow: 0 0 6px rgba(200,74,250,0.55); }
   }
 }

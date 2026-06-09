@@ -187,7 +187,7 @@ const hasPreview = Astro.slots.has('default');
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--mut);
@@ -229,7 +229,7 @@ const hasPreview = Astro.slots.has('default');
 }
 
 .kicker {
-  font-size: 13px;
+  font-size: var(--fs-base);
   font-style: italic;
   color: var(--emphasis);
   line-height: 1.4;
@@ -253,7 +253,7 @@ const hasPreview = Astro.slots.has('default');
 .point {
   position: relative;
   padding-left: 16px;
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.5;
   color: var(--fg2);
 
@@ -282,7 +282,7 @@ const hasPreview = Astro.slots.has('default');
 
 .why-label {
   flex-shrink: 0;
-  font-size: 9px;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--primary);
@@ -290,7 +290,7 @@ const hasPreview = Astro.slots.has('default');
 }
 
 .why-body {
-  font-size: 13px;
+  font-size: var(--fs-base);
   line-height: 1.5;
   color: var(--fg2);
 }
@@ -312,7 +312,7 @@ const hasPreview = Astro.slots.has('default');
 // small, not a button — it informs without competing with the actions above it.
 .cta-note {
   margin: 10px 0 0;
-  font-size: 12px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   color: var(--mut);
   max-width: 52ch;
@@ -325,7 +325,7 @@ const hasPreview = Astro.slots.has('default');
   padding: 8px 12px;
   border: 1px solid transparent;
   border-radius: 0;
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
@@ -345,7 +345,7 @@ const hasPreview = Astro.slots.has('default');
 }
 
 .btn-glyph {
-  font-size: 12px;
+  font-size: var(--fs-sm);
   line-height: 1;
 }
 
@@ -358,7 +358,7 @@ const hasPreview = Astro.slots.has('default');
 }
 
 .chip {
-  font-size: 9px;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   padding: 3px 7px;
@@ -418,7 +418,7 @@ const hasPreview = Astro.slots.has('default');
 .preview-marker {
   position: relative;
   z-index: 1;
-  font-size: 9px;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--phos);
@@ -428,7 +428,7 @@ const hasPreview = Astro.slots.has('default');
 .preview-hint {
   position: relative;
   z-index: 1;
-  font-size: 9px;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--mut);

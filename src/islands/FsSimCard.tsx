@@ -2,7 +2,7 @@
 //
 // Replaces the placeholder preview slot inside ProjectFeature.astro for the
 // FS Quasi-Static Sim card. Renders a mass-sweep lap-time curve with a
-// native range slider, a 2×2 readout grid, and an article entry line.
+// native range slider and a 2×2 readout grid.
 //
 // Data is bundle-resolved at build time (imported JSON). No fetch, no
 // loading state, no error handling — the 21-point sweep is tiny and

@@ -33,6 +33,19 @@
   --font-hero: 'Instrument Sans', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
+  // Type scale — shared font-size steps so component text stops diverging into
+  // ad-hoc values. Covers the label/body range; display + heading sizes keep
+  // their own bespoke clamp() values. (The interactive islands size their SVG
+  // text in viewBox units and are intentionally not on this scale.)
+  --fs-3xs:  9px;
+  --fs-2xs:  10px;
+  --fs-xs:   11px;
+  --fs-sm:   12px;
+  --fs-base: 13px;
+  --fs-md:   14px;
+  --fs-lg:   15px;
+  --fs-xl:   17px;
+
   // ── 2. Semantic tokens (day) ──
   // Instrument bar — always dark surface, light text
   --bar-bg:        var(--ink);
@@ -90,6 +103,18 @@
   // near-black widget surface (raw bordeaux would disappear there).
   --interactive:      #5D1A29;
   --interactive-glow: none;
+
+  // MARL agent-role palette — categorical data-viz colours for the racing-sim
+  // island (agent discs + legend swatches). These are fixed identity hues, the
+  // same in both themes, so an agent keeps its colour when the page toggles.
+  // The green here is a viz hue, distinct in role from the --phos live token.
+  --marl-a1:          #14CC4A;
+  --marl-a2:          #FFB820;
+  --marl-a3:          #4FB3FF;
+  --marl-a4:          #FF5A4A;
+  --marl-llm:         #C84AFA;
+  --marl-base:        #F0F0F0;
+  --marl-base-stroke: #2A2A2A;
 }
 
 [data-theme="night"] {

@@ -58,7 +58,7 @@ const notes = (await getCollection('tech-notes')).sort((a, b) =>
 }
 
 .eyebrow {
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--mut);
@@ -76,7 +76,7 @@ const notes = (await getCollection('tech-notes')).sort((a, b) =>
 }
 
 .writing-intro {
-  font-size: 15px;
+  font-size: var(--fs-lg);
   line-height: 1.55;
   color: var(--fg2);
   max-width: 56ch;
@@ -121,7 +121,7 @@ const notes = (await getCollection('tech-notes')).sort((a, b) =>
 // Panel id is a live system marker — phosphor is allowed here (matches the
 // project-band .pid treatment).
 .note-pid {
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.16em;
   color: var(--phos);
   text-shadow: var(--phos-glow);
@@ -145,14 +145,14 @@ const notes = (await getCollection('tech-notes')).sort((a, b) =>
 }
 
 .note-meta {
-  font-size: 9px;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--mut);
 }
 
 .note-arrow {
-  font-size: 15px;
+  font-size: var(--fs-lg);
   color: var(--mut);
   transition: transform 0.15s ease, color 0.15s ease;
 }

@@ -57,24 +57,24 @@ import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
 // sub-labels, like Profile's .col-key rows. Roles are horizontal wrapping chips
 // (not a vertical stack) so the three columns balance instead of leaving a void.
 .lookingfor { margin: 48px auto 0; max-width: 960px; text-align: left; border-top: 1px solid var(--bd); border-bottom: 1px solid var(--bd); padding: 28px 0; }
-.lf-head { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--mut); margin-bottom: 24px; }
+.lf-head { font-size: var(--fs-2xs); letter-spacing: 0.26em; text-transform: uppercase; color: var(--mut); margin-bottom: 24px; }
 .lf-grid { display: grid; grid-template-columns: 1.7fr 1.2fr 0.7fr; gap: 40px; align-items: start; }
-.lf-sub { display: block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--primary); margin-bottom: 16px; }
+.lf-sub { display: block; font-size: var(--fs-xs); letter-spacing: 0.22em; text-transform: uppercase; color: var(--primary); margin-bottom: 16px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip-lg { font-size: 12.5px; padding: 8px 13px; border: 1px solid var(--bd); color: var(--fg); background: var(--bg2); white-space: nowrap; }
+.chip-lg { font-size: var(--fs-base); padding: 8px 13px; border: 1px solid var(--bd); color: var(--fg); background: var(--bg2); white-space: nowrap; }
 .cities { display: flex; gap: 26px; }
 .city { display: flex; flex-direction: column; gap: 3px; }
 .city-name { font-family: var(--font-hero); font-size: 20px; font-weight: 600; line-height: 1.05; color: var(--fg); }
-.city-coord { font-size: 10.5px; color: var(--mut); letter-spacing: 0.04em; }
-.avail-val { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
+.city-coord { font-size: var(--fs-xs); color: var(--mut); letter-spacing: 0.04em; }
+.avail-val { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-md); letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; }
 
 .cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 36px; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 15px 26px; border: 1px solid var(--bd); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); text-decoration: none; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 15px 26px; border: 1px solid var(--bd); font-size: var(--fs-base); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); text-decoration: none; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
 .btn:hover { color: var(--primary); border-color: var(--primary); }
 .btn--primary { border-color: var(--primary); background: var(--primary-tint); color: var(--primary); }
 .btn--primary:hover { border-color: var(--primary-hover); color: var(--primary-hover); }
-.foot { margin-top: 56px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+.foot { margin-top: 56px; font-size: var(--fs-2xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 .foot a { color: var(--mut); text-decoration: none; }
 .foot a:hover { color: var(--primary); }
 .mono { font-family: var(--font-mono); }

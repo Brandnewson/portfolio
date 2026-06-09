@@ -19,6 +19,16 @@ export const OTHER_PROJECTS: OtherProject[] = [
     ],
   },
   {
+    title: 'Travelindr',
+    stack: ['agile', 'a/b testing', 'product strategy', 'fundraising'],
+    oneLiner: 'Co-founder and CEO of a group travel-itinerary generator, taken from idea to an incubated MVP.',
+    bullets: [
+      'Founded Travelindr, a group travel-itinerary generator, in a small team implementing Agile practices',
+      'Communicated core company strategy to the team, backed by qualitative focus group data using A/B testing',
+      'Pitched to investors, reached Minimum Viable Product (MVP) status, and was incubated at NEC',
+    ],
+  },
+  {
     title: 'Azure Serverless Distributed Pipeline',
     stack: ['python', 'azure functions', 'blob', 'queue', 'serverless'],
     oneLiner: 'An event-driven distributed pipeline on Azure for serverless analysis at scale.',
@@ -53,16 +63,6 @@ export const OTHER_PROJECTS: OtherProject[] = [
     bullets: [
       'Developed a 2D incompressible fluid solver analysing radiator angle effects on cooling, pressure drop and drag',
       'Automated batch simulations and visualisations to optimise radiator design with parallel processing',
-    ],
-  },
-  {
-    title: 'Travelindr',
-    stack: ['agile', 'a/b testing', 'product strategy', 'fundraising'],
-    oneLiner: 'Co-founder and CEO of a group travel-itinerary generator, taken from idea to an incubated MVP.',
-    bullets: [
-      'Founded Travelindr, a group travel-itinerary generator, in a small team implementing Agile practices',
-      'Communicated core company strategy to the team, backed by qualitative focus group data using A/B testing',
-      'Pitched to investors, reached Minimum Viable Product (MVP) status, and was incubated in an esteemed multi-national company',
     ],
   },
 ];

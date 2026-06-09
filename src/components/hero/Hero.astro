@@ -41,7 +41,7 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
    labelled block of its own. Wraps the toggle under the eyebrow on narrow
    screens. */
 .eyebrow-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 16px 0 22px; }
-.eyebrow { font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--primary); margin: 0; }
+.eyebrow { font-size: var(--fs-xs); letter-spacing: 0.32em; text-transform: uppercase; color: var(--primary); margin: 0; }
 /* The toggle's shared styles use --bar-* (tuned for the dark InstrumentBar).
    On the hero background, remap to page fg/mut so border + inactive glyph stay visible. */
 .eyebrow-row :global(.theme-toggle) { --bar-fg: var(--fg); --bar-fg-mut: var(--mut); flex-shrink: 0; }
@@ -53,7 +53,7 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
 
 .sub { font-size: clamp(16px, 1.5vw, 20px); line-height: 1.5; color: var(--fg2); max-width: 54ch; margin-top: 24px; }
 
-.status { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); }
+.status { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); }
 .status b { color: var(--phos); text-shadow: var(--phos-glow); font-weight: 600; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; animation: pulse 2.4s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
@@ -64,9 +64,9 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
 .heronav { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
 .navcta { display: inline-flex; flex-direction: column; gap: 6px; min-width: 240px; padding: 16px 18px; border: 1px solid var(--bd); text-decoration: none; background: transparent; transition: border-color 0.15s ease, background 0.15s ease; }
 .nc-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-.nc-label { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); }
-.nc-arrow { font-size: 15px; color: var(--mut); transition: transform 0.15s ease, color 0.15s ease; }
-.nc-sub { font-size: 11px; color: var(--mut); }
+.nc-label { font-size: var(--fs-sm); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); }
+.nc-arrow { font-size: var(--fs-lg); color: var(--mut); transition: transform 0.15s ease, color 0.15s ease; }
+.nc-sub { font-size: var(--fs-xs); color: var(--mut); }
 .navcta:hover { border-color: var(--primary); }
 .navcta:hover .nc-label { color: var(--primary); }
 .navcta:hover .nc-arrow { transform: translateY(3px); color: var(--primary); }
@@ -78,9 +78,9 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
    tint + primary border) since the recruiter's first want is the CV. Uses
    --primary (the brand/CTA colour), never phosphor. */
 .quick-links { display: flex; flex-wrap: wrap; gap: 8px; }
-.qlink { display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border: 1px solid var(--bd); color: var(--fg); text-decoration: none; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
+.qlink { display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border: 1px solid var(--bd); color: var(--fg); text-decoration: none; font-size: var(--fs-xs); letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
 .qlink:hover { color: var(--primary); border-color: var(--primary); }
-.ql-glyph { font-size: 13px; line-height: 1; color: var(--mut); transition: color 0.15s ease; }
+.ql-glyph { font-size: var(--fs-base); line-height: 1; color: var(--mut); transition: color 0.15s ease; }
 .qlink:hover .ql-glyph { color: var(--primary); }
 .qlink--cv { border-color: var(--primary); background: var(--primary-tint); color: var(--primary); }
 .qlink--cv .ql-glyph { color: var(--primary); }

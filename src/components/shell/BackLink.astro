@@ -21,7 +21,7 @@ const { href = '/', label = 'Back' } = Astro.props;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-decoration: none;
@@ -34,7 +34,7 @@ const { href = '/', label = 'Back' } = Astro.props;
 }
 
 .back-glyph {
-  font-size: 13px;
+  font-size: var(--fs-base);
   line-height: 1;
   transition: transform 0.15s ease;
 }

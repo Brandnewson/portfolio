@@ -31,7 +31,6 @@ export const BIO =
 export const EXPERIENCE: ExperienceItem[] = [
   { when: '2024 – 25', org: 'Jaguar TCS Racing', role: 'Junior Strategy & Software Engineer', location: 'Kidlington, UK' },
   { when: '2020 – 22', org: 'Republic of Singapore Navy', role: 'Marine Systems Specialist Technician', location: 'Singapore' },
-  { when: '2019 – 20', org: 'Travelindr', role: 'Co-founder & CEO', location: 'Singapore' },
 ];
 
 export const EDUCATION: EducationItem[] = [

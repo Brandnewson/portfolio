@@ -50,7 +50,7 @@ const { Content } = await render(note);
 }
 
 .eyebrow {
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--phos);
@@ -69,14 +69,14 @@ const { Content } = await render(note);
 }
 
 .note-page-component {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.06em;
   color: var(--fg2);
   margin: 4px 0 0;
 }
 
 .note-page-tags {
-  font-size: 9px;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--mut);
@@ -87,7 +87,7 @@ const { Content } = await render(note);
 // Scoped prose styles — :global so they reach the markdown Astro injects into
 // .prose (which this component's scoping wouldn't otherwise hash-match).
 .prose {
-  font-size: 15px;
+  font-size: var(--fs-lg);
   line-height: 1.65;
   color: var(--fg2);
 
@@ -102,7 +102,7 @@ const { Content } = await render(note);
   }
 
   :global(h3) {
-    font-size: 15px;
+    font-size: var(--fs-lg);
     font-weight: 600;
     color: var(--fg);
     margin: 22px 0 8px;
