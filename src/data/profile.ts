@@ -58,7 +58,7 @@ export const EDUCATION: EducationItem[] = [
 export const STACK: StackRow[] = [
   { key: 'Languages', value: 'Python, TypeScript, C++, Rust, MATLAB, Java' },
   { key: 'AI / ML', value: 'PyTorch, RAG, Claude Code, Codex, agentic harnesses, NumPy / SciPy' },
-  { key: 'Web / Infra', value: 'React, Node, FastAPI / Flask, MongoDB, AWS, Azure, Docker, CI/CD' },
+  { key: 'Web / Infra', value: 'React, Node, FastAPI / Flask, MongoDB, AWS, Azure, Kubernetes, CI/CD' },
   { key: 'Tools', value: 'Git, Docker, Azure DevOps, Plotly' },
 ];
 

@@ -1,0 +1,96 @@
+---
+// Other projects — a collapsible breadth list that sits after the featured
+// bands and before Profile. Native <details>/<summary> (no JS, free keyboard +
+// aria). Collapsed shows title + one-line summary + stack chips so a skimmer
+// who never expands still gets the breadth signal; expanding reveals the
+// bullets. Matches the band vocabulary (squared primary pips, mono chips, token
+// colours). No phosphor here — nothing is a live marker.
+import { OTHER_PROJECTS } from '../../data/other-projects';
+---
+<section class="other-projects" id="more">
+  <div class="wrap">
+    <span class="sec-rule" aria-hidden="true"></span>
+    <header class="op-head">
+      <div class="op-eyebrow mono"><span class="op-kicker">MORE WORK</span></div>
+      <h2 class="op-title">Other projects</h2>
+      <p class="op-sub">A wider sweep across domains. Expand any row for detail.</p>
+    </header>
+
+    <ul class="op-list" role="list">
+      {OTHER_PROJECTS.map((p) => (
+        <li>
+          <details class="op-item">
+            <summary class="op-summary">
+              <span class="op-summary-row">
+                <span class="op-name">{p.title}</span>
+                <span class="op-indicator" aria-hidden="true"></span>
+              </span>
+              <span class="op-oneliner">{p.oneLiner}</span>
+              <ul class="op-chips" role="list">
+                {p.stack.map((tech) => <li class="op-chip mono">{tech}</li>)}
+              </ul>
+            </summary>
+            <div class="op-detail">
+              <ul class="op-bullets" role="list">
+                {p.bullets.map((b) => <li class="op-bullet">{b}</li>)}
+              </ul>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style lang="scss">
+.other-projects { padding: 72px 0 24px; }
+
+/* Top divider, matching the accent rule that opens Profile / each band. */
+.sec-rule { display: block; height: 2px; width: 100%; background: var(--rule); margin-bottom: 44px; }
+
+.op-head { margin-bottom: 28px; max-width: 60ch; }
+.op-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mut); margin-bottom: 12px; }
+.op-kicker { color: var(--primary); font-weight: 600; }
+.op-title { font-family: var(--font-hero); font-weight: 600; font-size: clamp(28px, 3vw, 42px); line-height: 1.05; letter-spacing: -0.015em; color: var(--fg); margin: 0; }
+.op-sub { margin-top: 14px; font-size: 14px; line-height: 1.5; color: var(--fg2); }
+
+.op-list { list-style: none; margin: 0; padding: 0; }
+
+/* Each row is a native <details>; a top border makes the list read as a ledger,
+   matching the timeline / stack rows elsewhere. */
+.op-item { border-top: 1px solid var(--bd); }
+.op-list li:last-child .op-item { border-bottom: 1px solid var(--bd); }
+
+.op-summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 20px 0;
+  display: block;
+  /* Strip the native disclosure triangle (we draw our own +/− indicator). */
+  &::-webkit-details-marker { display: none; }
+  &:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+}
+
+.op-summary-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.op-name { font-size: 17px; font-weight: 600; color: var(--fg); transition: color 0.15s ease; }
+.op-summary:hover .op-name { color: var(--primary); }
+
+/* +/− indicator drawn from a glyph so it needs no extra markup. */
+.op-indicator { flex-shrink: 0; width: 16px; text-align: center; color: var(--mut); font-family: var(--font-mono); font-size: 15px; line-height: 1; transition: color 0.15s ease; }
+.op-indicator::after { content: '+'; }
+.op-item[open] .op-indicator::after { content: '−'; } /* U+2212 minus sign */
+.op-summary:hover .op-indicator { color: var(--primary); }
+
+.op-oneliner { display: block; margin-top: 6px; font-size: 13.5px; line-height: 1.5; color: var(--fg2); max-width: 70ch; }
+
+.op-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; margin: 12px 0 0; padding: 0; }
+.op-chip { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--bd); color: var(--mut); }
+
+/* Expanded content. */
+.op-detail { padding: 0 0 22px; }
+.op-bullets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; max-width: 78ch; }
+.op-bullet { position: relative; padding-left: 16px; font-size: 13.5px; line-height: 1.55; color: var(--fg2); }
+.op-bullet::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 4px; height: 4px; background: var(--primary); }
+
+.mono { font-family: var(--font-mono); }
+</style>

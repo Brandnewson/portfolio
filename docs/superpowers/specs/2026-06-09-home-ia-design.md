@@ -111,6 +111,32 @@ No proficiency bars (they read junior).
 6. CV asset in public, wire the CV download, and fix the shouty report download
    filename to a clean convention.
 
+## Other projects — curated content
+
+Curated from a longer list down to 5, optimised for distinct domains so the
+section reads as breadth rather than more motorsport. Order leads with the
+positioning-aligned, non-racing pieces so range registers before the two
+motorsport entries. Cut from the long list: Radiator Thermal Sim (weakest,
+overlaps the CFD sim), EV BMS Emulator (overlaps the ICE DAQ as FS embedded
+C++, kept the DAQ for its collaboration signal), CoHive internship (it is
+experience, not a built project, belongs in the Profile timeline).
+
+1. Aerodynamic Concept RAG Analyser — Python, RAG, vector DBs, LLMs, MCP, FastAPI
+2. Azure Serverless Distributed Pipeline — Python, Azure Functions, Blob, Queue, serverless
+3. E-commerce Shopify Store — Shopify, Facebook Ads, Photoshop, Premiere Pro
+4. FS ICE Data Acquisition System — C++, Arduino, Git
+5. 2D CFD Radiator Optimisation Simulator — Rust, numerical methods, parallelism
+
+## Repos and assets
+
+- Quasi-Static Sim repo: https://github.com/LGRSimulations/LGR_FullTrackQSLapTimeSim
+- MARL repo: https://github.com/Brandnewson/F1_StrategySimulator
+- Helm: no public repo (live product). Privacy line stands in.
+- CV: wire the button to `/Branson-Tay-CV.pdf`. FLAG — the current source CV is
+  motorsport-branded, which contradicts the full-stack/AI/FDE positioning. The
+  downloadable CV should be re-oriented before deploy. The button path is wired
+  so the correct PDF can be dropped in without a code change.
+
 ## Constraints (unchanged project rules)
 
 - SCSS only, all colours via tokens in `_tokens.scss`, no Tailwind / inline /

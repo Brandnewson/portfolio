@@ -15,7 +15,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  min-width: 124px;
+  min-width: 74px;
   border: 1px solid var(--bar-fg-mut);
   border-radius: 0;
   overflow: hidden;
@@ -28,12 +28,15 @@
 
   &:hover { border-color: var(--primary); }
 
+  // Day/night are now sun/moon glyphs rather than text, so the cells are sized
+  // for an icon (larger glyph, no letter-spacing) instead of a word.
   .label {
     position: relative;
     z-index: 1;
-    padding: 5px 0;
-    font-size: 10px;
-    letter-spacing: 0.22em;
+    padding: 4px 0;
+    font-size: 13px;
+    line-height: 1.1;
+    letter-spacing: 0;
     text-align: center;
     color: var(--bar-fg-mut);
     pointer-events: none;

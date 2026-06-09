@@ -13,8 +13,8 @@ export default function ThemeToggle() {
       aria-label={`Switch to ${theme === 'day' ? 'night' : 'day'} mode`}
       onClick={toggleTheme}
     >
-      <span className={`label ${theme === 'day' ? 'is-active' : ''}`}>DAY</span>
-      <span className={`label ${theme === 'night' ? 'is-active' : ''}`}>NIGHT</span>
+      <span className={`label ${theme === 'day' ? 'is-active' : ''}`} aria-hidden="true">☀</span>
+      <span className={`label ${theme === 'night' ? 'is-active' : ''}`} aria-hidden="true">☾</span>
       <span
         className="slider"
         aria-hidden="true"

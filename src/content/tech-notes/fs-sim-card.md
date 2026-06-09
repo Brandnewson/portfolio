@@ -1,7 +1,7 @@
 ---
 id: fs-sim-card
 title: FS Quasi-Static Sim card
-panel: PRJ/001
+panel: PRJ/003
 component: src/islands/FsSimCard.tsx
 mechanism: mass-slider
 substrate: quasi-static-lap-time-sweep

@@ -213,50 +213,20 @@ export default function HelmArchitecture(): ReactNode {
   const zoomIn = () => setZoom((z) => Math.min(Z_MAX, +(z + Z_STEP).toFixed(2)));
 
   const closeTimer = useRef<number | null>(null);
-  const hoverTimer = useRef<number | null>(null);
-  const openedByHover = useRef(false);
-  const openedAt = useRef(0);
-  // After a close, briefly ignore hover-opens so dismissing (Esc/✕) while the
-  // cursor still rests on the diagram doesn't immediately reopen it.
-  const reopenBlockedUntil = useRef(0);
-  const now = () => (typeof performance !== 'undefined' ? performance.now() : 0);
 
-  const openOverlay = (byHover = false) => {
+  // The overlay is opened only by the explicit Expand button (desktop, touch,
+  // and keyboard alike) — hovering the diagram does nothing, so a reader can
+  // never fall into it by accident and then be unsure how to interact.
+  const openOverlay = () => {
     if (closeTimer.current != null) { clearTimeout(closeTimer.current); closeTimer.current = null; }
-    openedByHover.current = byHover;
-    openedAt.current = now();
     setZoom(1);
     setExpanded(true);
     requestAnimationFrame(() => setShow(true)); // next frame → eased fade/scale in
   };
   const closeOverlay = () => {
     setShow(false);
-    openedByHover.current = false;
-    reopenBlockedUntil.current = now() + 450;
     if (closeTimer.current != null) clearTimeout(closeTimer.current);
     closeTimer.current = window.setTimeout(() => { setExpanded(false); closeTimer.current = null; }, 320);
-  };
-
-  // Desktop: hovering the diagram opens the overlay after a short intent delay
-  // (so scrolling past doesn't trigger it). Touch has no hover and uses the
-  // explicit Expand button instead.
-  const handleDiagramEnter = () => {
-    if (expanded) return;
-    if (now() < reopenBlockedUntil.current) return;
-    if (typeof window === 'undefined' || !window.matchMedia('(hover: hover)').matches) return;
-    if (hoverTimer.current != null) clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => openOverlay(true), 180);
-  };
-  const handleDiagramLeave = () => {
-    if (hoverTimer.current != null) { clearTimeout(hoverTimer.current); hoverTimer.current = null; }
-  };
-  // Pointer leaving the panel retracts it — but only for hover-opened overlays
-  // (button/keyboard opens stay until Esc/✕), and only after a grace window so
-  // the open animation can't immediately bounce it closed.
-  const handlePanelLeave = () => {
-    if (!openedByHover.current) return;
-    if (now() - openedAt.current < 250) return;
-    closeOverlay();
   };
 
   // While the overlay is open: close on Escape and lock page scroll behind it.
@@ -276,10 +246,9 @@ export default function HelmArchitecture(): ReactNode {
     };
   }, [expanded]);
 
-  // Clear any pending timers on unmount.
+  // Clear any pending timer on unmount.
   useEffect(() => () => {
     if (closeTimer.current != null) clearTimeout(closeTimer.current);
-    if (hoverTimer.current != null) clearTimeout(hoverTimer.current);
   }, []);
 
   // Edges touching the active node, and the neighbour set those edges reach.
@@ -468,22 +437,14 @@ export default function HelmArchitecture(): ReactNode {
     <div className="helm-arch">
       <div className="helm-arch-head">
         <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
-        {/* Desktop affordance: a quiet hint (hover opens it). Touch devices hide
-            this and show the Expand button instead — see the SCSS media query. */}
-        <span className="helm-arch-hint-hover mono" aria-hidden="true">
-          <span className="hx-icon">⤢</span> Hover to expand
-        </span>
-        <button type="button" className="helm-arch-expand mono" onClick={() => openOverlay(false)} aria-haspopup="dialog">
+        {/* The diagram is compact at rest; the Expand button is the only way to
+            open the full-screen view, on every device. */}
+        <button type="button" className="helm-arch-expand mono" onClick={openOverlay} aria-haspopup="dialog">
           <span className="hx-icon" aria-hidden="true">⤢</span> Expand
         </button>
       </div>
 
-      <div
-        className="helm-arch-scroll"
-        aria-hidden={expanded || undefined}
-        onMouseEnter={handleDiagramEnter}
-        onMouseLeave={handleDiagramLeave}
-      >
+      <div className="helm-arch-scroll" aria-hidden={expanded || undefined}>
         {renderSvg(false)}
       </div>
       <span className="helm-arch-swipe mono" aria-hidden="true">swipe to explore the diagram →</span>
@@ -498,7 +459,7 @@ export default function HelmArchitecture(): ReactNode {
           aria-label="Helm system topology, expanded view"
         >
           <div className="helm-overlay-backdrop" onClick={closeOverlay} />
-          <div className="helm-overlay-panel" onMouseLeave={handlePanelLeave}>
+          <div className="helm-overlay-panel">
             <div className="helm-overlay-head">
               <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
               {zoomControl}

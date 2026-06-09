@@ -1,7 +1,7 @@
 ---
 id: helm-architecture
 title: Helm System Topology diagram
-panel: PRJ/003
+panel: PRJ/001
 component: src/islands/HelmArchitecture.tsx
 mechanism: node-hover
 substrate: deployment-topology

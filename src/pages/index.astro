@@ -3,6 +3,7 @@ import Shell from '../layouts/Shell.astro';
 import Hero from '../components/hero/Hero.astro';
 import ProjectFeature from '../components/projects/ProjectFeature.astro';
 import Profile from '../components/profile/Profile.astro';
+import OtherProjects from '../components/projects/OtherProjects.astro';
 import Closing from '../components/shell/Closing.astro';
 import SectionRail from '../islands/SectionRail.tsx';
 import FsSimCard from '../islands/FsSimCard';
@@ -14,7 +15,7 @@ import HelmArchitecture from '../islands/HelmArchitecture';
 
   <div class="band-wrap">
     <ProjectFeature
-      anchorId="helm"
+      anchorId="work"
       panelId="PRJ/001"
       tier="FEATURED"
       title="Helm"
@@ -28,6 +29,7 @@ import HelmArchitecture from '../islands/HelmArchitecture';
       stack={['typescript', 'fastapi', 'k8s', 'sqs', 'cloudflare']}
       route="https://helmcv.app"
       routeLabel="Launch Helm"
+      note="Source is private as Helm is a live product. The diagram shows the architecture instead."
     >
       <HelmArchitecture client:load />
     </ProjectFeature>
@@ -49,6 +51,8 @@ import HelmArchitecture from '../islands/HelmArchitecture';
       stack={['python', 'pytorch', 'dqn family']}
       route="/report"
       routeLabel="View report"
+      repo="https://github.com/Brandnewson/F1_StrategySimulator"
+      repoLabel="View code"
       reverse
     >
       <MarlCard client:load />
@@ -57,7 +61,7 @@ import HelmArchitecture from '../islands/HelmArchitecture';
 
   <div class="band-wrap">
     <ProjectFeature
-      anchorId="work"
+      anchorId="sim"
       panelId="PRJ/003"
       tier="SHIPPING"
       title="Quasi-Static Lap Time Simulator"
@@ -68,13 +72,17 @@ import HelmArchitecture from '../islands/HelmArchitecture';
         "Python FastAPI web app for engineers to easily use with RAG AI chatbot",
       ]}
       why="Let engineers reason design choices in minutes, instead of hours of expensive track time"
-      stack={['python', 'linear programming', 'web development', 'data modelling']}
+      stack={['python', 'fastapi', 'api design', 'linear programming', 'web development', 'data modelling']}
       route="https://lgr-simulator.fly.dev/"
       routeLabel="Launch simulator"
+      repo="https://github.com/LGRSimulations/LGR_FullTrackQSLapTimeSim"
+      repoLabel="View code"
     >
       <FsSimCard client:load />
     </ProjectFeature>
   </div>
+
+  <OtherProjects />
 
   <Profile />
   <Closing />

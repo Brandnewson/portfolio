@@ -34,6 +34,12 @@ interface Props {
   // Friendly label for the route button. Without it the raw `route` is shown,
   // which is fine for short paths but ugly for full URLs.
   routeLabel?: string;
+  // Optional public code repo. Renders a second secondary button (↗, new tab)
+  // alongside the route button. Omit for projects with no public source.
+  repo?: string;
+  repoLabel?: string;
+  // Optional quiet line beneath the CTA row (e.g. explaining a missing repo).
+  note?: string;
   download?: string;
   downloadAs?: string;
   // When true, swap the column order so the preview sits on the LEFT and the
@@ -52,6 +58,9 @@ const {
   stack,
   route,
   routeLabel,
+  repo,
+  repoLabel,
+  note,
   download,
   downloadAs,
   reverse = false,
@@ -91,11 +100,12 @@ const hasPreview = Astro.slots.has('default');
     )}
 
     <div class="cta-row">
-      {download ? (
+      {download && (
         <a class="btn btn--secondary mono" href={download} download={downloadAs ?? true}>
           <span class="btn-glyph" aria-hidden="true">↓</span> {downloadLabel}
         </a>
-      ) : route && (
+      )}
+      {route && (
         <a
           class="btn btn--secondary mono"
           href={route}
@@ -105,7 +115,19 @@ const hasPreview = Astro.slots.has('default');
           {routeText} <span class="btn-glyph" aria-hidden="true">↗</span>
         </a>
       )}
+      {repo && (
+        <a
+          class="btn btn--secondary mono"
+          href={repo}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {repoLabel ?? 'View code'} <span class="btn-glyph" aria-hidden="true">↗</span>
+        </a>
+      )}
     </div>
+
+    {note && <p class="cta-note">{note}</p>}
 
     <ul class="stack" role="list">
       {stack.map((tech) => <li class="chip mono">{tech}</li>)}
@@ -284,6 +306,16 @@ const hasPreview = Astro.slots.has('default');
   &:empty {
     display: none;
   }
+}
+
+// Quiet explanatory line under the CTA row (e.g. why a repo is absent). Muted,
+// small, not a button — it informs without competing with the actions above it.
+.cta-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--mut);
+  max-width: 52ch;
 }
 
 .btn {
