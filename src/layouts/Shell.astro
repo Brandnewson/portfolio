@@ -4,10 +4,20 @@ import InstrumentBar from '../components/shell/InstrumentBar.astro';
 
 interface Props {
   title?: string;
+  description?: string;
   hideBar?: boolean;
 }
 
-const { title = 'Branson — Portfolio', hideBar = false } = Astro.props;
+const {
+  title = 'Branson Tay · Portfolio',
+  description = 'Branson Tay, full-stack engineer building applied-AI tools that ship. Work across AI, simulation, and forward-deployed systems. Open to roles in London and New York.',
+  hideBar = false,
+} = Astro.props;
+
+// Astro.site is set in astro.config.mjs, so these resolve to absolute URLs —
+// required for canonical and for social cards (OG/Twitter need absolute image URLs).
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og.png', Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +25,25 @@ const { title = 'Branson — Portfolio', hideBar = false } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Open Graph: how the link renders when shared (LinkedIn, Slack, iMessage). -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Branson Tay" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter / X large-image card. -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
 
   <!--
     Anti-flash: set data-theme synchronously from localStorage BEFORE styles

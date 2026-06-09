@@ -13,7 +13,10 @@ export async function getStaticPaths() {
 const { note } = Astro.props;
 const { Content } = await render(note);
 ---
-<Shell title={`${note.data.title} — Branson Tay`}>
+<Shell
+  title={`${note.data.title} · Branson Tay`}
+  description={`How the ${note.data.title} works, and the engineering reasoning behind it.`}
+>
   <article class="note-page">
     <BackLink href="/writing" label="All notes" />
 

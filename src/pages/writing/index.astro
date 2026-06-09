@@ -10,7 +10,10 @@ const notes = (await getCollection('tech-notes')).sort((a, b) =>
   a.data.panel.localeCompare(b.data.panel),
 );
 ---
-<Shell title="Writing · Branson Tay">
+<Shell
+  title="Writing · Branson Tay"
+  description="Short engineering notes on how the interactive pieces of this site are built, and the reasoning behind each one."
+>
   <section class="writing">
     <BackLink href="/#work" label="Back to work" />
 
