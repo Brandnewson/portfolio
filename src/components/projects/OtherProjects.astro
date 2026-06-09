@@ -26,9 +26,11 @@ import { OTHER_PROJECTS } from '../../data/other-projects';
                 <span class="op-indicator" aria-hidden="true"></span>
               </span>
               <span class="op-oneliner">{p.oneLiner}</span>
-              <ul class="op-chips" role="list">
-                {p.stack.map((tech) => <li class="op-chip mono">{tech}</li>)}
-              </ul>
+              {/* Chips are spans, not a <ul>: only phrasing content is valid
+                  inside <summary>, and this keeps the toggle's accessible name sane. */}
+              <span class="op-chips">
+                {p.stack.map((tech) => <span class="op-chip mono">{tech}</span>)}
+              </span>
             </summary>
             <div class="op-detail">
               <ul class="op-bullets" role="list">

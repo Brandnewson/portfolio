@@ -15,7 +15,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  min-width: 74px;
+  // Two near-square cells sized for a single glyph each (sun / moon), not the
+  // old DAY/NIGHT words.
+  min-width: 64px;
   border: 1px solid var(--bar-fg-mut);
   border-radius: 0;
   overflow: hidden;
@@ -33,9 +35,9 @@
   .label {
     position: relative;
     z-index: 1;
-    padding: 4px 0;
-    font-size: 13px;
-    line-height: 1.1;
+    padding: 6px 0;
+    font-size: 15px;
+    line-height: 1;
     letter-spacing: 0;
     text-align: center;
     color: var(--bar-fg-mut);

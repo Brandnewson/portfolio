@@ -1,6 +1,6 @@
-// MarlCard — interactive viz for PRJ/001.
+// MarlCard — interactive viz for PRJ/002.
 //
-// Replaces the placeholder preview slot inside ProjectPanel.astro for the
+// Replaces the placeholder preview slot inside ProjectFeature.astro for the
 // MARL Racing Sim card. Renders the real Spa-Francorchamps centreline plus
 // per-phase animated agents, a discrete phase slider, and a narrative panel.
 //

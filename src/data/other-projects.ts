@@ -62,7 +62,7 @@ export const OTHER_PROJECTS: OtherProject[] = [
     bullets: [
       'Founded Travelindr, a group travel-itinerary generator, in a small team implementing Agile practices',
       'Communicated core company strategy to the team, backed by qualitative focus group data using A/B testing',
-      'Pitched to investors, reached Minimal-Viable Product status, and was incubated in an esteemed multi-national company',
+      'Pitched to investors, reached Minimum Viable Product (MVP) status, and was incubated in an esteemed multi-national company',
     ],
   },
 ];

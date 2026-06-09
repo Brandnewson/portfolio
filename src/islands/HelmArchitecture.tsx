@@ -213,6 +213,7 @@ export default function HelmArchitecture(): ReactNode {
   const zoomIn = () => setZoom((z) => Math.min(Z_MAX, +(z + Z_STEP).toFixed(2)));
 
   const closeTimer = useRef<number | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   // The overlay is opened only by the explicit Expand button (desktop, touch,
   // and keyboard alike) — hovering the diagram does nothing, so a reader can
@@ -229,10 +230,36 @@ export default function HelmArchitecture(): ReactNode {
     closeTimer.current = window.setTimeout(() => { setExpanded(false); closeTimer.current = null; }, 320);
   };
 
-  // While the overlay is open: close on Escape and lock page scroll behind it.
+  // While the overlay is open it behaves as a real modal dialog: move focus
+  // into it, trap Tab within the panel, close on Escape, lock page scroll, and
+  // restore focus to the trigger on close.
   useEffect(() => {
     if (!expanded) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeOverlay(); };
+    const panel = panelRef.current;
+    const prevFocused = document.activeElement as HTMLElement | null;
+    const focusable = () =>
+      panel
+        ? Array.from(
+            panel.querySelectorAll<HTMLElement>(
+              'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+            ),
+          )
+        : [];
+    // Initial focus lands on the Close button rather than the first zoom control.
+    (panel?.querySelector('.helm-overlay-close') as HTMLElement | null)?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { closeOverlay(); return; }
+      if (e.key !== 'Tab' || !panel) return;
+      const items = focusable();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const current = document.activeElement as HTMLElement | null;
+      if (current && !panel.contains(current)) { e.preventDefault(); first.focus(); }
+      else if (e.shiftKey && current === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && current === last) { e.preventDefault(); first.focus(); }
+    };
     document.addEventListener('keydown', onKey);
     const docEl = document.documentElement;
     const prevHtml = docEl.style.overflow;
@@ -243,6 +270,7 @@ export default function HelmArchitecture(): ReactNode {
       document.removeEventListener('keydown', onKey);
       docEl.style.overflow = prevHtml;
       document.body.style.overflow = prevBody;
+      prevFocused?.focus?.();
     };
   }, [expanded]);
 
@@ -419,7 +447,7 @@ export default function HelmArchitecture(): ReactNode {
             <span className="helm-legend-key mono"><span className="helm-swatch is-aws" />AWS managed</span>
             <span className="helm-legend-key mono"><span className="helm-swatch is-ext" />external SaaS</span>
           </div>
-          <p className="helm-legend-note">Helm exposes one public surface (<span className="mono">web</span>) and keeps every other service private behind a shared key. Hover any component to see what it does, and why it sits where it does.</p>
+          <p className="helm-legend-note">Helm exposes one public surface (<span className="mono">web</span>) and keeps every other service private behind a shared key. Select any component to see what it does, and why it sits where it does.</p>
         </div>
       )}
     </div>
@@ -459,7 +487,7 @@ export default function HelmArchitecture(): ReactNode {
           aria-label="Helm system topology, expanded view"
         >
           <div className="helm-overlay-backdrop" onClick={closeOverlay} />
-          <div className="helm-overlay-panel">
+          <div className="helm-overlay-panel" ref={panelRef}>
             <div className="helm-overlay-head">
               <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
               {zoomControl}

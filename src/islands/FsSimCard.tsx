@@ -1,6 +1,6 @@
-// FsSimCard — interactive viz for PRJ/002.
+// FsSimCard — interactive viz for PRJ/003.
 //
-// Replaces the placeholder preview slot inside ProjectPanel.astro for the
+// Replaces the placeholder preview slot inside ProjectFeature.astro for the
 // FS Quasi-Static Sim card. Renders a mass-sweep lap-time curve with a
 // native range slider, a 2×2 readout grid, and an article entry line.
 //

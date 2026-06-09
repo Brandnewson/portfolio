@@ -54,14 +54,6 @@
   font-weight: 600;
 }
 
-.helm-arch-hint {
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--mut);
-  opacity: 0.75;
-}
-
 // ── Expand affordance (inline head → opens the overlay) ──
 // The Expand button is the single trigger for the full-screen view, shown on
 // every device. (Hover-to-open was removed so a reader can't fall into the
