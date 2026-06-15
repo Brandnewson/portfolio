@@ -26,6 +26,7 @@ import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
               <div class="city"><span class="city-name">{c.name}</span><span class="city-coord mono">{c.coord}</span></div>
             ))}
           </div>
+          <p class="lf-note mono">London-based · UK Graduate visa, no sponsorship needed · US-authorised via H1B1 treaty visa</p>
         </div>
         <div>
           <span class="lf-sub mono">Available</span>
@@ -66,6 +67,9 @@ import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
 .city { display: flex; flex-direction: column; gap: 3px; }
 .city-name { font-family: var(--font-hero); font-size: 20px; font-weight: 600; line-height: 1.05; color: var(--fg); }
 .city-coord { font-size: var(--fs-xs); color: var(--mut); letter-spacing: 0.04em; }
+// Visa / work-authorisation note sitting under the cities — quiet supporting
+// line, not a heading, so it stays muted and small like the coord labels.
+.lf-note { margin: 16px 0 0; font-size: var(--fs-xs); line-height: 1.55; color: var(--mut); letter-spacing: 0.02em; }
 .avail-val { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-md); letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; }
 

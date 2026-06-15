@@ -26,7 +26,7 @@ export interface City {
 }
 
 export const BIO =
-  'I sit at the intersection of mechanical engineering and computer science. I want to build in that overlap, capitalising on both, and push toward physical AI, where learning systems meet real hardware and dynamics.';
+  'I sit at the intersection of mechanical engineering and computer science, and I build in that overlap. I\'m drawn to where AI meets the physical world, where learning systems meet real hardware and dynamics.';
 
 export const EXPERIENCE: ExperienceItem[] = [
   { when: '2024 – 25', org: 'Jaguar TCS Racing', role: 'Junior Strategy & Software Engineer', location: 'Kidlington, UK' },

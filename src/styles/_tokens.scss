@@ -76,6 +76,13 @@
   // box-shadow doesn't apply (e.g. <circle> dots on plots).
   --phos-filter: none;
 
+  // "OPEN TO WORK" status badge — the one phosphor-style live indicator in the
+  // hero. Night reuses the phosphor green + bloom; day has no phosphor, so it
+  // takes the brand burgundy (--acc2 / bordeaux) plus a matching glow so the
+  // badge reads as an intentional status indicator rather than plain muted text.
+  --badge-fg:   var(--acc2);
+  --badge-glow: 0 0 8px rgba(93, 26, 41, 0.42), 0 0 18px rgba(93, 26, 41, 0.20);
+
   // Accent rule on top of project panels
   --rule: var(--acc);
 
@@ -158,6 +165,10 @@
   --phos:        var(--acc);
   --phos-glow:   0 0 8px rgba(20, 204, 74, 0.45), 0 0 18px rgba(20, 204, 74, 0.15);
   --phos-filter: drop-shadow(0 0 3px var(--acc)) drop-shadow(0 0 7px rgba(20, 204, 74, 0.45));
+
+  // Night badge keeps the phosphor treatment unchanged (green glow).
+  --badge-fg:   var(--phos);
+  --badge-glow: var(--phos-glow);
 
   --rule: var(--amb);
 
