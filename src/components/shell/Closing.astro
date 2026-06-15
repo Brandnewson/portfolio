@@ -4,11 +4,17 @@
 // (the one that used to live in Profile) directly above the email CTA, so the
 // page has one cohesive ending instead of two that repeat each other.
 import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
+import CopyEmail from '../../islands/CopyEmail.tsx';
 ---
 <section class="close" id="contact">
   <div class="wrap">
     <span class="acc-rule" aria-hidden="true"></span>
     <h2 class="close-title">Let's build something<br class="cbrk" /> that ships.</h2>
+
+    <div class="cta-row">
+      <CopyEmail client:visible />
+      <a class="btn mono" href="/Branson-Tay-CV.pdf" download><span aria-hidden="true">↓</span> Download CV</a>
+    </div>
 
     <div class="lookingfor">
       <div class="lf-head mono">Looking for</div>
@@ -26,18 +32,19 @@ import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
               <div class="city"><span class="city-name">{c.name}</span><span class="city-coord mono">{c.coord}</span></div>
             ))}
           </div>
-          <p class="lf-note mono">London-based · UK Graduate visa, no sponsorship needed · US-authorised via H1B1 treaty visa</p>
+          <p class="lf-note mono">
+            <span class="seg">London-based</span>
+            <span class="sep" aria-hidden="true">·</span>
+            <span class="seg">UK Graduate visa</span>
+            <span class="sep" aria-hidden="true">·</span>
+            <span class="seg">US-authorised via H1B1 treaty visa</span>
+          </p>
         </div>
         <div>
           <span class="lf-sub mono">Available</span>
           <div class="avail-val mono"><span class="live-dot" aria-hidden="true"></span> {AVAILABLE}</div>
         </div>
       </div>
-    </div>
-
-    <div class="cta-row">
-      <a class="btn btn--primary mono" href="mailto:bransontay@gmail.com">✉ bransontay@gmail.com</a>
-      <a class="btn mono" href="/Branson-Tay-CV.pdf" download><span aria-hidden="true">↓</span> Download CV</a>
     </div>
 
     <div class="foot mono">
@@ -69,7 +76,10 @@ import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
 .city-coord { font-size: var(--fs-xs); color: var(--mut); letter-spacing: 0.04em; }
 // Visa / work-authorisation note sitting under the cities — quiet supporting
 // line, not a heading, so it stays muted and small like the coord labels.
+// `·`-joined segments: nowrap so a phrase never splits, stacked per-line on phones.
 .lf-note { margin: 16px 0 0; font-size: var(--fs-xs); line-height: 1.55; color: var(--mut); letter-spacing: 0.02em; }
+.lf-note .seg { white-space: nowrap; }
+.lf-note .sep { margin: 0 6px; }
 .avail-val { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-md); letter-spacing: 0.06em; color: var(--phos); text-shadow: var(--phos-glow); }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot-bg); box-shadow: var(--dot-glow); flex-shrink: 0; }
 
@@ -90,5 +100,7 @@ import { ROLES, CITIES, AVAILABLE } from '../../data/profile';
 
 @media (max-width: 560px) {
   .cbrk { display: none; }
+  .lf-note .seg { display: block; }
+  .lf-note .sep { display: none; }
 }
 </style>

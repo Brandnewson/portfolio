@@ -1,0 +1,74 @@
+// Styles for the CopyEmail island. Mirrors the Closing section's .btn--primary
+// (burgundy-tinted CTA) so the copy-email control sits naturally beside the
+// Download CV button — it stays the prominent contact action, just copy-based.
+// Global (island scss is imported, not scoped), so everything is namespaced
+// under .copy-email to avoid colliding with page styles.
+
+.copy-email {
+  position: relative;
+  display: inline-flex;
+}
+
+.copy-email__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 26px;
+  border: 1px solid var(--primary);
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-base);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    border-color: var(--primary-hover);
+    color: var(--primary-hover);
+  }
+}
+
+.copy-email__icon {
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+
+// The address itself reads as an address — lowercase, gentler tracking — even
+// though the surrounding button label is uppercased telemetry styling.
+.copy-email__addr {
+  text-transform: none;
+  letter-spacing: 0.03em;
+}
+
+.copy-email__hint {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+}
+
+// Confirmation popup — a small tooltip above the button. Uses fg/bg so it reads
+// as a contrasting chip in both day and night without new tokens.
+.copy-email__pop {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  white-space: nowrap;
+  padding: 6px 10px;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+
+  &.is-shown {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

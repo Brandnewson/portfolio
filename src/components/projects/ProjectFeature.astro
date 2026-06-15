@@ -89,7 +89,23 @@ const hasPreview = Astro.slots.has('default');
     {kicker && <p class="kicker">{kicker}</p>}
 
     <ul class="points" role="list">
-      {points.map((pt) => <li class="point">{pt}</li>)}
+      {points.map((pt) => {
+        // A point joined by " · " (e.g. a metric breakdown) renders as nowrap
+        // segments so it never wraps mid-phrase, and stacks one-per-line on phones.
+        const segs = pt.split(' · ');
+        return segs.length > 1 ? (
+          <li class="point point--segmented">
+            {segs.map((s, i) => (
+              <Fragment>
+                <span class="seg">{s}</span>
+                {i < segs.length - 1 && <span class="sep" aria-hidden="true"> · </span>}
+              </Fragment>
+            ))}
+          </li>
+        ) : (
+          <li class="point">{pt}</li>
+        );
+      })}
     </ul>
 
     {why && (
@@ -268,6 +284,10 @@ const hasPreview = Astro.slots.has('default');
     background: var(--primary);
   }
 }
+
+// Segmented point (" · "-joined): keep each segment intact, never breaking
+// mid-phrase. On phones each segment drops to its own line under the one pip.
+.point--segmented .seg { white-space: nowrap; }
 
 // ── "Why it matters" — single inline line ──
 // Quiet WHY label + one-line body on the same baseline. Downgraded from the
@@ -451,5 +471,10 @@ const hasPreview = Astro.slots.has('default');
   .preview-placeholder {
     min-height: 200px;
   }
+}
+
+@media (max-width: 560px) {
+  .point--segmented .seg { display: block; }
+  .point--segmented .sep { display: none; }
 }
 </style>
