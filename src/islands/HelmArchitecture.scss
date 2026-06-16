@@ -49,9 +49,10 @@
 // ── Header strip ──
 .helm-arch-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px 12px;
+  flex-wrap: wrap;
 }
 
 .helm-arch-title {
@@ -63,31 +64,41 @@
 }
 
 // ── Expand affordance (inline head → opens the overlay) ──
-// Rendered as a plain muted hint line ("click to expand"), not a bordered
-// button: the whole diagram canvas is clickable, and this is the matching
-// keyboard/AT-accessible trigger. Kept as a real <button> for that reason.
+// A bordered, accent-coloured chip (the design system's --primary CTA
+// treatment) so the "open full screen" action is obvious at a glance on both
+// desktop and touch — the old muted 9px hint line was too easy to miss. The
+// whole diagram canvas is also clickable, but this is the explicit, focusable
+// invitation, kept as a real <button> for keyboard/AT users.
 .helm-arch-expand {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 0;
-  background: transparent;
-  color: var(--mut);
-  font-size: 9px;
+  border: 1px solid var(--primary);
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-size: 9.5px;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 0;
+  padding: 6px 11px;
   cursor: pointer;
-  transition: color 0.15s ease;
+  border-radius: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 
-  &:hover { color: var(--primary); }
+  &:hover {
+    border-color: var(--primary-hover);
+    color: var(--primary-hover);
+  }
 
-  .hx-icon { font-size: 12px; line-height: 1; }
+  .hx-icon { font-size: 13px; line-height: 1; }
 
   &:focus-visible {
     outline: none;
-    color: var(--primary);
-    text-decoration: underline;
+    border-color: var(--primary-hover);
+    color: var(--primary-hover);
+    box-shadow: 0 0 0 2px var(--primary-tint);
   }
 }
 

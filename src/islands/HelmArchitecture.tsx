@@ -510,11 +510,18 @@ export default function HelmArchitecture(): ReactNode {
       <div className="helm-arch-head">
         <span className="helm-arch-title mono">HELM · SYSTEM TOPOLOGY</span>
         {/* The diagram is compact at rest and the whole canvas is clickable to
-            open the full-screen view. This is the same trigger styled as a plain
-            hint line — it stays a real button so keyboard and AT users have an
-            explicit, focusable way in. */}
-        <button type="button" className="helm-arch-expand mono" onClick={openOverlay} aria-haspopup="dialog">
-          <span className="hx-icon" aria-hidden="true">⤢</span> click to expand
+            open the full-screen view. This is the same trigger styled as a
+            clearly bordered accent chip so the affordance is obvious on desktop
+            and touch alike — and it stays a real button so keyboard and AT users
+            have an explicit, focusable way in. */}
+        <button
+          type="button"
+          className="helm-arch-expand mono"
+          onClick={openOverlay}
+          aria-haspopup="dialog"
+          aria-label="Expand diagram to full screen"
+        >
+          <span className="hx-icon" aria-hidden="true">⤢</span> Expand
         </button>
       </div>
 
