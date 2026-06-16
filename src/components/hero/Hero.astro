@@ -74,7 +74,9 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
 /* Hero CTAs: one primary featured-project card, then a lighter quick-links row
    (GitHub, LinkedIn, Contact, weighted CV) — secondary to the primary, per the
    IA spec. The toggle/calibrate control above stays out of the CTA budget. */
-.heronav { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+/* Centred so the primary "Featured project" card reads as THE call to action,
+   with the secondary quick-links row centred beneath it. */
+.heronav { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; align-items: center; }
 .navcta { display: inline-flex; flex-direction: column; gap: 6px; min-width: 240px; padding: 16px 18px; border: 1px solid var(--bd); text-decoration: none; background: transparent; transition: border-color 0.15s ease, background 0.15s ease; }
 .nc-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .nc-label { font-size: var(--fs-sm); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); }
@@ -90,7 +92,7 @@ import ThemeToggle from '../../islands/ThemeToggle.tsx';
 /* Secondary quick-links. Ghost buttons, with the CV given more weight (filled
    tint + primary border) since the recruiter's first want is the CV. Uses
    --primary (the brand/CTA colour), never phosphor. */
-.quick-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.quick-links { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .qlink { display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border: 1px solid var(--bd); color: var(--fg); text-decoration: none; font-size: var(--fs-xs); letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
 .qlink:hover { color: var(--primary); border-color: var(--primary); }
 .ql-glyph { font-size: var(--fs-base); line-height: 1; color: var(--mut); transition: color 0.15s ease; }

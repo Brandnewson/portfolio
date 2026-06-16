@@ -1,8 +1,8 @@
 ---
-// /report — in-browser viewer for the MARL research report.
+// /dissertation — in-browser viewer for the MARL dissertation.
 //
-// Branson asked for a "simple visualiser" so a reader can view the report
-// without downloading it. The PDF (public/report.pdf) is embedded in an
+// Branson asked for a "simple visualiser" so a reader can view the dissertation
+// without downloading it. The PDF (public/dissertation.pdf) is embedded in an
 // <iframe>, which hands off to the browser's native PDF viewer — robust across
 // Chrome/Firefox/Safari and zero JS.
 //
@@ -13,15 +13,15 @@
 import Shell from '../layouts/Shell.astro';
 ---
 <Shell
-  title="MARL Research Report · Branson Tay"
+  title="MARL Dissertation · Branson Tay"
   description="An in-browser viewer for Branson Tay's multi-agent reinforcement learning racing research, on when teamwork helps and when it hurts."
 >
   <section class="report">
     <aside class="report-side">
       <p class="report-eyebrow mono">PRJ/002 · RESEARCH</p>
-      <h1 class="report-title">MARL Racing Sim Research Report</h1>
+      <h1 class="report-title">MARL Racing Sim Dissertation</h1>
       <div class="report-actions">
-        <a class="rbtn mono" href="/report.pdf" download="Branson-Tay-MARL-Report.pdf">
+        <a class="rbtn mono" href="/dissertation.pdf" download="Branson-Tay-MARL-Dissertation.pdf">
           <span class="rbtn-glyph" aria-hidden="true">↓</span> Download PDF
         </a>
         <a class="rbtn mono" href="/#work">
@@ -33,8 +33,8 @@ import Shell from '../layouts/Shell.astro';
     <div class="report-frame">
       <iframe
         class="report-pdf"
-        src="/report.pdf#view=Fit"
-        title="MARL Racing Sim research report (PDF)"
+        src="/dissertation.pdf#view=Fit"
+        title="MARL Racing Sim dissertation (PDF)"
         loading="lazy"
       ></iframe>
     </div>
