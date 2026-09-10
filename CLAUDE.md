@@ -1,6 +1,6 @@
 # Portfolio — Branson
 
-Personal portfolio site targeting full-stack, ML/AI, forward deployed, and GTM engineering roles in New York and London.
+Personal portfolio site targeting product, full-stack, ML/AI, forward deployed, and GTM engineering roles in New York and London.
 
 ## Current task
 → INITIALISATION — read docs/context/architecture.md and docs/context/stack.md before doing anything else

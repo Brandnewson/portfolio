@@ -2,15 +2,24 @@
 
 How the repo is structured, what lives where, and why.
 
+Last verified against the tree: 2026-09-10.
+
 ---
 
 ## Mental model
 
-Three layers:
+Two layers, not three:
 
-1. **Static shell** — rendered at build time by Astro. The instrument bar, targa bar, hero text, silver rules, panel structure. No JavaScript.
-2. **Interactive islands** — hydrated client-side. MARL canvas, FS sim sliders, search widget, theme toggle. These are React (.tsx) components in src/islands/.
-3. **Edge layer** — Cloudflare Worker. The DeepSeek proxy. Lives in src/workers/, deployed separately via wrangler.
+1. **Static shell** — everything rendered at build time by Astro. The instrument
+   bar, hero, project bands, profile, closing panel, and every `/writing` page.
+   No JavaScript ships for any of it.
+2. **Interactive islands** — hydrated client-side. Five of them, all React
+   (`.tsx`) in `src/islands/`, each with a co-located `.scss` file.
+
+There is **no edge layer**. The site is a fully static build. `@astrojs/cloudflare`
+is in `package.json` but is *not* wired into `astro.config.mjs` — there is no
+adapter, no `output: 'server'`, no Worker, and no `wrangler.toml`. If you need a
+server route, wiring the adapter is a deliberate change, not a given.
 
 ---
 
@@ -19,185 +28,199 @@ Three layers:
 ```
 portfolio/
 ├── .github/
-│   └── workflows/
-│       ├── deploy.yml            # Push to main → Cloudflare Pages rebuild
-│       └── sim-data.yml          # Monthly cron → regenerate lookup_table.json
+│   └── workflows/               # EMPTY (.gitkeep only) — no CI. See "Deploy".
 │
-├── public/
-│   ├── audio/                    # Curated mp3 tracks (Kavinsky, M83, Bonobo, Jon Hopkins)
-│   └── fonts/                    # Self-hosted. No Google Fonts (privacy + performance)
+├── public/                      # Copied verbatim to the build root
+│   ├── Branson-Tay-CV.pdf       # Linked from hero + closing CTAs
+│   ├── dissertation.pdf         # Linked from /dissertation
+│   ├── og.png                   # 1200x630 social card (see Shell.astro)
+│   ├── favicon.svg
+│   └── fonts/                   # Self-hosted woff2 — IBM Plex Mono, Instrument Sans
 │
-├── scripts/
-│   └── generate-lookup.py        # Runs FS LP solver across parameter grid → outputs JSON
+├── scripts/                     # Playwright VERIFICATION scripts, not a build step
+│   ├── _shot.mjs                # Shared screenshot helper
+│   ├── _og.mjs                  # Renders the OG card image
+│   ├── measure-font-metrics.mjs
+│   └── verify-*.mjs             # One per layout change — run manually against dev
 │
-├── sims/                         # Git submodules — these are separate repos
-│   ├── formula-student-sim/      # The Python LP quasi-static sim
-│   └── marl-f1/                  # The MARL reinforcement learning sim
+├── sims/                        # Placeholder (.gitkeep). No submodules exist.
 │
 ├── src/
-│   ├── components/               # Static .astro components — no client JS
-│   │   ├── shell/
-│   │   │   ├── InstrumentBar.astro   # Top nav — BRANSON + indicators + toggle slot
-│   │   │   ├── TargaBar.astro        # 5px silver gradient bar at very top
-│   │   │   └── BottomBar.astro       # Status bar at bottom
-│   │   ├── hero/
-│   │   │   ├── Hero.astro            # Name, tagline, search slot, coords
-│   │   │   └── SearchBar.astro       # Static structure — island mounts inside
+│   ├── components/              # Static .astro — no client JS
+│   │   ├── hero/Hero.astro              # Name, eyebrow, headline, status, CTAs
 │   │   ├── projects/
-│   │   │   ├── MARLPanel.astro       # Panel structure — canvas island mounts inside
-│   │   │   ├── FSSimPanel.astro      # Panel structure — sliders island mounts inside
-│   │   │   └── HelmPanel.astro       # Fully static — feature cards, tech badges, before/after
-│   │   └── ui/
-│   │       ├── TechNote.astro        # (i) disclosure panel — takes content entry as prop
-│   │       ├── MusicWidget.astro     # Static structure — speaker/EQ visual
-│   │       └── BootSequence.astro    # ECU init sequence — plays on first load
+│   │   │   ├── ProjectFeature.astro     # Full-width project band; island via <slot>
+│   │   │   └── OtherProjects.astro      # Breadth list, from data/other-projects.ts
+│   │   ├── profile/Profile.astro        # Background — experience, education, stack
+│   │   └── shell/
+│   │       ├── InstrumentBar.astro      # Top nav (Shell renders it unless hideBar)
+│   │       ├── Closing.astro            # "Looking for" panel + contact CTAs
+│   │       ├── BackLink.astro           # Back affordance on subpages
+│   │       └── BottomBar.astro          # UNUSED — nothing imports it
 │   │
-│   ├── islands/                  # Interactive React components — hydrated client-side
-│   │   ├── MARLCanvas.tsx        # Canvas 2D racing sim + λ slider
-│   │   ├── FSSimSliders.tsx      # Downforce/weight/tyre sliders + lap time calc
-│   │   ├── SearchWidget.tsx      # Four-layer search + DeepSeek Tier 2
-│   │   └── ThemeToggle.tsx       # Day/Night rocker buttons — updates atom + data-theme
+│   ├── islands/                 # React, hydrated client-side. Each has a sibling .scss.
+│   │   ├── HelmArchitecture.tsx         # Helm system diagram + expand view
+│   │   ├── MarlCard.tsx                 # SVG agents animating the Spa centreline
+│   │   ├── FsSimCard.tsx                # Mass sweep chart from the baked JSON
+│   │   ├── SectionRail.tsx              # Right-edge scroll-position rail
+│   │   ├── ThemeToggle.tsx              # Day/Night rocker — writes the theme atom
+│   │   └── *.scss                       # Co-located, imported by the .tsx
 │   │
+│   ├── content.config.ts        # Collection schemas. NOTE: src/ root, not src/content/
 │   ├── content/
-│   │   ├── config.ts             # Zod schemas for all collections
-│   │   ├── knowledge/            # Knowledge graph entries — powering search
-│   │   │   ├── aerodynamics.md
-│   │   │   ├── reinforcement-learning.md
-│   │   │   ├── cicd.md
-│   │   │   └── ...               # One file per knowledge domain
-│   │   └── tech-notes/           # (i) panel content — one per interactive element
-│   │       ├── search-pipeline.md
-│   │       ├── marl-lambda.md
-│   │       ├── fs-precompute.md
-│   │       ├── tunnel-transition.md
-│   │       └── ...
+│   │   ├── tech-notes/          # The only populated collection — 4 markdown notes
+│   │   └── knowledge/           # Placeholder (.gitkeep). No collection defined.
 │   │
-│   ├── data/
-│   │   ├── lookup_table.json     # AUTO-GENERATED by CI. Never edit manually.
-│   │   ├── embeddings.json       # Pre-computed knowledge entry embeddings
-│   │   ├── synonyms.json         # Manual domain synonym map
-│   │   └── playlist.json         # Music metadata (title, artist, duration, file)
+│   ├── data/                    # Plain TS/JSON modules, imported directly. No CI.
+│   │   ├── profile.ts           # BIO, EXPERIENCE, EDUCATION, STACK, ROLES, CITIES
+│   │   ├── other-projects.ts    # OTHER_PROJECTS breadth list
+│   │   ├── spa-path.ts          # Baked Spa-Francorchamps SVG path (250 vertices)
+│   │   └── fs-mass-sweep.json   # Pre-computed mass -> lap time sweep
 │   │
-│   ├── layouts/
-│   │   └── Shell.astro           # Root layout — TargaBar + InstrumentBar + slot + BottomBar
+│   ├── layouts/Shell.astro      # Root layout — head, SEO/OG, anti-flash theme, bar
 │   │
 │   ├── pages/
-│   │   ├── index.astro           # Home — Hero + all three project panels
-│   │   ├── formula-sim.astro     # FS sim full tool page
-│   │   ├── f1-sim.astro          # MARL full visualisation page
-│   │   └── helm.astro            # Helm showcase page
+│   │   ├── index.astro          # Home — the whole narrative on one page
+│   │   ├── contact.astro
+│   │   ├── dissertation.astro
+│   │   └── writing/
+│   │       ├── index.astro      # Tech-note index
+│   │       └── [id].astro       # One page per tech note
 │   │
-│   ├── stores/
-│   │   └── theme.ts              # Nano-stores atom: 'day' | 'night'
+│   ├── stores/theme.ts          # Nanostores atom: 'day' | 'night' (+ localStorage)
 │   │
-│   ├── styles/
-│   │   ├── _tokens.scss          # ALL CSS custom properties — day + night values
-│   │   ├── _reset.scss           # Minimal reset
-│   │   ├── _typography.scss      # Font stacks, sizes, letter spacing rules
-│   │   ├── _animations.scss      # Tunnel flash, breathing, boot sequence keyframes
-│   │   ├── _components.scss      # Shared component patterns (panels, gauges, rules)
-│   │   └── global.scss           # Imports all partials — this is the single entry point
-│   │
-│   ├── utils/
-│   │   ├── levenshtein.ts        # Edit distance — typo correction
-│   │   ├── search.ts             # Orchestrates all four search layers
-│   │   ├── interpolate.ts        # Nearest-neighbour lookup against LP table
-│   │   └── embeddings.ts         # Cosine similarity against pre-computed vectors
-│   │
-│   └── workers/
-│       └── deepseek-proxy.ts     # Cloudflare Worker — proxies DeepSeek, holds API key
+│   └── styles/
+│       ├── _fonts.scss          # @font-face for the self-hosted woff2
+│       ├── _tokens.scss         # ALL CSS custom properties — day + night
+│       ├── _reset.scss
+│       ├── _components.scss     # Shared patterns
+│       └── global.scss          # Entry point. Imported ONCE, from Shell.astro.
 │
-├── docs/                         # This folder — context for Claude Code sessions
-│   ├── context/
-│   │   ├── stack.md
-│   │   ├── design.md
-│   │   ├── architecture.md       # This file
-│   │   └── progress.md
-│   └── reference/
-│       ├── tokens.md
-│       ├── apis.md
-│       ├── content-schema.md
-│       └── astro-patterns.md
+├── docs/
+│   ├── context/                 # stack, design, architecture (this file), progress
+│   ├── reference/               # tokens, apis, content-schema, astro-patterns
+│   ├── superpowers/             # Dated design specs + plans
+│   └── mockup*.html             # Static palette / component explorations
 │
-├── CLAUDE.md                     # Claude Code entry point
-├── .gitmodules                   # Submodule definitions
 ├── astro.config.mjs
-├── tsconfig.json
-├── wrangler.toml                 # Cloudflare Worker config
+├── CLAUDE.md
 └── package.json
 ```
 
 ---
 
-## Routing logic
+## Routing
 
-| URL | Page | Notes |
+| URL | Source | Notes |
 |---|---|---|
-| / | index.astro | Hero + all three project panels inline |
-| /formula-sim | formula-sim.astro | Full FS sim tool — target audience: engineers |
-| /f1-sim | f1-sim.astro | Full MARL visualisation |
-| /helm | helm.astro | Helm full showcase |
+| `/` | `pages/index.astro` | Hero, three project bands, profile, other projects, closing |
+| `/contact` | `pages/contact.astro` | Channel list |
+| `/dissertation` | `pages/dissertation.astro` | MARL research write-up |
+| `/writing` | `pages/writing/index.astro` | Tech-note index, sorted by `panel` |
+| `/writing/<id>` | `pages/writing/[id].astro` | `getStaticPaths` over the collection |
+| `/report` | — | Permanent redirect to `/dissertation` (`astro.config.mjs`) |
 
-The persistent shell (InstrumentBar, BottomBar) wraps every page via Shell.astro. Navigating between pages feels like changing instrument readouts, not navigating a website.
+`Shell.astro` wraps every page. It renders `InstrumentBar` unless the page passes
+`hideBar` — the home page does, because the hero *is* the header there.
+
+Note that `/` is a single long page, not a hub. Document scroll is the primary
+navigation mechanism, and `SectionRail` reflects position within it.
 
 ---
 
-## Data flow — FS Sim
+## Home page composition
+
+`index.astro` is where the narrative order lives — changing the page's argument
+means reordering here, not editing the components:
 
 ```
-Build time:
-sims/formula-student-sim/ (Python LP solver)
-  → scripts/generate-lookup.py runs solver across parameter grid
-  → outputs src/data/lookup_table.json
-  → committed by GitHub Actions bot
-  → triggers Cloudflare Pages redeploy
-
-Runtime:
-FSSimSliders.tsx (React island)
-  → user moves slider
-  → utils/interpolate.ts finds nearest neighbours in lookup_table.json
-  → interpolates lap time
-  → updates display (<1ms, no network request)
+Hero
+ProjectFeature "Helm"        (PRJ/001, FEATURED)  <- <HelmArchitecture client:load />
+ProjectFeature "MARL"        (PRJ/002)            <- <MarlCard />
+ProjectFeature "FS Sim"      (PRJ/003)            <- <FsSimCard />
+Profile                      (background)
+OtherProjects                (breadth)
+Closing                      (roles / locations / availability + CTAs)
+SectionRail                  (fixed overlay, tracks all of the above)
 ```
 
-## Data flow — Search
+`ProjectFeature` is a generic band: title, kicker, points, stack badges, route,
+and a `<slot>` the island drops into. Adding a project is a new `<ProjectFeature>`
+block with props — not a new component.
+
+---
+
+## Data flow
+
+**All data is baked.** Nothing is generated by CI, and nothing is fetched at
+runtime. Every data module is a plain import resolved at build time:
 
 ```
-Runtime:
-SearchWidget.tsx
-  → user types query
-  → utils/levenshtein.ts: check against vocabulary → "Did you mean?"
-  → utils/search.ts: expand via synonyms.json
-  → Fuse.js: fuzzy search against knowledge entry bodies
-  → utils/embeddings.ts: cosine similarity against embeddings.json
-  → Tier 1 results render immediately
-
-Simultaneously:
-  → fetch POST to /api/deepseek (Cloudflare Worker)
-  → Worker validates rate limit (KV store)
-  → Worker calls DeepSeek V3 with system prompt + relevant entries
-  → SSE stream pipes back to client
-  → Tier 2 result types out with phosphor cursor animation
+src/data/profile.ts        -> Profile.astro, Closing.astro
+src/data/other-projects.ts -> OtherProjects.astro
+src/data/spa-path.ts       -> MarlCard.tsx      (SVG path + lap duration)
+src/data/fs-mass-sweep.json-> FsSimCard.tsx     (mass sweep points)
 ```
 
-## Data flow — Theme
+`spa-path.ts` and `fs-mass-sweep.json` were produced *once* from the sim repos
+and committed. Their header comments record the provenance and how to regenerate.
+Regeneration is a manual, deliberate act — there is no scheduled workflow, and
+nothing in this repo depends on the sim repos being present.
+
+**Content collections** — one collection, `tech-notes`, defined in
+`src/content.config.ts` via the `glob` loader over `src/content/tech-notes/`.
+Frontmatter is Zod-validated (`title`, `panel`, `component`, `mechanism`,
+`substrate`). The entry `id` is the filename slug and drives `/writing/<id>`.
+
+**Theme** —
 
 ```
-ThemeToggle.tsx
-  → user clicks DAY or NIGHT button
-  → updates theme atom in src/stores/theme.ts
-  → sets data-theme attribute on document.documentElement
-  → SCSS [data-theme="night"] selectors activate
-  → CSS custom properties swap
-  → all islands subscribed to theme atom re-render with new colours
+ThemeToggle.tsx  -> setTheme() -> $theme atom (stores/theme.ts)
+                                    |
+              subscribe: sets data-theme on <html> + writes localStorage
+                                    |
+                    SCSS [data-theme="night"] selectors swap tokens
 ```
+
+`Shell.astro` also carries an inline `is:inline` script that reads
+`localStorage.theme` and sets `data-theme` *before* styles parse. Without it,
+night-mode visitors get a day-mode flash on every load. Do not move it into a
+bundled module — it must run synchronously in `<head>`.
+
+---
+
+## Deploy
+
+There is no workflow file in this repo. `bransontay.dev` is built and served by
+**Cloudflare Pages' Git integration**, configured in the Cloudflare dashboard
+rather than in version control: a push to `main` triggers Cloudflare to clone,
+run `npm run build`, and publish `dist/`.
+
+Practical consequences:
+
+- Nothing in the repo describes the deploy. If the build config needs changing
+  (build command, Node version, env vars), that happens in the Cloudflare
+  dashboard, and this file is the only place that says so.
+- A green push is not a green deploy. Verify on the live site, not in Actions.
+- `package.json` pins `engines.node >= 22.12.0`. Cloudflare's default Node may be
+  older; that setting is dashboard-side too.
 
 ---
 
 ## Key constraints
 
-**Cloudflare Workers runtime** — no Node.js APIs. Use Web Fetch API. No file system access at runtime. All data must be bundled at build time or fetched from external sources.
+**Islands boundary** — a `.astro` component cannot pass data reactively into an
+island. Props are serialised once at render time. For state that must cross two
+islands, use a nanostores atom (`stores/theme.ts` is the working example).
 
-**Islands boundary** — data cannot be passed reactively from a .astro component into an island at runtime. Pass initial data as props at render time. For runtime state that crosses islands, use Nano-stores.
+**One global stylesheet** — `global.scss` is imported exactly once, from
+`Shell.astro`. Island styles are co-located `.scss` imported from the `.tsx`.
+There is no `additionalData` auto-import configured in `astro.config.mjs`, so a
+partial that needs tokens must `@use` them itself.
 
-**Submodules** — always clone with `git clone --recurse-submodules`. The GitHub Actions workflows use `submodules: true` on the checkout step. If the sims folder is empty, you forgot this.
+**Verification scripts are manual** — `scripts/verify-*.mjs` are Playwright
+scripts run by hand against a local dev server. They are not wired into a test
+runner or CI, so they only catch what you remember to run.
+
+**No submodules** — `sims/` is an empty placeholder. `git clone` is enough; there
+is nothing to `--recurse-submodules` for.

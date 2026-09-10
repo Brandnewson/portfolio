@@ -61,7 +61,7 @@ export const STACK: StackRow[] = [
   { key: 'Tools', value: 'Git, Docker, Azure DevOps, Plotly' },
 ];
 
-export const ROLES = ['Forward-Deployed Engineer', 'Applied AI Engineer', 'Solutions Architect', 'Full-stack Engineer'];
+export const ROLES = ['Forward-Deployed Engineer', 'Product Engineer', 'Applied AI Engineer', 'Full-stack Engineer'];
 
 export const CITIES: City[] = [
   { name: 'London', coord: '51.5°N · 0.1°W' },
