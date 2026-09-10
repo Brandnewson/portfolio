@@ -118,10 +118,17 @@ portfolio/
 | `/dissertation` | `pages/dissertation.astro` | MARL research write-up |
 | `/writing` | `pages/writing/index.astro` | Tech-note index, sorted by `panel` |
 | `/writing/<id>` | `pages/writing/[id].astro` | `getStaticPaths` over the collection |
-| `/report` | — | Permanent redirect to `/dissertation` (`astro.config.mjs`) |
+| `/report` | — | Legacy path -> `/dissertation`, declared in `astro.config.mjs` |
 
 `Shell.astro` wraps every page. It renders `InstrumentBar` unless the page passes
 `hideBar` — the home page does, because the hero *is* the header there.
+
+The `/report` entry is worth understanding precisely: because this is a static
+build with no adapter, Astro cannot emit a real 301. It generates
+`/report/index.html` containing a `<meta http-equiv="refresh">` plus a canonical
+link to `/dissertation`. Browsers follow it, but it is not an HTTP redirect — so
+it does not pass link equity the way a 301 would, and `curl` without `-L` sees a
+200. If a true 301 ever matters, it needs a Cloudflare Pages `_redirects` file.
 
 Note that `/` is a single long page, not a hub. Document scroll is the primary
 navigation mechanism, and `SectionRail` reflects position within it.
